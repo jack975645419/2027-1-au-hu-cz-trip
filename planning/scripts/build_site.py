@@ -13,9 +13,14 @@
 """
 import json
 import shutil
+import sys
 from pathlib import Path
 
 from PIL import Image
+
+WEB_PHOTOS = {}     # 由 build_data() 填充
+LABELS = {}         # 方案 → 地点日期标注
+BUILD_NOTE = sys.argv[1] if len(sys.argv) > 1 else "更新"
 
 ROOT = Path(__file__).resolve().parent.parent
 REPO = Path(r"D:\Proj\2027-1-au-hu-cz-trip")
@@ -78,6 +83,7 @@ def write_js(rel, var, obj):
 
 
 def build_data():
+    global WEB_PHOTOS, LABELS
     write_js("data/places.js", "PLACES", places)
     web = {}
     for pid, rec in photos.items():
@@ -86,11 +92,13 @@ def build_data():
                      "page": f.get("page", "")}
                     for f in rec.get("files", [])
                     if (PICS_SRC / Path(f["file"]).name).exists()]
+    WEB_PHOTOS = web
     write_js("data/photos.js", "PHOTOS", web)
     for k, itin in itins.items():
         lid = k.lower()
         write_js(f"data/itinerary_{lid}.js", f"ITIN_{k}", itin)
-        write_js(f"data/labels_{lid}.js", f"LABELS_{k}", compute_labels(itin))
+        LABELS[k] = compute_labels(itin)
+        write_js(f"data/labels_{lid}.js", f"LABELS_{k}", LABELS[k])
     print("  数据 → data/")
 
 
@@ -120,6 +128,8 @@ a.back{color:var(--dim);font-size:12px;text-decoration:none}
 .day .bd{padding:12px 16px}
 .tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
 .note{color:#e8c07a;font-size:12px;margin-top:8px}
+.ampm{color:#9aa5b1;font-size:12px}
+.hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
 ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
 .thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
@@ -221,13 +231,15 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
   const n=d.items.length;
   const items = d.items.map(function(nm,i){
     const id=NAME2ID[nm], ph=(id&&P[id])||[];
-    const th = ph.length ? '<div class="thumbs">'+ph.slice(0,3).map(f=>'<img src="../'+f.file+'" loading="lazy">').join("")+"</div>" : "";
-    return "<li>"+nm+(n>1?' <span style=\\"color:#9aa5b1;font-size:12px\\">'+__SESSJS__+"</span>":"")+th+"</li>";
+    const th = ph.length ? '<div class="thumbs">'+ph.slice(0,3).map(function(f){return '<img src="../'+f.file+'" loading="lazy">';}).join("")+"</div>" : "";
+    const sess = n<=1 ? "" : (i < (n+1)/2 ? "上午" : "下午");
+    const ampm = n>1 ? ' <span class="ampm">'+sess+"</span>" : "";
+    return "<li>"+nm+ampm+th+"</li>";
   }).join("");
   return '<div class="day"><div class="hd"><span class="d">'+d.date+
     '</span><span class="w">周'+d.w+'</span><span class="s">住 '+d.stay+'</span></div>'+
     '<div class="bd">'+
-    (d.transport?'<div class="tp"><b>🚆</b> '+d.transport+"</div>":"")+
+    (d.transport?'<div class="tp"><b>&#128646;</b> '+d.transport+"</div>":"")+
     (items?"<ul>"+items+"</ul>":"")+
     (d.note?'<div class="note">'+d.note+"</div>":"")+
     "</div></div>";
@@ -257,14 +269,11 @@ PLAN_TPL = """<!DOCTYPE html>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>逐日行程</h2><div id="days"></div>
+__HIST__
 <footer><div id="verfoot"></div><div style="margin-top:6px">__TITLE__ · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="../data/places.js"></script>
-<script src="../data/photos.js"></script>
-<script src="../data/labels__LID__.js"></script>
-<script src="../data/itinerary__LID__.js"></script>
-<script src="../data/version.js"></script>
+__DATA__
 <script>__JSMAP____JSDAYS____JSVER__</script>
 </body></html>"""
 
@@ -289,7 +298,61 @@ INDEX_TPL = """<!DOCTYPE html>
 </body></html>"""
 
 
+# ---------- 版本快照 ----------
+def git_count():
+    import subprocess
+    r = subprocess.run(["git", "-C", str(REPO), "rev-list", "--count", "HEAD"],
+                       capture_output=True, text=True)
+    return int(r.stdout.strip() or 0)
+
+
+def head_sha():
+    import subprocess
+    r = subprocess.run(["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"],
+                       capture_output=True, text=True)
+    return r.stdout.strip()
+
+
+def now_str():
+    from datetime import datetime, timedelta, timezone
+    return datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
+
+
+def data_block(k, lid, inline=False, ver=None, note=""):
+    """数据 <script> 片段。inline=True 时把数据烘进页面，用于历史快照（与后续版本解耦）"""
+    if inline:
+        frozen = {"version": f"v{ver}", "built_at": now_str(),
+                  "commit": head_sha(), "note": note}
+        return ("\n".join([
+            "<script>window.PLACES=" + json.dumps(places, ensure_ascii=False) + ";</script>",
+            "<script>window.PHOTOS=" + json.dumps(WEB_PHOTOS, ensure_ascii=False) + ";</script>",
+            f"<script>window.LABELS_{k}=" + json.dumps(LABELS[k], ensure_ascii=False) + ";</script>",
+            f"<script>window.ITIN_{k}=" + json.dumps(itins[k], ensure_ascii=False) + ";</script>",
+            "<script>window.VERSION=" + json.dumps(frozen, ensure_ascii=False) + ";</script>",
+        ]))
+    return "\n".join([
+        '<script src="../data/places.js"></script>',
+        '<script src="../data/photos.js"></script>',
+        f'<script src="../data/labels_{lid}.js"></script>',
+        f'<script src="../data/itinerary_{lid}.js"></script>',
+        '<script src="../data/version.js"></script>',
+    ])
+
+
+def hist_block(lid):
+    """列出该方案已存档的历史版本"""
+    files = sorted((REPO / lid).glob("v*.html"),
+                   key=lambda p: int(p.stem[1:]) if p.stem[1:].isdigit() else 0,
+                   reverse=True)
+    if not files:
+        return ""
+    links = "".join(f'<a href="{p.name}">{p.stem}</a>' for p in files)
+    return f'<h2>历史版本</h2><div class="card hist">{links}</div>'
+
+
 def build_pages():
+    ver = git_count() + 1
+    note = BUILD_NOTE
     for k, itin in itins.items():
         lid = k.lower()
         trade = "".join(f'<div class="pros">+ {x}</div>' for x in itin["pros"]) + \
@@ -299,20 +362,27 @@ def build_pages():
                        .replace("__CITYZOOM__", str(CITY_ZOOM))
                        .replace("__LABELVAR__", f"LABELS_{k}"))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
-                         .replace("__ITINVAR__", f"ITIN_{k}")
-                         .replace("__SESSJS__", '"+(n<=1?"":((i<(n+1)/2)?"上午":"下午"))+"'))
-        html = (PLAN_TPL.replace("__TITLE__", itin["title"])
-                        .replace("__SUBTITLE__", itin["subtitle"])
-                        .replace("__TRADEOFF__", trade)
-                        .replace("__LID__", lid)
-                        .replace("__CSS__", CSS)
-                        .replace("__JSMAP__", jsmap)
-                        .replace("__JSDAYS__", jsdays)
-                        .replace("__JSVER__", JS_VER))
+                         .replace("__ITINVAR__", f"ITIN_{k}"))
+
+        def render(inline, hist):
+            return (PLAN_TPL.replace("__TITLE__", itin["title"])
+                            .replace("__SUBTITLE__", itin["subtitle"])
+                            .replace("__TRADEOFF__", trade)
+                            .replace("__LID__", lid)
+                            .replace("__CSS__", CSS)
+                            .replace("__HIST__", hist)
+                            .replace("__DATA__", data_block(k, lid, inline, ver, note))
+                            .replace("__JSMAP__", jsmap)
+                            .replace("__JSDAYS__", jsdays)
+                            .replace("__JSVER__", JS_VER))
+
         d = REPO / lid
         d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(html, encoding="utf-8")
-        print(f"  {lid}/index.html")
+        # 历史快照：数据全部烘进页面，之后改数据也不会影响它
+        (d / f"v{ver}.html").write_text(render(True, ""), encoding="utf-8")
+        # 最新版
+        (d / "index.html").write_text(render(False, hist_block(lid)), encoding="utf-8")
+        print(f"  {lid}/index.html  +  {lid}/v{ver}.html（快照）")
 
     picks = "".join(
         f'<a class="pick" href="{k.lower()}/index.html"><div class="t">{itins[k]["title"]}</div>'

@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v5", "built_at": "2026-09-16 16:27", "commit": "68f9fee", "note": "归档全部规划资料进 planning/"};
+window.VERSION = {"version": "v6", "built_at": "2026-09-16 16:41", "commit": "a08a55e", "note": "修复 JS 语法错误（行程与地图恢复）+ 每版存档独立 HTML 快照"};

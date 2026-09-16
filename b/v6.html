@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>方案 B · 只玩哈尔施塔特 · 2027-1 奥匈捷之旅</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+header{padding:16px 0 8px;border-bottom:1px solid var(--line);margin-bottom:16px}
+h1{margin:6px 0;font-size:22px}
+h2{font-size:15px;margin:26px 0 10px;color:var(--accent)}
+.sub{color:var(--dim);font-size:13px}.sub b{color:var(--text)}
+.badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
+.badge b{color:var(--accent)}
+a.back{color:var(--dim);font-size:12px;text-decoration:none}
+#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#0e1218;z-index:1}
+#map:fullscreen{height:100vh!important;width:100vw!important;border-radius:0;border:0;position:fixed;inset:0;z-index:9999}
+#map:-webkit-full-screen{height:100vh!important;width:100vw!important;border-radius:0;position:fixed;inset:0;z-index:9999}
+.fsbtn a{display:flex!important;align-items:center;justify-content:center;width:32px!important;height:32px!important;line-height:32px!important;font-size:15px;color:#222;text-decoration:none;background:#fff;border-radius:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.day .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:#202832;border-bottom:1px solid var(--line)}
+.day .d{font-size:17px;font-weight:700;color:var(--accent)}
+.day .w{color:var(--dim);font-size:12px}
+.day .s{margin-left:auto;color:var(--dim);font-size:12px}
+.day .bd{padding:12px 16px}
+.tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
+.note{color:#e8c07a;font-size:12px;margin-top:8px}
+.ampm{color:#9aa5b1;font-size:12px}
+.hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
+ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
+.pros{color:#7fd39a}.cons{color:#e08a8a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .n{font-size:22px;font-weight:600}.stat .l{color:var(--dim);font-size:12px}
+.pick{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;color:var(--text);text-decoration:none}
+.pick:hover{border-color:var(--accent)}
+.pick .t{font-size:17px;font-weight:600;margin-bottom:4px}
+.pick .s{color:var(--dim);font-size:13px}
+footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
+.plabel{background:rgba(20,25,33,.92);border:1px solid #39434f;color:#e8ecf1;border-radius:6px;padding:3px 7px;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.plabel::before{display:none!important}
+.plabel .lb{color:#6ea8fe;font-size:10px;margin-top:2px}
+.plabel .nt{color:#9aa5b1;font-size:10px}
+.clabel{background:rgba(15,19,25,.9);border:1px solid #46525f;color:#fff;border-radius:9px;padding:5px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.clabel::before{display:none!important}
+.leaflet-popup-content-wrapper{background:#1b212b;color:#e8ecf1;border-radius:10px}
+.leaflet-popup-tip{background:#1b212b}
+.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+</style></head><body><div class="wrap">
+<header><a class="back" href="../index.html">← 全部方案</a>
+<h1>方案 B · 只玩哈尔施塔特</h1><div class="sub">湖区集中，布拉格保留 2 个整天</div>
+<div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
+<div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
+<h2>取舍</h2><div class="card"><div class="pros">+ 布拉格保留 2 个整天</div><div class="pros">+ 哈尔施塔特占满晨昏两个黄金时段</div><div class="pros">+ 1/27 转场比 A 短，更从容</div><div class="cons">− 不去圣沃尔夫冈</div></div>
+<h2>住宿分配</h2><div class="grid" id="stats"></div>
+<h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
+<h2>逐日行程</h2><div id="days"></div>
+
+<footer><div id="verfoot"></div><div style="margin-top:6px">方案 B · 只玩哈尔施塔特 · 草稿</div></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>window.PLACES=[{"id": "nyc_cafe", "name": "纽约咖啡厅", "query": "New York Cafe, Budapest", "city": "Budapest", "lat": 47.4986782, "lon": 19.0704636, "note": "号称世界最美咖啡厅，早去排队"}, {"id": "szechenyi_bath", "name": "塞切尼温泉浴场", "query": "Szechenyi Thermal Bath, Budapest", "city": "Budapest", "lat": 47.5184354, "lon": 19.0825223, "note": "户外温泉，冬季泡汤极爽"}, {"id": "heroes_square", "name": "英雄广场", "query": "Hosok tere, Budapest", "city": "Budapest", "lat": 47.5153516, "lon": 19.0770869, "note": "紧邻塞切尼浴场", "en": "Heroes Square Budapest"}, {"id": "chain_bridge", "name": "塞切尼链桥", "query": "Szechenyi Lanchid, Budapest", "city": "Budapest", "lat": 47.4989791, "lon": 19.0436494, "note": "连接布达与佩斯"}, {"id": "fishermans_bastion", "name": "渔人堡", "query": "Halaszbastya, Budapest", "city": "Budapest", "lat": 47.5023053, "lon": 19.0346998, "note": "9点前免费且人少"}, {"id": "matthias_church", "name": "马加什教堂", "query": "Matyas-templom, Budapest", "city": "Budapest", "lat": 47.5020118, "lon": 19.0342109, "note": "与渔人堡同一广场", "en": "Matthias Church Budapest"}, {"id": "parliament_view", "name": "国会大厦观景点", "query": "Batthyany ter, Budapest", "city": "Budapest", "lat": 47.5068724, "lon": 19.037782, "note": "对岸拍国会大厦经典机位", "en": "Hungarian Parliament Building Budapest"}, {"id": "buda_castle", "name": "布达堡", "query": "Budai Var, Budapest", "city": "Budapest", "lat": 47.5019564, "lon": 19.0324788, "note": "布达王宫区", "en": "Buda Castle Budapest"}, {"id": "danube_cruise", "name": "多瑙河游船码头", "query": "Vigado ter, Budapest", "city": "Budapest", "lat": 47.4958194, "lon": 19.0491946, "note": "夜游多瑙河登船点", "en": "Danube river Budapest night"}, {"id": "state_opera", "name": "匈牙利国家歌剧院", "query": "Magyar Allami Operahaz, Budapest", "city": "Budapest", "lat": 47.5028701, "lon": 19.0581577, "note": "可听歌剧或参加导览", "en": "Hungarian State Opera House"}, {"id": "st_stephens", "name": "圣伊什特万圣殿", "query": "Szent Istvan Bazilika, Budapest", "city": "Budapest", "lat": 47.5007766, "lon": 19.053965, "note": "登顶可俯瞰全城"}, {"id": "liberty_bridge", "name": "自由桥", "query": "Szabadsag hid, Budapest", "city": "Budapest", "lat": 47.4857237, "lon": 19.0549035, "note": "绿色桥身，电车穿行"}, {"id": "parliament", "name": "匈牙利国会大厦", "query": "Orszaghaz, Budapest", "city": "Budapest", "lat": 47.5070496, "lon": 19.0459186, "note": "需提前订导览票"}, {"id": "st_stephens_cathedral", "name": "斯蒂芬大教堂", "query": "Stephansdom, Wien", "city": "Vienna", "lat": 48.2084923, "lon": 16.3731269, "note": ""}, {"id": "hofburg", "name": "霍夫堡宫", "query": "Hofburg, Wien", "city": "Vienna", "lat": 48.2063293, "lon": 16.3656259, "note": ""}, {"id": "karlskirche", "name": "卡尔教堂", "query": "Karlskirche, Wien", "city": "Vienna", "lat": 48.1982785, "lon": 16.3718951, "note": ""}, {"id": "cafe_mozart", "name": "莫扎特咖啡馆", "query": "Albertinaplatz, Wien", "city": "Vienna", "lat": 48.2040163, "lon": 16.3689146, "note": "", "en": "Cafe Mozart Vienna"}, {"id": "zollamtssteg", "name": "绿桥（爱在黎明破晓前）", "query": "Zollamtssteg, Wien", "city": "Vienna", "lat": 48.2098048, "lon": 16.3843875, "note": "电影打卡点"}, {"id": "josefsplatz", "name": "约瑟夫广场", "query": "Josefsplatz, Wien", "city": "Vienna", "lat": 48.2065252, "lon": 16.3675025, "note": "霍夫堡旁"}, {"id": "graben", "name": "格拉本大街", "query": "Graben, Wien", "city": "Vienna", "lat": 48.2083656, "lon": 16.3702037, "note": "商业步行街"}, {"id": "belvedere", "name": "美景宫", "query": "Schloss Belvedere, Wien", "city": "Vienna", "lat": 48.1921648, "lon": 16.3789337, "note": "藏有克里姆特《吻》"}, {"id": "kunsthistorisches", "name": "艺术史博物馆", "query": "Kunsthistorisches Museum, Wien", "city": "Vienna", "lat": 48.2037395, "lon": 16.3617819, "note": "周一闭馆"}, {"id": "schonbrunn", "name": "美泉宫", "query": "Schloss Schonbrunn, Wien", "city": "Vienna", "lat": 48.1849894, "lon": 16.3115684, "note": "需预留半天"}, {"id": "musikverein", "name": "金色大厅", "query": "Musikverein, Wien", "city": "Vienna", "lat": 48.2004865, "lon": 16.3727252, "note": "音乐会场地"}, {"id": "hallstatt", "name": "哈尔施塔特", "query": "Hallstatt, Oberosterreich", "city": "Hallstatt", "lat": 47.5347939, "lon": 13.5988875, "note": "火车站需换渡船过湖"}, {"id": "st_wolfgang", "name": "圣沃尔夫冈", "query": "St. Wolfgang im Salzkammergut", "city": "St. Wolfgang", "lat": 47.749753, "lon": 13.5026937, "note": "沙夫山齿轨火车"}, {"id": "old_town_square", "name": "老城广场（天文钟）", "query": "Staromestske namesti, Praha", "city": "Prague", "lat": 50.0874453, "lon": 14.4209714, "note": "待确认"}, {"id": "charles_bridge", "name": "查理大桥", "query": "Charles Bridge, Prague", "city": "Prague", "lat": 50.0866258, "lon": 14.4101485, "note": "待确认"}, {"id": "prague_castle", "name": "布拉格城堡", "query": "Prazsky hrad, Praha", "city": "Prague", "lat": 50.0908114, "lon": 14.4005225, "note": "待确认"}, {"id": "st_vitus", "name": "圣维特大教堂", "query": "Katedrala svateho Vita, Praha", "city": "Prague", "lat": 50.0908638, "lon": 14.400571, "note": "待确认"}, {"id": "lenon_wall", "name": "列侬墙", "query": "Lennonova zed, Praha", "city": "Prague", "lat": 50.0862417, "lon": 14.4068148, "note": "待确认"}, {"id": "dancing_house", "name": "跳舞的房子", "query": "Tancici dum, Praha", "city": "Prague", "lat": 50.0754264, "lon": 14.4141719, "note": "待确认"}];</script>
+<script>window.PHOTOS={"nyc_cafe": [{"file": "pics/Budapest_nyc_cafe_1.jpg", "author": "Ana Lanza", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-group-of-people-sitting-at-tables-outside-of-a-restaurant-slstYczuUI8"}, {"file": "pics/Budapest_nyc_cafe_2.jpg", "author": "Diane Picchiottino", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-group-of-people-sitting-outside-a-building-hNpvg442Kug"}], "szechenyi_bath": [{"file": "pics/Budapest_szechenyi_bath_1.jpg", "author": "Linda Gerbec", "license": "Unsplash License", "page": "https://unsplash.com/photos/people-walking-on-park-during-daytime-YJ9ujIUvMtg"}, {"file": "pics/Budapest_szechenyi_bath_2.jpg", "author": "Victor Malyushev", "license": "Unsplash License", "page": "https://unsplash.com/photos/photography-of-people-on-swimming-pool-during-daytime-IrRGLe3lwVQ"}], "chain_bridge": [{"file": "pics/Budapest_chain_bridge_1.jpg", "author": "Lovie Tey", "license": "Unsplash License", "page": "https://unsplash.com/photos/photo-of-concrete-bridge-scenery-pObCeVzT8cQ"}, {"file": "pics/Budapest_chain_bridge_2.jpg", "author": "Ingrid Martinussen", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-bridge-over-a-body-of-water-under-a-cloudy-sky-7jJ_tOYpamU"}], "fishermans_bastion": [{"file": "pics/Budapest_fishermans_bastion_1.jpg", "author": "Maxence Bouniort", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-group-of-people-walking-up-and-down-some-stairs-ujVad_dHa64"}, {"file": "pics/Budapest_fishermans_bastion_2.jpg", "author": "Tícia Vesztergombi", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-statue-of-a-man-riding-a-horse-next-to-a-building-waWK1mZxAuo"}], "st_stephens": [{"file": "pics/Budapest_st_stephens_1.jpg", "author": "Ansgar Scheffold", "license": "Unsplash License", "page": "https://unsplash.com/photos/brown-and-white-concrete-building-at-night-time-_Eu09i69jPU"}, {"file": "pics/Budapest_st_stephens_2.jpg", "author": "Raimond Klavins", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-and-brown-boat-on-water-near-brown-concrete-building-during-daytime-AcQY1ot67mE"}], "liberty_bridge": [{"file": "pics/Budapest_liberty_bridge_1.jpg", "author": "David Fucsku", "license": "Unsplash License", "page": "https://unsplash.com/photos/green-bridge-covered-in-snow-under-a-blue-sky-mfEHgYb5swY"}, {"file": "pics/Budapest_liberty_bridge_2.jpg", "author": "Alexander Åkesson", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-a-lot-of-trees-in-front-of-it-G8RUi6wkPEo"}], "parliament": [{"file": "pics/Budapest_parliament_1.jpg", "author": "Zaur Ibrahimov", "license": "Unsplash License", "page": "https://unsplash.com/photos/houses-on-green-grass-field-near-mountain-during-daytime-tMztctdTK3c"}, {"file": "pics/Budapest_parliament_2.jpg", "author": "Ulvi Safari", "license": "Unsplash License", "page": "https://unsplash.com/photos/mountain-ranges-5pGw6psjwjQ"}], "st_stephens_cathedral": [{"file": "pics/Vienna_st_stephens_cathedral_1.jpg", "author": "Ezgi Deliklitas", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-st-stephens-cathedral-vienna-uRvDZg9sRbY"}, {"file": "pics/Vienna_st_stephens_cathedral_2.jpg", "author": "Victor Malyushev", "license": "Unsplash License", "page": "https://unsplash.com/photos/aerial-photography-of-grey-building-Wf5y2l9DHmY"}], "hofburg": [{"file": "pics/Vienna_hofburg_1.jpg", "author": "Jörg Bauer", "license": "Unsplash License", "page": "https://unsplash.com/photos/people-walking-near-white-concrete-building-during-daytime-1IxGdqGeCMo"}, {"file": "pics/Vienna_hofburg_2.jpg", "author": "Peter Oertel", "license": "Unsplash License", "page": "https://unsplash.com/photos/brown-horse-with-carriage-on-road-near-building-during-daytime-mMQc9h390G8"}], "karlskirche": [{"file": "pics/Vienna_karlskirche_1.jpg", "author": "Laurenz Kleinheider", "license": "Unsplash License", "page": "https://unsplash.com/photos/st-charless-church-vienna-IraVn9L24A0"}, {"file": "pics/Vienna_karlskirche_2.jpg", "author": "Diogo Nunes", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-and-brown-concrete-building-mPxJJXTWmEE"}], "zollamtssteg": [{"file": "pics/Vienna_zollamtssteg_1.jpg", "author": "Bernd 📷 Dittrich", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-train-emerges-from-under-a-green-bridge-rmJl_GmyCIg"}, {"file": "pics/Vienna_zollamtssteg_2.jpg", "author": "Lazar Gugleta", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-bridge-over-a-body-of-water-with-buildings-in-the-background-W-WEPqKlOQU"}], "josefsplatz": [{"file": "pics/Vienna_josefsplatz_1.jpg", "author": "Alexandra Kottenbach", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-a-statue-in-front-of-it-uf1VelR0ygA"}, {"file": "pics/Vienna_josefsplatz_2.jpg", "author": "Ciocan Ciprian", "license": "Unsplash License", "page": "https://unsplash.com/photos/an-old-book-shelf-with-many-books-on-it-S-tm1hnMK88"}], "graben": [{"file": "pics/Vienna_graben_1.jpg", "author": "Arno Senoner", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-window-display-of-a-flower-shop-9BPYBQVO_4Q"}, {"file": "pics/Vienna_graben_2.jpg", "author": "Alexey Golubev", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-man-riding-a-horse-down-a-hill-next-to-a-body-of-water-b1Brx-oQfyM"}], "belvedere": [{"file": "pics/Vienna_belvedere_1.jpg", "author": "Leonhard Niederwimmer", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-man-standing-in-front-of-a-large-white-building-6Cll-g8oopo"}, {"file": "pics/Vienna_belvedere_2.jpg", "author": "Niklas Bischop", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-a-fountain-in-front-of-it-ONtEoTiF5s8"}], "kunsthistorisches": [{"file": "pics/Vienna_kunsthistorisches_1.jpg", "author": "Martin Zenker", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-many-windows-y4j_bddcGRY"}, {"file": "pics/Vienna_kunsthistorisches_2.jpg", "author": "Wald Creations", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-domed-building-with-a-blue-skylight-above-it-zqaoiUi9AGg"}], "schonbrunn": [{"file": "pics/Vienna_schonbrunn_1.jpg", "author": "E. Diop", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-concrete-building-near-green-grass-field-under-blue-sky-during-daytime-D_b3n_paRpE"}, {"file": "pics/Vienna_schonbrunn_2.jpg", "author": "Allan Wadsworth", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-concrete-building-near-body-of-water-during-daytime-Qerg39bgHLU"}], "musikverein": [{"file": "pics/Vienna_musikverein_1.jpg", "author": "Bells Mayer", "license": "Unsplash License", "page": "https://unsplash.com/photos/people-inside-building-with-chandeliers-NgXUoFkxQyQ"}, {"file": "pics/Vienna_musikverein_2.jpg", "author": "Jiamin Huang", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-room-with-a-large-organ--Ib5gX8Pk-o"}], "hallstatt": [{"file": "pics/Hallstatt_hallstatt_1.jpg", "author": "Hasmik Ghazaryan Olson", "license": "Unsplash License", "page": "https://unsplash.com/photos/houses-near-body-of-water-and-mountain-during-daytime-LKBW3401d-0"}, {"file": "pics/Hallstatt_hallstatt_2.jpg", "author": "Filippo Cesarini", "license": "Unsplash License", "page": "https://unsplash.com/photos/brown-and-white-concrete-buildings-near-mountain-during-daytime-6pZ1CR95-LE"}], "st_wolfgang": [{"file": "pics/St.Wolfgang_st_wolfgang_1.jpg", "author": "Leonhard Niederwimmer", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-scenic-view-of-a-town-with-mountains-in-the-background-Z4XLBLnSqiE"}, {"file": "pics/St.Wolfgang_st_wolfgang_2.jpg", "author": "Free Walking Tour Salzburg", "license": "Unsplash License", "page": "https://unsplash.com/photos/houses-near-body-of-water-during-daytime-7mAVe4zT45k"}], "old_town_square": [{"file": "pics/Prague_old_town_square_1.jpg", "author": "waa towaw", "license": "Unsplash License", "page": "https://unsplash.com/photos/gothic-church-spires-and-a-statue-against-a-blue-sky-w3r_ZPK-FSs"}, {"file": "pics/Prague_old_town_square_2.jpg", "author": "Noemi Palmieri", "license": "Unsplash License", "page": "https://unsplash.com/photos/pragues-st-nicholas-church-and-monument-under-a-blue-sky-oKErIHFI8cA"}], "charles_bridge": [{"file": "pics/Prague_charles_bridge_1.jpg", "author": "Martin Krchnacek", "license": "Unsplash License", "page": "https://unsplash.com/photos/gray-concrete-bridge-near-buildings-OyoaCpMCR0U"}, {"file": "pics/Prague_charles_bridge_2.jpg", "author": "William Zhang", "license": "Unsplash License", "page": "https://unsplash.com/photos/charles-bridge-and-prague-castle-6En4WYsNYXM"}], "prague_castle": [{"file": "pics/Prague_prague_castle_1.jpg", "author": "Mikhail Mamaev", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-person-holding-a-stick-4z7anafe7p4"}, {"file": "pics/Prague_prague_castle_2.jpg", "author": "Jan Antonin Kolar", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-wooden-framed-glass-window-QqozkTGEA0Q"}], "st_vitus": [{"file": "pics/Prague_st_vitus_1.jpg", "author": "Boubacar Mohamed Touré", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-man-poses-in-a-blue-embroidered-shirt-vX_pRFr7cC8"}, {"file": "pics/Prague_st_vitus_2.jpg", "author": "Ab Benson", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-woman-with-her-hands-on-her-face-jZ26CWE8sFE"}], "lenon_wall": [{"file": "pics/Prague_lenon_wall_1.jpg", "author": "Nayam", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-laptop-computer-sitting-on-top-of-a-table-gP03rRKJBps"}, {"file": "pics/Prague_lenon_wall_2.jpg", "author": "Oskar Hagberg", "license": "Unsplash License", "page": "https://unsplash.com/photos/padel-racket-and-ball-on-court-0mANKAqH87U"}], "dancing_house": [{"file": "pics/Prague_dancing_house_1.jpg", "author": "Thomas Winkler", "license": "Unsplash License", "page": "https://unsplash.com/photos/black-white-red-and-yellow-abstract-painting-2JS-pxUTGok"}, {"file": "pics/Prague_dancing_house_2.jpg", "author": "Kamilla Isalieva", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-group-of-people-walking-by-a-building-NH-u_nOpDl4"}], "heroes_square": [{"file": "pics/Budapest_heroes_square_1.jpg", "author": "Bram van Geerenstein", "license": "Unsplash License", "page": "https://unsplash.com/photos/architectural-photography-of-statues-PBIJDcnAkEg"}, {"file": "pics/Budapest_heroes_square_2.jpg", "author": "Luca Herren", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-statue-of-a-person-holding-a-torch-in-front-of-a-monument-XR-_BTxOr4A"}], "matthias_church": [{"file": "pics/Budapest_matthias_church_1.jpg", "author": "Florian van Duyn", "license": "Unsplash License", "page": "https://unsplash.com/photos/matthias-church-and-statue-in-budapest--ZktwJWN_24"}, {"file": "pics/Budapest_matthias_church_2.jpg", "author": "Daniel Horvath", "license": "Unsplash License", "page": "https://unsplash.com/photos/white-and-brown-concrete-cathedral-JSjkGY0vS3U"}], "parliament_view": [{"file": "pics/Budapest_parliament_view_1.jpg", "author": "Ervin Lukacs", "license": "Unsplash License", "page": "https://unsplash.com/photos/hungarian-parliament-building-in-budapest-sMyQb3i9bNA"}, {"file": "pics/Budapest_parliament_view_2.jpg", "author": "Gabriel Miklós", "license": "Unsplash License", "page": "https://unsplash.com/photos/brown-and-white-concrete-building-during-night-time-LiE-pn2fJ5I"}], "buda_castle": [{"file": "pics/Budapest_buda_castle_1.jpg", "author": "Nemanja Ćirić", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-large-building-with-a-domed-roof-a34ZgS4VPxw"}, {"file": "pics/Budapest_buda_castle_2.jpg", "author": "Mihály Köles", "license": "Unsplash License", "page": "https://unsplash.com/photos/brown-and-white-concrete-building-near-body-of-water-during-daytime-afUfiI7IXjI"}], "danube_cruise": [{"file": "pics/Budapest_danube_cruise_1.jpg", "author": "Dan Freeman", "license": "Unsplash License", "page": "https://unsplash.com/photos/landscape-photo-of-bridge-with-lights-kDP_lvDzh2c"}, {"file": "pics/Budapest_danube_cruise_2.jpg", "author": "Jason Mavrommatis", "license": "Unsplash License", "page": "https://unsplash.com/photos/hungarian-parliament-building-at-night--9Ap357MJ8s"}], "state_opera": [{"file": "pics/Budapest_state_opera_1.jpg", "author": "Faezeh Taheri", "license": "Unsplash License", "page": "https://unsplash.com/photos/an-ornate-theater-with-empty-red-seats-Hne6drySGfQ"}, {"file": "pics/Budapest_state_opera_2.jpg", "author": "Victor Malyushev", "license": "Unsplash License", "page": "https://unsplash.com/photos/gothic-design-palace-under-clear-sky-IW4zbrKoges"}], "cafe_mozart": [{"file": "pics/Vienna_cafe_mozart_1.jpg", "author": "Oleksii Shtanko", "license": "Unsplash License", "page": "https://unsplash.com/photos/a-city-street-at-night-with-a-lot-of-traffic-YKg-M6bkaJU"}, {"file": "pics/Vienna_cafe_mozart_2.jpg", "author": "Florian Schindler", "license": "Unsplash License", "page": "https://unsplash.com/photos/illuminated-cafe-exterior-with-outdoor-tables-at-night-92emRwuQhoo"}]};</script>
+<script>window.LABELS_B={"斯蒂芬大教堂": ["1/23 上午"], "格拉本大街": ["1/23 上午"], "约瑟夫广场": ["1/23 上午"], "霍夫堡宫": ["1/23 下午"], "莫扎特咖啡馆": ["1/23 下午"], "艺术史博物馆": ["1/24 上午"], "卡尔教堂": ["1/24 上午"], "绿桥（爱在黎明破晓前）": ["1/24 下午"], "美泉宫": ["1/25 上午"], "美景宫": ["1/25 上午"], "金色大厅": ["1/25 下午"], "哈尔施塔特": ["1/26 全天", "1/27 上午"], "老城广场（天文钟）": ["1/27 下午", "1/29 上午"], "布拉格城堡": ["1/28 上午"], "圣维特大教堂": ["1/28 上午"], "列侬墙": ["1/28 下午"], "查理大桥": ["1/28 下午"], "跳舞的房子": ["1/29 下午"], "纽约咖啡厅": ["1/30 上午"], "自由桥": ["1/30 上午"], "多瑙河游船码头": ["1/30 下午"], "渔人堡": ["1/31 上午"], "马加什教堂": ["1/31 上午"], "布达堡": ["1/31 上午"], "塞切尼链桥": ["1/31 下午"], "圣伊什特万圣殿": ["1/31 下午"], "国会大厦观景点": ["1/31 下午"], "英雄广场": ["2/1 上午"], "塞切尼温泉浴场": ["2/1 上午"], "匈牙利国会大厦": ["2/1 下午"], "匈牙利国家歌剧院": ["2/1 下午"]};</script>
+<script>window.ITIN_B={"id": "B", "title": "方案 B · 只玩哈尔施塔特", "subtitle": "湖区集中，布拉格保留 2 个整天", "pros": ["布拉格保留 2 个整天", "哈尔施塔特占满晨昏两个黄金时段", "1/27 转场比 A 短，更从容"], "cons": ["不去圣沃尔夫冈"], "stay": [["维也纳", 3], ["哈尔施塔特", 1], ["布拉格", 3], ["布达佩斯", 3]], "days": [{"date": "1/22", "w": "五", "city": "Vienna", "stay": "—", "transport": "深圳宝安机场集合，建议 22:30 前到", "items": [], "note": "01:45 HU789 起飞"}, {"date": "1/23", "w": "六", "city": "Vienna", "stay": "维也纳", "transport": "VIE → 市区：ÖBB 城铁约 €4.2，15–25 分钟", "items": ["斯蒂芬大教堂", "格拉本大街", "约瑟夫广场", "霍夫堡宫", "莫扎特咖啡馆"], "note": "清晨落地，先寄存行李"}, {"date": "1/24", "w": "日", "city": "Vienna", "stay": "维也纳", "transport": "市内 72 小时通票约 €17", "items": ["艺术史博物馆", "卡尔教堂", "绿桥（爱在黎明破晓前）"], "note": "艺术史博物馆周一闭馆，必须今天去"}, {"date": "1/25", "w": "一", "city": "Vienna", "stay": "维也纳", "transport": "地铁 U4 到 Schönbrunn", "items": ["美泉宫", "美景宫", "金色大厅"], "note": "晚上金色大厅音乐会"}, {"date": "1/26", "w": "二", "city": "Hallstatt", "stay": "哈尔施塔特", "transport": "维也纳 → 哈尔施塔特 约 3h（Wien Hbf → Attnang-Puchheim → Hallstatt Bahnhof）", "items": ["哈尔施塔特"], "note": "火车站在湖对岸，需坐渡船进村（约 8 分钟）；建议 09:00 前后出发，午后到"}, {"date": "1/27", "w": "三", "city": "Hallstatt", "stay": "布拉格", "transport": "哈尔施塔特 → 布拉格 约 5.5–6.5h（Attnang-Puchheim → Linz → Praha）", "items": ["哈尔施塔特", "老城广场（天文钟）"], "note": "清晨看湖面晨雾；建议 13:00 前后出发，夜抵布拉格"}, {"date": "1/28", "w": "四", "city": "Prague", "stay": "布拉格", "transport": "步行 + 电车", "items": ["布拉格城堡", "圣维特大教堂", "列侬墙", "查理大桥"], "note": "查理大桥黄昏去"}, {"date": "1/29", "w": "五", "city": "Prague", "stay": "布拉格", "transport": "步行 + 电车", "items": ["老城广场（天文钟）", "跳舞的房子"], "note": ""}, {"date": "1/30", "w": "六", "city": "Budapest", "stay": "布达佩斯", "transport": "布拉格 → 布达佩斯 火车约 7h（RegioJet / ČD / ÖBB EC，提前买约 €19–35）", "items": ["纽约咖啡厅", "自由桥", "多瑙河游船码头"], "note": "建议 08:00 早班，15:00 前后抵达；夜游船看国会大厦亮灯"}, {"date": "1/31", "w": "日", "city": "Budapest", "stay": "布达佩斯", "transport": "步行 + 地铁", "items": ["渔人堡", "马加什教堂", "布达堡", "塞切尼链桥", "圣伊什特万圣殿", "国会大厦观景点"], "note": "⚠️ 渔人堡 9:00 前免费且人少，早上先去"}, {"date": "2/1", "w": "一", "city": "Budapest", "stay": "布达佩斯", "transport": "地铁 M1 到英雄广场 / 塞切尼", "items": ["英雄广场", "塞切尼温泉浴场", "匈牙利国会大厦", "匈牙利国家歌剧院"], "note": "国会大厦导览票需提前官网订"}, {"date": "2/2", "w": "二", "city": "Budapest", "stay": "—", "transport": "11:45 CZ650 布达佩斯 → 广州，08:30 前到机场（100E 巴士约 1500 HUF）", "items": [], "note": ""}]};</script>
+<script>window.VERSION={"version": "v6", "built_at": "2026-09-16 16:40", "commit": "a08a55e", "note": "修复 JS 语法错误 + 增加版本快照页面"};</script>
+<script>
+const COLORS={"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"}, CITY_CN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}, CITY_ZOOM=11;
+const LAB=window.LABELS_B||{};
+const map=L.map("map").setView([47.9,16.5],6);
+const bases={
+ "暗色 CARTO":L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+   {maxZoom:19,subdomains:"abcd",attribution:"&copy; OpenStreetMap &copy; CARTO"}),
+ "亮色 CARTO":L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+   {maxZoom:19,subdomains:"abcd",attribution:"&copy; OpenStreetMap &copy; CARTO"}),
+ "Esri 街道":L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+   {maxZoom:19,attribution:"Tiles &copy; Esri"})
+};
+const DEF="暗色 CARTO"; bases[DEF].addTo(map);
+let te=0; bases[DEF].on("tileerror",function(){ if(++te>4&&map.hasLayer(bases[DEF])){map.removeLayer(bases[DEF]);bases["Esri 街道"].addTo(map);} });
+
+const groups={},layers={},bounds=[],placeM=[],cityM=[];
+window.PLACES.forEach(p=>(groups[p.city]=groups[p.city]||[]).push(p));
+
+Object.entries(groups).forEach(function(kv){
+  const city=kv[0], items=kv[1], c=COLORS[city]||"#888", lg=L.layerGroup();
+  items.forEach(function(p){
+    const labArr=LAB[p.name]||[];
+    const html="<b>"+p.name+"</b>"
+      +(labArr.length?'<div class="lb">'+labArr.join(" / ")+"</div>":"")
+      +(p.note?'<div class="nt">'+p.note+"</div>":"");
+    const m=L.circleMarker([p.lat,p.lon],{radius:8,color:"#fff",weight:2,fillColor:c,fillOpacity:.95})
+      .bindPopup("<b>"+p.name+"</b>"+(labArr.length?'<div class="lb">'+labArr.join(" / ")+"</div>":"")
+        +(p.note?'<div class="note">'+p.note+"</div>":""))
+      .bindTooltip(html,{permanent:true,direction:"top",className:"plabel",opacity:1,offset:[0,-6]})
+      .addTo(lg);
+    placeM.push(m); bounds.push([p.lat,p.lon]);
+  });
+  lg.addTo(map); layers[(CITY_CN[city]||city)+" ("+items.length+")"]=lg;
+
+  const lat=items.reduce((s,p)=>s+p.lat,0)/items.length, lon=items.reduce((s,p)=>s+p.lon,0)/items.length;
+  const cm=L.marker([lat,lon],{icon:L.divIcon({className:"",html:"",iconSize:[0,0]}),interactive:false,keyboard:false})
+    .bindTooltip(CITY_CN[city]||city,{permanent:true,direction:"center",className:"clabel",opacity:1});
+  cm.addTo(map); cityM.push(cm);
+});
+L.control.layers(bases,layers,{collapsed:window.innerWidth<600}).addTo(map);
+
+function applyZoom(){
+  const cityMode = map.getZoom() < CITY_ZOOM;
+  placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
+  cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
+}
+map.on("zoomend",applyZoom);
+
+function toggleFs(){
+  const el=document.getElementById("map");
+  const req=el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen;
+  const ext=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+  if(!document.fullscreenElement&&!document.webkitFullscreenElement){ if(req) req.call(el); }
+  else if(ext){ ext.call(document); }
+}
+const FsCtl=L.control({position:"topright"});
+FsCtl.onAdd=function(){
+  const d=L.DomUtil.create("div","leaflet-bar fsbtn");
+  d.innerHTML='<a href="#" title="全屏" aria-label="全屏">&#9974;</a>';
+  L.DomEvent.disableClickPropagation(d);
+  L.DomEvent.on(d,"click",function(e){L.DomEvent.stop(e);toggleFs();});
+  return d;
+};
+FsCtl.addTo(map);
+document.addEventListener("fullscreenchange",function(){setTimeout(function(){map.invalidateSize();applyZoom();},120);});
+document.addEventListener("webkitfullscreenchange",function(){setTimeout(function(){map.invalidateSize();applyZoom();},120);});
+
+if(bounds.length){ map.fitBounds(bounds,{padding:[40,40]}); }
+applyZoom();
+
+const P=window.PHOTOS||{}, NAME2ID={"纽约咖啡厅": "nyc_cafe", "塞切尼温泉浴场": "szechenyi_bath", "英雄广场": "heroes_square", "塞切尼链桥": "chain_bridge", "渔人堡": "fishermans_bastion", "马加什教堂": "matthias_church", "国会大厦观景点": "parliament_view", "布达堡": "buda_castle", "多瑙河游船码头": "danube_cruise", "匈牙利国家歌剧院": "state_opera", "圣伊什特万圣殿": "st_stephens", "自由桥": "liberty_bridge", "匈牙利国会大厦": "parliament", "斯蒂芬大教堂": "st_stephens_cathedral", "霍夫堡宫": "hofburg", "卡尔教堂": "karlskirche", "莫扎特咖啡馆": "cafe_mozart", "绿桥（爱在黎明破晓前）": "zollamtssteg", "约瑟夫广场": "josefsplatz", "格拉本大街": "graben", "美景宫": "belvedere", "艺术史博物馆": "kunsthistorisches", "美泉宫": "schonbrunn", "金色大厅": "musikverein", "哈尔施塔特": "hallstatt", "圣沃尔夫冈": "st_wolfgang", "老城广场（天文钟）": "old_town_square", "查理大桥": "charles_bridge", "布拉格城堡": "prague_castle", "圣维特大教堂": "st_vitus", "列侬墙": "lenon_wall", "跳舞的房子": "dancing_house"}, ITIN=window.ITIN_B;
+document.getElementById("days").innerHTML = ITIN.days.map(function(d){
+  const n=d.items.length;
+  const items = d.items.map(function(nm,i){
+    const id=NAME2ID[nm], ph=(id&&P[id])||[];
+    const th = ph.length ? '<div class="thumbs">'+ph.slice(0,3).map(function(f){return '<img src="../'+f.file+'" loading="lazy">';}).join("")+"</div>" : "";
+    const sess = n<=1 ? "" : (i < (n+1)/2 ? "上午" : "下午");
+    const ampm = n>1 ? ' <span class="ampm">'+sess+"</span>" : "";
+    return "<li>"+nm+ampm+th+"</li>";
+  }).join("");
+  return '<div class="day"><div class="hd"><span class="d">'+d.date+
+    '</span><span class="w">周'+d.w+'</span><span class="s">住 '+d.stay+'</span></div>'+
+    '<div class="bd">'+
+    (d.transport?'<div class="tp"><b>&#128646;</b> '+d.transport+"</div>":"")+
+    (items?"<ul>"+items+"</ul>":"")+
+    (d.note?'<div class="note">'+d.note+"</div>":"")+
+    "</div></div>";
+}).join("");
+document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
+  return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+"</div></div>";
+}).join("");
+
+const V=window.VERSION||{};
+document.getElementById("ver").innerHTML="版本 <b>"+(V.version||"-")+"</b> · 更新于 "+(V.built_at||"-")+(V.note?" · "+V.note:"");
+document.getElementById("verfoot").textContent=(V.version||"")+" · "+(V.built_at||"")+" · commit "+(V.commit||"")+" · "+(V.note||"");
+</script>
+</body></html>
