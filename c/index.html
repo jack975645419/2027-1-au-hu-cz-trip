@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-<title>方案 B · 只玩哈尔施塔特 · 2027-1 奥匈捷之旅</title>
+<title>方案 C · 布达佩斯进 / 布拉格中转回 · 2027-1 奥匈捷之旅</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
@@ -65,27 +65,27 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 .leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
 </style></head><body><div class="wrap">
 <header><a class="back" href="../index.html">← 全部方案</a>
-<h1>方案 B · 只玩哈尔施塔特</h1><div class="sub">湖区集中，布拉格保留 2 个整天</div>
+<h1>方案 C · 布达佩斯进 / 布拉格中转回</h1><div class="sub">机票最省 · 火车最短 · 到家最早</div>
 <div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
-<h2>取舍</h2><div class="card"><div class="pros">+ 布拉格保留 2 个整天</div><div class="pros">+ 哈尔施塔特占满晨昏两个黄金时段</div><div class="pros">+ 1/27 转场比 A 短，更从容</div><div class="cons">− 不去圣沃尔夫冈</div></div>
+<h2>取舍</h2><div class="card"><div class="pros">+ 机票最便宜 ¥5,694（比 A/B 省 ¥976）</div><div class="pros">+ 火车总时长最短约 12h（A/B 约 16h）</div><div class="pros">+ 2/2 中午就到家，比 A/B 早一天</div><div class="pros">+ 回程票价 Google 标注「目前低价」</div><div class="cons">− 回程是中转，约 16h（比直飞多 5h）</div><div class="cons">− 总晚数 9 晚，比 A/B 少 1 晚</div><div class="cons">− 中转需在国内机场转机，春运前要留足时间</div></div>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>逐日行程</h2><div id="days"></div>
 <h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v8.html">v8</a><a href="v7.html">v7</a><a href="v6.html">v6</a></div>
-<footer><div id="verfoot"></div><div style="margin-top:6px">方案 B · 只玩哈尔施塔特 · 草稿</div></footer>
+<h2>历史版本</h2><div class="card hist"><a href="v8.html">v8</a></div>
+<footer><div id="verfoot"></div><div style="margin-top:6px">方案 C · 布达佩斯进 / 布拉格中转回 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../data/places.js"></script>
 <script src="../data/photos.js"></script>
 <script src="../data/hotels.js"></script>
-<script src="../data/labels_b.js"></script>
-<script src="../data/itinerary_b.js"></script>
+<script src="../data/labels_c.js"></script>
+<script src="../data/itinerary_c.js"></script>
 <script src="../data/version.js"></script>
 <script>
 const COLORS={"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"}, CITY_CN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}, CITY_ZOOM=11;
-const LAB=window.LABELS_B||{};
+const LAB=window.LABELS_C||{};
 const map=L.map("map").setView([47.9,16.5],6);
 const bases={
  "暗色 CARTO":L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -169,7 +169,7 @@ document.addEventListener("webkitfullscreenchange",function(){setTimeout(functio
 if(bounds.length){ map.fitBounds(bounds,{padding:[40,40]}); }
 applyZoom();
 
-const P=window.PHOTOS||{}, NAME2ID={"纽约咖啡厅": "nyc_cafe", "塞切尼温泉浴场": "szechenyi_bath", "英雄广场": "heroes_square", "塞切尼链桥": "chain_bridge", "渔人堡": "fishermans_bastion", "马加什教堂": "matthias_church", "国会大厦观景点": "parliament_view", "布达堡": "buda_castle", "多瑙河游船码头": "danube_cruise", "匈牙利国家歌剧院": "state_opera", "圣伊什特万圣殿": "st_stephens", "自由桥": "liberty_bridge", "匈牙利国会大厦": "parliament", "斯蒂芬大教堂": "st_stephens_cathedral", "霍夫堡宫": "hofburg", "卡尔教堂": "karlskirche", "莫扎特咖啡馆": "cafe_mozart", "绿桥（爱在黎明破晓前）": "zollamtssteg", "约瑟夫广场": "josefsplatz", "格拉本大街": "graben", "美景宫": "belvedere", "艺术史博物馆": "kunsthistorisches", "美泉宫": "schonbrunn", "金色大厅": "musikverein", "哈尔施塔特": "hallstatt", "圣沃尔夫冈": "st_wolfgang", "老城广场（天文钟）": "old_town_square", "查理大桥": "charles_bridge", "布拉格城堡": "prague_castle", "圣维特大教堂": "st_vitus", "列侬墙": "lenon_wall", "跳舞的房子": "dancing_house"}, ITIN=window.ITIN_B;
+const P=window.PHOTOS||{}, NAME2ID={"纽约咖啡厅": "nyc_cafe", "塞切尼温泉浴场": "szechenyi_bath", "英雄广场": "heroes_square", "塞切尼链桥": "chain_bridge", "渔人堡": "fishermans_bastion", "马加什教堂": "matthias_church", "国会大厦观景点": "parliament_view", "布达堡": "buda_castle", "多瑙河游船码头": "danube_cruise", "匈牙利国家歌剧院": "state_opera", "圣伊什特万圣殿": "st_stephens", "自由桥": "liberty_bridge", "匈牙利国会大厦": "parliament", "斯蒂芬大教堂": "st_stephens_cathedral", "霍夫堡宫": "hofburg", "卡尔教堂": "karlskirche", "莫扎特咖啡馆": "cafe_mozart", "绿桥（爱在黎明破晓前）": "zollamtssteg", "约瑟夫广场": "josefsplatz", "格拉本大街": "graben", "美景宫": "belvedere", "艺术史博物馆": "kunsthistorisches", "美泉宫": "schonbrunn", "金色大厅": "musikverein", "哈尔施塔特": "hallstatt", "圣沃尔夫冈": "st_wolfgang", "老城广场（天文钟）": "old_town_square", "查理大桥": "charles_bridge", "布拉格城堡": "prague_castle", "圣维特大教堂": "st_vitus", "列侬墙": "lenon_wall", "跳舞的房子": "dancing_house"}, ITIN=window.ITIN_C;
 document.getElementById("days").innerHTML = ITIN.days.map(function(d){
   const n=d.items.length;
   const items = d.items.map(function(nm,i){
