@@ -1,161 +1,70 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
 <title>2027-1 奥匈捷之旅</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
-  :root{ --bg:#12161c; --card:#1b212b; --line:#2a323e; --text:#e8ecf1; --dim:#9aa5b1; --accent:#6ea8fe; }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);
-       font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
-       line-height:1.6;-webkit-text-size-adjust:100%}
-  .wrap{max-width:900px;margin:0 auto;padding:16px}
-  header{padding:20px 0 8px;border-bottom:1px solid var(--line);margin-bottom:16px}
-  h1{margin:0 0 6px;font-size:22px;letter-spacing:.5px}
-  .sub{color:var(--dim);font-size:13px}
-  .sub b{color:var(--text);font-weight:600}
-  .badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);
-         border-radius:999px;padding:3px 11px;font-size:11px;letter-spacing:.3px}
-  .badge b{color:var(--accent);font-weight:600}
-  h2{font-size:15px;margin:26px 0 10px;color:var(--accent);letter-spacing:.5px}
-  #map{height:58vh;min-height:320px;border-radius:12px;border:1px solid var(--line);
-       background:#0e1218;z-index:1}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
-  .card .t{font-weight:600;margin-bottom:4px}
-  .card .d{color:var(--dim);font-size:13px}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
-  th{color:var(--dim);font-weight:500}
-  .tag{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-  .stat .n{font-size:22px;font-weight:600}
-  .stat .l{color:var(--dim);font-size:12px}
-  footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
-  .leaflet-popup-content-wrapper{background:#1b212b;color:#e8ecf1;border-radius:10px}
-  .leaflet-popup-tip{background:#1b212b}
-  .leaflet-popup-content{margin:10px 12px;font-size:13px}
-  .leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
-  .leaflet-container a.leaflet-popup-close-button{color:#9aa5b1}
-</style>
-</head>
-<body>
-<div class="wrap">
-
-<header>
-  <h1>2027-1 奥匈捷之旅</h1>
-  <div class="sub">
-    <b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州
-  </div>
-  <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div>
-</header>
-
-<h2>地图</h2>
-<div id="map"></div>
-
-<h2>航班</h2>
-<div class="card">
-  <div class="t">去程 · 1/23（六）</div>
-  <div class="d">深圳 SZX 01:45 → 维也纳 VIE · 海航 HU789 · 实测直飞 ¥3,357</div>
+:root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+header{padding:16px 0 8px;border-bottom:1px solid var(--line);margin-bottom:16px}
+h1{margin:6px 0;font-size:22px}
+h2{font-size:15px;margin:26px 0 10px;color:var(--accent)}
+.sub{color:var(--dim);font-size:13px}.sub b{color:var(--text)}
+.badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
+.badge b{color:var(--accent)}
+a.back{color:var(--dim);font-size:12px;text-decoration:none}
+#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#0e1218;z-index:1}
+#map:fullscreen{height:100vh!important;width:100vw!important;border-radius:0;border:0;position:fixed;inset:0;z-index:9999}
+#map:-webkit-full-screen{height:100vh!important;width:100vw!important;border-radius:0;position:fixed;inset:0;z-index:9999}
+.fsbtn a{display:flex!important;align-items:center;justify-content:center;width:32px!important;height:32px!important;line-height:32px!important;font-size:15px;color:#222;text-decoration:none;background:#fff;border-radius:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.day .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:#202832;border-bottom:1px solid var(--line)}
+.day .d{font-size:17px;font-weight:700;color:var(--accent)}
+.day .w{color:var(--dim);font-size:12px}
+.day .s{margin-left:auto;color:var(--dim);font-size:12px}
+.day .bd{padding:12px 16px}
+.tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
+.note{color:#e8c07a;font-size:12px;margin-top:8px}
+ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
+.pros{color:#7fd39a}.cons{color:#e08a8a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .n{font-size:22px;font-weight:600}.stat .l{color:var(--dim);font-size:12px}
+.pick{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;color:var(--text);text-decoration:none}
+.pick:hover{border-color:var(--accent)}
+.pick .t{font-size:17px;font-weight:600;margin-bottom:4px}
+.pick .s{color:var(--dim);font-size:13px}
+footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
+.plabel{background:rgba(20,25,33,.92);border:1px solid #39434f;color:#e8ecf1;border-radius:6px;padding:3px 7px;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.plabel::before{display:none!important}
+.plabel .lb{color:#6ea8fe;font-size:10px;margin-top:2px}
+.plabel .nt{color:#9aa5b1;font-size:10px}
+.clabel{background:rgba(15,19,25,.9);border:1px solid #46525f;color:#fff;border-radius:9px;padding:5px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.clabel::before{display:none!important}
+.leaflet-popup-content-wrapper{background:#1b212b;color:#e8ecf1;border-radius:10px}
+.leaflet-popup-tip{background:#1b212b}
+.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+</style></head><body><div class="wrap">
+<header><h1>2027-1 奥匈捷之旅</h1>
+<div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
+<div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
+<h2>选择方案</h2><a class="pick" href="a/index.html"><div class="t">方案 A · 湖区加 1 晚</div><div class="s">圣沃尔夫冈 + 哈尔施塔特各住 1 晚</div><div class="s" style="margin-top:6px">住宿：维也纳 3晚 · 圣沃尔夫冈 1晚 · 哈尔施塔特 1晚 · 布拉格 2晚 · 布达佩斯 3晚</div></a><a class="pick" href="b/index.html"><div class="t">方案 B · 只玩哈尔施塔特</div><div class="s">湖区集中，布拉格保留 2 个整天</div><div class="s" style="margin-top:6px">住宿：维也纳 3晚 · 哈尔施塔特 1晚 · 布拉格 3晚 · 布达佩斯 3晚</div></a>
+<h2>航班（两个方案相同）</h2>
+<div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
+<div class="sub">深圳 SZX 01:45 → 维也纳 VIE · 海航 HU789 · 实测直飞 ¥3,357</div></div>
+<div class="card"><div style="font-weight:600">回程 · 2/2（二）</div>
+<div class="sub">布达佩斯 BUD 11:45 → 广州 CAN · 南航 CZ650 · 实测直飞 ¥3,313</div></div>
+<footer><div id="verfoot"></div><div style="margin-top:6px">行程草稿 · 地图数据 OpenStreetMap</div></footer>
 </div>
-<div class="card">
-  <div class="t">回程 · 2/2（二）</div>
-  <div class="d">布达佩斯 BUD 11:45 → 广州 CAN · 南航 CZ650 · 实测直飞 ¥3,313</div>
-</div>
-
-<h2>城市</h2>
-<div class="grid" id="stats"></div>
-
-<h2>全部景点</h2>
-<div class="card" style="padding:6px 10px">
-  <table id="places"></table>
-</div>
-
-<footer>
-  <div id="verfoot"></div>
-  <div style="margin-top:6px">草稿 · 行程待定 · 地图数据 data/places.json</div>
-</footer>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="data/places.js"></script>
 <script src="data/version.js"></script>
 <script>
-const V = window.VERSION || {};
-document.getElementById("ver").innerHTML =
-  `版本 <b>${V.version || "—"}</b> · 更新于 ${V.built_at || "—"}` +
-  (V.note ? ` · ${V.note}` : "");
-document.getElementById("verfoot").textContent =
-  `${V.version || ""} · ${V.built_at || ""} · commit ${V.commit || ""} · ${V.note || ""}`;
-
-const COLORS = {
-  "Budapest": "#e0605e", "Vienna": "#6ea8fe",
-  "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"
-};
-const CITY_CN = {
-  "Budapest": "布达佩斯", "Vienna": "维也纳",
-  "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"
-};
-
-const map = L.map("map").setView([47.9, 16.5], 6);
-const bases = {
-  "暗色 CARTO": L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    maxZoom: 19, subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO" }),
-  "亮色 CARTO": L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-    maxZoom: 19, subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO" }),
-  "Esri 街道": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-    maxZoom: 19, attribution: "Tiles &copy; Esri" })
-};
-const DEFAULT_BASE = "暗色 CARTO";
-bases[DEFAULT_BASE].addTo(map);
-
-// 瓦片加载失败（国内网络常见）自动降级到 Esri
-let tileErr = 0;
-bases[DEFAULT_BASE].on("tileerror", () => {
-  if (++tileErr > 4 && map.hasLayer(bases[DEFAULT_BASE])) {
-    map.removeLayer(bases[DEFAULT_BASE]);
-    bases["Esri 街道"].addTo(map);
-  }
-});
-
-const layers = {}, bounds = [];
-const groups = {};
-window.PLACES.forEach(p => (groups[p.city] = groups[p.city] || []).push(p));
-
-Object.entries(groups).forEach(([city, items]) => {
-  const color = COLORS[city] || "#888";
-  const lg = L.layerGroup();
-  items.forEach(p => {
-    L.circleMarker([p.lat, p.lon], {
-      radius: 7, color: "#fff", weight: 1.5, fillColor: color, fillOpacity: .95
-    }).bindPopup(`<b>${p.name}</b>${p.note ? `<div class="note">${p.note}</div>` : ""}`).addTo(lg);
-    bounds.push([p.lat, p.lon]);
-  });
-  lg.addTo(map);
-  layers[`${CITY_CN[city] || city} (${items.length})`] = lg;
-});
-L.control.layers(bases, layers, { collapsed: false }).addTo(map);
-if (bounds.length) map.fitBounds(bounds, { padding: [40, 40] });
-
-// 城市统计
-document.getElementById("stats").innerHTML = Object.entries(groups)
-  .sort((a, b) => b[1].length - a[1].length)
-  .map(([city, items]) => {
-    const c = COLORS[city] || "#888";
-    return `<div class="stat"><div class="n">${items.length}</div>
-      <div class="l"><span class="tag" style="background:${c}"></span>${CITY_CN[city] || city}</div></div>`;
-  }).join("");
-
-// 景点表
-document.getElementById("places").innerHTML =
-  "<tr><th>景点</th><th>城市</th><th>备注</th></tr>" +
-  Object.entries(groups).map(([city, items]) => items.map(p =>
-    `<tr><td>${p.name}</td>
-      <td><span class="tag" style="background:${COLORS[city] || '#888'}"></span>${CITY_CN[city] || city}</td>
-      <td style="color:var(--dim)">${p.note || ""}</td></tr>`).join("")
-  ).join("");
+const V=window.VERSION||{};
+document.getElementById("ver").innerHTML="版本 <b>"+(V.version||"-")+"</b> · 更新于 "+(V.built_at||"-")+(V.note?" · "+V.note:"");
+document.getElementById("verfoot").textContent=(V.version||"")+" · "+(V.built_at||"")+" · commit "+(V.commit||"")+" · "+(V.note||"");
 </script>
-</body>
-</html>
+</body></html>
