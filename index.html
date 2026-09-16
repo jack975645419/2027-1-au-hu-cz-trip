@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 <title>2027-1 奥匈捷之旅</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{ --bg:#12161c; --card:#1b212b; --line:#2a323e; --text:#e8ecf1; --dim:#9aa5b1; --accent:#6ea8fe; }
   *{box-sizing:border-box}
@@ -72,7 +72,7 @@
 <footer>草稿 · 行程待定 · 数据生成自 data/places.json</footer>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data/places.js"></script>
 <script>
 const COLORS = {
@@ -85,9 +85,25 @@ const CITY_CN = {
 };
 
 const map = L.map("map").setView([47.9, 16.5], 6);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 18, attribution: "&copy; OpenStreetMap contributors"
-}).addTo(map);
+const bases = {
+  "暗色 CARTO": L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    maxZoom: 19, subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO" }),
+  "亮色 CARTO": L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    maxZoom: 19, subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO" }),
+  "Esri 街道": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom: 19, attribution: "Tiles &copy; Esri" })
+};
+const DEFAULT_BASE = "暗色 CARTO";
+bases[DEFAULT_BASE].addTo(map);
+
+// 瓦片加载失败（国内网络常见）自动降级到 Esri
+let tileErr = 0;
+bases[DEFAULT_BASE].on("tileerror", () => {
+  if (++tileErr > 4 && map.hasLayer(bases[DEFAULT_BASE])) {
+    map.removeLayer(bases[DEFAULT_BASE]);
+    bases["Esri 街道"].addTo(map);
+  }
+});
 
 const layers = {}, bounds = [];
 const groups = {};
@@ -105,7 +121,7 @@ Object.entries(groups).forEach(([city, items]) => {
   lg.addTo(map);
   layers[`${CITY_CN[city] || city} (${items.length})`] = lg;
 });
-L.control.layers(null, layers, { collapsed: false }).addTo(map);
+L.control.layers(bases, layers, { collapsed: false }).addTo(map);
 if (bounds.length) map.fitBounds(bounds, { padding: [40, 40] });
 
 // 城市统计
