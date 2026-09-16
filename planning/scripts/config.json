@@ -1,0 +1,22 @@
+{
+  "currency": "CNY",
+  "providers": ["google"],
+  "legs": [
+    {
+      "id": "go_szx_vie",
+      "label": "去程 深圳(SZX)→维也纳(VIE)",
+      "origin": "SZX",
+      "dest": "VIE",
+      "date": "2027-01-23",
+      "target": 3357
+    },
+    {
+      "id": "back_bud_can",
+      "label": "回程 布达佩斯(BUD)→广州(CAN)",
+      "origin": "BUD",
+      "dest": "CAN",
+      "date": "2027-02-02",
+      "target": 3313
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v4", "built_at": "2026-09-16 16:21", "commit": "c2b84bf", "note": "两个方案各自独立页面 + 地图全屏 + 按缩放级别标注（城市名/景点名+日期上下午）"};
+window.VERSION = {"version": "v5", "built_at": "2026-09-16 16:27", "commit": "68f9fee", "note": "归档全部规划资料进 planning/"};
