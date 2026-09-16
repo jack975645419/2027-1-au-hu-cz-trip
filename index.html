@@ -16,6 +16,9 @@
   h1{margin:0 0 6px;font-size:22px;letter-spacing:.5px}
   .sub{color:var(--dim);font-size:13px}
   .sub b{color:var(--text);font-weight:600}
+  .badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);
+         border-radius:999px;padding:3px 11px;font-size:11px;letter-spacing:.3px}
+  .badge b{color:var(--accent);font-weight:600}
   h2{font-size:15px;margin:26px 0 10px;color:var(--accent);letter-spacing:.5px}
   #map{height:58vh;min-height:320px;border-radius:12px;border:1px solid var(--line);
        background:#0e1218;z-index:1}
@@ -46,6 +49,7 @@
   <div class="sub">
     <b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州
   </div>
+  <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div>
 </header>
 
 <h2>地图</h2>
@@ -69,12 +73,23 @@
   <table id="places"></table>
 </div>
 
-<footer>草稿 · 行程待定 · 数据生成自 data/places.json</footer>
+<footer>
+  <div id="verfoot"></div>
+  <div style="margin-top:6px">草稿 · 行程待定 · 地图数据 data/places.json</div>
+</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data/places.js"></script>
+<script src="data/version.js"></script>
 <script>
+const V = window.VERSION || {};
+document.getElementById("ver").innerHTML =
+  `版本 <b>${V.version || "—"}</b> · 更新于 ${V.built_at || "—"}` +
+  (V.note ? ` · ${V.note}` : "");
+document.getElementById("verfoot").textContent =
+  `${V.version || ""} · ${V.built_at || ""} · commit ${V.commit || ""} · ${V.note || ""}`;
+
 const COLORS = {
   "Budapest": "#e0605e", "Vienna": "#6ea8fe",
   "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"

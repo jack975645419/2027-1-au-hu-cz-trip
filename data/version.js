@@ -1,0 +1,1 @@
+window.VERSION = {"version": "v3", "built_at": "2026-09-16 16:08", "commit": "359976c", "note": "加版本号与更新时间"};
