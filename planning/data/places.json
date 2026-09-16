@@ -227,8 +227,8 @@
     "name": "哈尔施塔特",
     "query": "Hallstatt, Oberosterreich",
     "city": "Hallstatt",
-    "lat": 47.5347939,
-    "lon": 13.5988875,
+    "lat": 47.5622,
+    "lon": 13.649,
     "note": "火车站需换渡船过湖"
   },
   {
@@ -236,8 +236,8 @@
     "name": "圣沃尔夫冈",
     "query": "St. Wolfgang im Salzkammergut",
     "city": "St. Wolfgang",
-    "lat": 47.749753,
-    "lon": 13.5026937,
+    "lat": 47.7386,
+    "lon": 13.4482,
     "note": "沙夫山齿轨火车"
   },
   {

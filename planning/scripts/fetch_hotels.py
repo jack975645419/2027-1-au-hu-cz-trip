@@ -29,16 +29,56 @@ ENDPOINTS = [
     "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ]
 
-# (key, 中文名, 中心纬度, 中心经度, 搜索半径m, 所属 places.city)
+# (key, 中文名, 中心纬度, 中心经度, 搜索半径m, 所属 places.city, Nominatim 兜底搜索词)
 STOPS = [
-    ("vienna", "维也纳", 48.20849, 16.37313, 2500, "Vienna"),
-    ("st_wolfgang", "圣沃尔夫冈", 47.74975, 13.50269, 1500, "St. Wolfgang"),
-    ("hallstatt", "哈尔施塔特", 47.53479, 13.59889, 1200, "Hallstatt"),
-    ("prague", "布拉格", 50.08745, 14.42097, 1800, "Prague"),
-    ("budapest", "布达佩斯", 47.50078, 19.05397, 2200, "Budapest"),
+    ("vienna", "维也纳", 48.20849, 16.37313, 2500, "Vienna", []),
+    ("st_wolfgang", "圣沃尔夫冈", 47.7386, 13.4482, 1500, "St. Wolfgang",
+     ["hotel Sankt Wolfgang im Salzkammergut", "Pension St. Wolfgang Salzkammergut",
+      "Gasthof St. Wolfgang Salzkammergut", "Hotel Weisses Rössl St. Wolfgang"]),
+    ("hallstatt", "哈尔施塔特", 47.5622, 13.6490, 1200, "Hallstatt",
+     ["hotel Hallstatt Oberosterreich", "Pension Hallstatt", "Gasthof Hallstatt",
+      "Seehotel Hallstatt", "Heritage Hotel Hallstatt"]),
+    ("prague", "布拉格", 50.08745, 14.42097, 1800, "Prague", []),
+    ("budapest", "布达佩斯", 47.50078, 19.05397, 2200, "Budapest", []),
 ]
 
-PICK = 3  # 每个住宿点推荐几家
+PICK = 3     # 每个住宿点推荐几家
+TRIM = 40    # 写进 JSON 的候选上限（大城市 Overpass 会返回几百家）
+
+BAD = ("parkplatz", "parkhaus", "parking", "bundessport", "garage", "stellplatz")
+
+
+def nominatim_hotels(terms):
+    """Overpass 拿不到时的兜底：用 Nominatim 按关键词搜"""
+    out, seen = [], set()
+    for term in terms:
+        u = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode(
+            {"q": term, "format": "json", "limit": 15, "extratags": 1})
+        try:
+            req = urllib.request.Request(u, headers={"User-Agent": UA})
+            data = json.loads(urllib.request.urlopen(req, timeout=30).read().decode("utf-8"))
+        except Exception as e:
+            print(f"    Nominatim「{term}」失败: {type(e).__name__}")
+            continue
+        for x in data:
+            name = x["display_name"].split(",")[0].strip()
+            if not name or name in seen:
+                continue
+            if any(w in name.lower() for w in BAD):
+                continue
+            seen.add(name)
+            et = x.get("extratags") or {}
+            stars = et.get("stars", "")
+            out.append({
+                "osm_id": f"nominatim/{x.get('osm_id','')}",
+                "name": name, "kind": "hotel",
+                "lat": float(x["lat"]), "lon": float(x["lon"]),
+                "stars": int(stars[0]) if stars and stars[0].isdigit() else None,
+                "website": et.get("website", ""), "phone": et.get("phone", ""),
+                "street": "", "city": "", "postcode": "",
+            })
+        time.sleep(1.2)
+    return out
 
 
 def overpass(query):
@@ -55,14 +95,33 @@ def overpass(query):
 
 
 def hotels_around(lat, lon, radius):
+    """逐个镜像试，取第一个「有结果」的响应——部分镜像只覆盖局部区域，会返回空"""
     q = f"""[out:json][timeout:120];
 (
   node["tourism"~"^(hotel|guest_house|hostel)$"](around:{radius},{lat},{lon});
   way["tourism"~"^(hotel|guest_house|hostel)$"](around:{radius},{lat},{lon});
 );
 out center tags;"""
-    data, ep = overpass(q)
-    if not data:
+    best = []
+    for ep in ENDPOINTS:
+        try:
+            req = urllib.request.Request(
+                ep, data=urllib.parse.urlencode({"data": q}).encode(),
+                headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                data = json.loads(r.read().decode("utf-8"))
+        except Exception as e:
+            print(f"    {ep.split('/')[2]} 失败: {type(e).__name__}")
+            continue
+        cur = [e for e in data.get("elements", []) if (e.get("tags", {}).get("name")
+                                                       or e.get("tags", {}).get("name:en"))]
+        print(f"    {ep.split('/')[2]}: {len(cur)} 家")
+        if len(cur) > len(best):
+            best = cur
+        if best:
+            break
+    data = {"elements": best}
+    if not best:
         return []
     out = []
     for el in data.get("elements", []):
@@ -116,15 +175,24 @@ def haversine(a, b, c, d):
 def main():
     noimg = "--noimg" in sys.argv
     places = json.loads(PLACES.read_text(encoding="utf-8"))
+    global FORCE
+    FORCE = "--force" in sys.argv
 
-    result = {}
-    for key, cn, lat, lon, radius, city in STOPS:
+    # 合并而非覆盖：Overpass 镜像经常抽风，抓不到时保留上一轮的成果
+    result = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    for key, cn, lat, lon, radius, city, terms in STOPS:
+        if not FORCE and result.get(key, {}).get("candidates"):
+            print(f"\n{cn}：已有 {len(result[key]['candidates'])} 家，跳过（--force 可强制重抓）")
+            continue
         print(f"\n{cn}（半径 {radius}m）")
         spots = [p for p in places if p["city"] == city] or [{"lat": lat, "lon": lon}]
         clat = sum(p["lat"] for p in spots) / len(spots)
         clon = sum(p["lon"] for p in spots) / len(spots)
 
         cands = hotels_around(lat, lon, radius)
+        if not cands and terms:
+            print("    Overpass 无结果 → Nominatim 兜底")
+            cands = nominatim_hotels(terms)
         stas = stations_around(lat, lon, min(radius, 1500))
         for h in cands:
             h["dist_sights"] = round(haversine(h["lat"], h["lon"], clat, clon))
@@ -138,10 +206,12 @@ def main():
         cands.sort(key=lambda h: h["score"])
 
         picks = cands[:PICK]
-        print(f"  候选 {len(cands)} 家，推荐 {len(picks)} 家：" +
+        kept = cands[:TRIM]                      # 只写前 N 家，避免 JSON 过大
+        print(f"  候选 {len(cands)} 家 → 保留 {len(kept)}，推荐 {len(picks)} 家：" +
               "、".join(h["name"] for h in picks))
         result[key] = {"city": cn, "center": [lat, lon], "sight_center": [clat, clon],
-                       "candidates": cands, "picks": [h["name"] for h in picks]}
+                       "total": len(cands), "candidates": kept,
+                       "picks": [h["name"] for h in picks]}
         time.sleep(1.5)
 
     # 给推荐酒店配图（只认 Commons 上能搜到该酒店名的，搜不到就不配，避免张冠李戴）

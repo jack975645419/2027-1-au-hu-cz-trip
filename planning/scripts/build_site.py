@@ -31,6 +31,13 @@ CITY_ZOOM = 11          # < 此缩放显示城市名，>= 显示景点名
 places = json.loads((ROOT / "data" / "places.json").read_text(encoding="utf-8"))
 photos = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))
 itins = json.loads((ROOT / "data" / "itineraries.json").read_text(encoding="utf-8"))
+_hp = ROOT / "data" / "hotels.json"
+HOTELS = json.loads(_hp.read_text(encoding="utf-8")) if _hp.exists() else {}
+
+# 住宿点 → 用来做「城区实景」兜底配图的景点 id
+CITY_PHOTO = {"vienna": "st_stephens_cathedral", "st_wolfgang": "st_wolfgang",
+              "hallstatt": "hallstatt", "prague": "charles_bridge",
+              "budapest": "chain_bridge"}
 
 name2id = {p["name"]: p["id"] for p in places}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特",
@@ -73,6 +80,17 @@ def build_pics():
                     im = im.resize((MAX_W, int(im.height * MAX_W / im.width)), Image.LANCZOS)
                 im.save(out / src.name, "JPEG", quality=QUALITY, optimize=True)
             n += 1
+    hsrc = PICS_SRC / "hotels"
+    if hsrc.exists():
+        hout = out / "hotels"
+        hout.mkdir(exist_ok=True)
+        for f in hsrc.glob("*.jpg"):
+            with Image.open(f) as im:
+                im = im.convert("RGB")
+                if im.width > MAX_W:
+                    im = im.resize((MAX_W, int(im.height * MAX_W / im.width)), Image.LANCZOS)
+                im.save(hout / f.name, "JPEG", quality=QUALITY, optimize=True)
+            n += 1
     print(f"  图片 {n} 张 → pics/")
 
 
@@ -94,6 +112,8 @@ def build_data():
                     if (PICS_SRC / Path(f["file"]).name).exists()]
     WEB_PHOTOS = web
     write_js("data/photos.js", "PHOTOS", web)
+    if HOTELS:
+        write_js("data/hotels.js", "HOTELS", HOTELS)
     for k, itin in itins.items():
         lid = k.lower()
         write_js(f"data/itinerary_{lid}.js", f"ITIN_{k}", itin)
@@ -130,6 +150,17 @@ a.back{color:var(--dim);font-size:12px;text-decoration:none}
 .note{color:#e8c07a;font-size:12px;margin-top:8px}
 .ampm{color:#9aa5b1;font-size:12px}
 .hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
+.hsec{margin-bottom:24px}
+.hsec h3{font-size:14px;margin:0 0 10px;color:var(--text)}
+.hcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.hcard .hn{font-weight:600;font-size:15px}
+.hcard .hstars{color:#e8c07a;font-size:12px;margin-left:6px}
+.hcard .hm{color:var(--dim);font-size:12px;margin-top:4px}
+.hcard .ha{margin-top:8px}
+.hcard .ha a{color:var(--accent);text-decoration:none;font-size:12px;margin-right:16px}
+.more{color:var(--accent);font-size:12px;cursor:pointer;background:none;border:none;padding:0}
+.morelist{display:none;margin-top:10px;font-size:12px;color:var(--dim);line-height:2}
+.morelist.on{display:block}
 ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
 .thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
@@ -193,6 +224,7 @@ Object.entries(groups).forEach(function(kv){
     .bindTooltip(CITY_CN[city]||city,{permanent:true,direction:"center",className:"clabel",opacity:1});
   cm.addTo(map); cityM.push(cm);
 });
+__JSHOTELSLAYER__
 L.control.layers(bases,layers,{collapsed:window.innerWidth<600}).addTo(map);
 
 function applyZoom(){
@@ -249,6 +281,64 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
 }).join("");
 """
 
+JS_HOTELS_LAYER = """
+const hLayer=L.layerGroup(); let hn=0;
+if(window.HOTELS){
+  Object.keys(window.HOTELS).forEach(function(key){
+    const rec=window.HOTELS[key];
+    (rec.candidates||[]).forEach(function(h){
+      hn++;
+      L.circleMarker([h.lat,h.lon],{radius:5,color:"#fff",weight:1,fillColor:"#c98adf",fillOpacity:.85})
+        .bindPopup("<b>"+h.name+"</b>"+(h.stars?" ★"+h.stars:"")
+          +'<div class="note">'+(h.dist_sights?h.dist_sights+"m · ":"")+(h.website?"有官网":"")+"</div>")
+        .addTo(hLayer);
+    });
+  });
+}
+layers["酒店 ("+hn+")"]=hLayer;
+"""
+
+JS_HOTELS = """
+const HH=window.HOTELS||{}, CITYPHOTO=__CITYPHOTO__;
+function kindCn(k){return k==="hotel"?"酒店":(k==="guest_house"?"民宿":(k==="hostel"?"青旅":"住宿"));}
+function card(h,rec,key){
+  const stars=h.stars?new Array(h.stars+1).join("★"):"";
+  const addr=[h.street,h.postcode,h.city].filter(Boolean).join(" ");
+  let ph="";
+  if(h.photos&&h.photos.length){
+    ph='<div class="thumbs">'+h.photos.slice(0,3).map(function(p){
+      return '<img src="../pics/hotels/'+p.file.split("/").pop()+'" loading="lazy">';}).join("")+"</div>";
+  }else{
+    const cp=(window.PHOTOS&&window.PHOTOS[CITYPHOTO[key]])||[];
+    if(cp.length) ph='<div class="thumbs">'+cp.slice(0,2).map(function(f){
+      return '<img src="../'+f.file+'" loading="lazy">';}).join("")+'</div><div class="hm">（城区实景，非该酒店实拍）</div>';
+  }
+  const site=h.website?'<a href="'+h.website+'" target="_blank" rel="noopener">官网</a>':"";
+  const bk='<a href="https://www.booking.com/search.html?ss='+encodeURIComponent(h.name+" "+rec.city)+'" target="_blank" rel="noopener">Booking 看价 →</a>';
+  const osm='<a href="https://www.openstreetmap.org/?mlat='+h.lat+'&mlon='+h.lon+'#map=18/'+h.lat+'/'+h.lon+'" target="_blank" rel="noopener">OSM 定位</a>';
+  return '<div class="hcard"><div class="hn">'+h.name+'<span class="hstars">'+stars+"</span></div>"
+    +'<div class="hm">'+kindCn(h.kind)+(h.dist_sights?" · 距你的景点群 "+h.dist_sights+"m":"")
+    +(h.dist_station!=null?" · 距最近车站 "+h.dist_station+"m":"")+"</div>"
+    +(addr?'<div class="hm">'+addr+(h.phone?" · "+h.phone:"")+"</div>":"")
+    +'<div class="ha">'+site+bk+osm+"</div>"+ph+"</div>";
+}
+document.getElementById("hotels").innerHTML = Object.keys(HH).map(function(key){
+  const rec=HH[key], cands=rec.candidates||[];
+  const picks=cands.filter(function(h){return (rec.picks||[]).indexOf(h.name)>=0;});
+  const rest=cands.filter(function(h){return (rec.picks||[]).indexOf(h.name)<0;});
+  return '<div class="hsec"><h3>'+rec.city+"　OSM 共 "+rec.total+" 家 · 下列 "+cands.length+" 家按位置排序</h3>"
+    +picks.map(function(h){return card(h,rec,key);}).join("")
+    +(rest.length?'<button class="more" data-k="'+key+'">展开另外 '+rest.length+' 家 ▾</button>'
+      +'<div class="morelist" id="ml-'+key+'">'+rest.map(function(h){
+        return h.name+(h.stars?" ★"+h.stars:"")+(h.dist_sights?" · "+h.dist_sights+"m":"");}).join("<br>")
+      +"</div>":"")
+    +"</div>";
+}).join("");
+Array.prototype.forEach.call(document.querySelectorAll(".more"),function(b){
+  b.onclick=function(){document.getElementById("ml-"+b.getAttribute("data-k")).classList.toggle("on");};
+});
+"""
+
 JS_VER = """
 const V=window.VERSION||{};
 document.getElementById("ver").innerHTML="版本 <b>"+(V.version||"-")+"</b> · 更新于 "+(V.built_at||"-")+(V.note?" · "+V.note:"");
@@ -269,12 +359,13 @@ PLAN_TPL = """<!DOCTYPE html>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>逐日行程</h2><div id="days"></div>
+<h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
 __HIST__
 <footer><div id="verfoot"></div><div style="margin-top:6px">__TITLE__ · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 __DATA__
-<script>__JSMAP____JSDAYS____JSVER__</script>
+<script>__JSMAP____JSDAYS____JSHOTELS____JSVER__</script>
 </body></html>"""
 
 INDEX_TPL = """<!DOCTYPE html>
@@ -328,11 +419,13 @@ def data_block(k, lid, inline=False, ver=None, note=""):
             "<script>window.PHOTOS=" + json.dumps(WEB_PHOTOS, ensure_ascii=False) + ";</script>",
             f"<script>window.LABELS_{k}=" + json.dumps(LABELS[k], ensure_ascii=False) + ";</script>",
             f"<script>window.ITIN_{k}=" + json.dumps(itins[k], ensure_ascii=False) + ";</script>",
+            "<script>window.HOTELS=" + json.dumps(HOTELS, ensure_ascii=False) + ";</script>",
             "<script>window.VERSION=" + json.dumps(frozen, ensure_ascii=False) + ";</script>",
         ]))
     return "\n".join([
         '<script src="../data/places.js"></script>',
         '<script src="../data/photos.js"></script>',
+        '<script src="../data/hotels.js"></script>',
         f'<script src="../data/labels_{lid}.js"></script>',
         f'<script src="../data/itinerary_{lid}.js"></script>',
         '<script src="../data/version.js"></script>',
@@ -360,9 +453,11 @@ def build_pages():
         jsmap = (JS_MAP.replace("__COLORS__", json.dumps(COLORS))
                        .replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
                        .replace("__CITYZOOM__", str(CITY_ZOOM))
-                       .replace("__LABELVAR__", f"LABELS_{k}"))
+                       .replace("__LABELVAR__", f"LABELS_{k}")
+                       .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
                          .replace("__ITINVAR__", f"ITIN_{k}"))
+        jshotels = JS_HOTELS.replace("__CITYPHOTO__", json.dumps(CITY_PHOTO, ensure_ascii=False))
 
         def render(inline, hist):
             return (PLAN_TPL.replace("__TITLE__", itin["title"])
@@ -374,6 +469,7 @@ def build_pages():
                             .replace("__DATA__", data_block(k, lid, inline, ver, note))
                             .replace("__JSMAP__", jsmap)
                             .replace("__JSDAYS__", jsdays)
+                            .replace("__JSHOTELS__", jshotels)
                             .replace("__JSVER__", JS_VER))
 
         d = REPO / lid
