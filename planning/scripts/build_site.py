@@ -165,6 +165,22 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
 .thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
 .pros{color:#7fd39a}.cons{color:#e08a8a}
+.ovw{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 4px;margin-bottom:12px}
+.ovw .row{display:flex;align-items:baseline;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.ovw .row:last-child{border-bottom:0}
+.ovw .dt{flex:0 0 auto;min-width:74px;font-weight:700;color:var(--accent);font-size:14px}
+.ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
+.ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
+.ovw .city.mv::after{content:" →";color:var(--dim)}
+.ovw .seg{flex:0 0 auto;font-size:12px}
+.ovw .seg .ico{margin-right:3px}
+.ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
+.ovw .seg .tn{color:var(--text);font-weight:500}
+.ovw .seg .tm{color:var(--dim);margin-left:4px}
+.ovw .sights{flex:1 1 auto;min-width:0;color:var(--dim);font-size:12px;line-height:1.55;text-align:right}
+@media(max-width:640px){
+.ovw .row{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
+.ovw .sights{text-align:left;width:100%;padding-top:2px;border-top:1px dashed var(--line);margin-top:2px;padding-left:0}}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .stat .n{font-size:22px;font-weight:600}.stat .l{color:var(--dim);font-size:12px}
@@ -281,6 +297,35 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
 }).join("");
 """
 
+JS_OVERVIEW = """
+const CCN=__CITYCN__, ITINOV=window.__ITINVAR__;
+document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
+  const cA = d.flight||d.train;
+  let seg="";
+  if(d.flight){
+    const f=d.flight;
+    seg='<span class="seg flt"><span class="ico">&#9992;</span><span class="tn">'+f.no+
+      '</span><span class="tm">'+f.dep+' '+f.time+' '+f.arr+'</span></span>';
+  }else if(d.train){
+    const t=d.train;
+    seg='<span class="seg trn"><span class="ico">&#128646;</span><span class="tn">'+t.no+
+      '</span><span class="tm">'+t.dep+' '+t.time+' '+t.arr+'</span></span>';
+  }
+  const mv = d.items.length ? " mv" : "";
+  return '<div class="row"><span class="dt">'+d.date+
+    '<span class="w">周'+d.w+'</span></span>'+
+    '<span class="city'+mv+'">'+(CCN[d.city]||d.city)+'</span>'+
+    (seg?'<span class="seg">'+seg+"</span>":"")+
+    '<span class="sights">'+d.items.join(" · ")+"</span></div>";
+}).join("");
+"""
+
+
+def overview_block():
+    """概览数据在客户端渲染；城市中文名复用 CITY_CN"""
+    return JS_OVERVIEW.replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
+
+
 JS_HOTELS_LAYER = """
 const hLayer=L.layerGroup(); let hn=0;
 if(window.HOTELS){
@@ -358,14 +403,14 @@ PLAN_TPL = """<!DOCTYPE html>
 <h2>取舍</h2><div class="card">__TRADEOFF__</div>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
-<h2>逐日行程</h2><div id="days"></div>
-<h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
+<h2>行程一览</h2><div class="ovw" id="overview"></div>
+<h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
 __HIST__
 <footer><div id="verfoot"></div><div style="margin-top:6px">__TITLE__ · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 __DATA__
-<script>__JSMAP____JSDAYS____JSHOTELS____JSVER__</script>
+<script>__JSMAP____JSDAYS____JSOVW____JSHOTELS____JSVER__</script>
 </body></html>"""
 
 INDEX_TPL = """<!DOCTYPE html>
@@ -457,6 +502,7 @@ def build_pages():
                        .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
                          .replace("__ITINVAR__", f"ITIN_{k}"))
+        jsovw = overview_block().replace("__ITINVAR__", f"ITIN_{k}")
         jshotels = JS_HOTELS.replace("__CITYPHOTO__", json.dumps(CITY_PHOTO, ensure_ascii=False))
 
         def render(inline, hist):
@@ -469,6 +515,7 @@ def build_pages():
                             .replace("__DATA__", data_block(k, lid, inline, ver, note))
                             .replace("__JSMAP__", jsmap)
                             .replace("__JSDAYS__", jsdays)
+                            .replace("__JSOVW__", jsovw)
                             .replace("__JSHOTELS__", jshotels)
                             .replace("__JSVER__", JS_VER))
 

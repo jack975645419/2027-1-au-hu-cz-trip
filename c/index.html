@@ -45,6 +45,22 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
 .thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
 .pros{color:#7fd39a}.cons{color:#e08a8a}
+.ovw{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 4px;margin-bottom:12px}
+.ovw .row{display:flex;align-items:baseline;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.ovw .row:last-child{border-bottom:0}
+.ovw .dt{flex:0 0 auto;min-width:74px;font-weight:700;color:var(--accent);font-size:14px}
+.ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
+.ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
+.ovw .city.mv::after{content:" →";color:var(--dim)}
+.ovw .seg{flex:0 0 auto;font-size:12px}
+.ovw .seg .ico{margin-right:3px}
+.ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
+.ovw .seg .tn{color:var(--text);font-weight:500}
+.ovw .seg .tm{color:var(--dim);margin-left:4px}
+.ovw .sights{flex:1 1 auto;min-width:0;color:var(--dim);font-size:12px;line-height:1.55;text-align:right}
+@media(max-width:640px){
+.ovw .row{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
+.ovw .sights{text-align:left;width:100%;padding-top:2px;border-top:1px dashed var(--line);margin-top:2px;padding-left:0}}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .stat .n{font-size:22px;font-weight:600}.stat .l{color:var(--dim);font-size:12px}
@@ -71,9 +87,9 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <h2>取舍</h2><div class="card"><div class="pros">+ 机票最便宜 ¥5,694（比 A/B 省 ¥976）</div><div class="pros">+ 火车总时长最短约 12h（A/B 约 16h）</div><div class="pros">+ 2/2 中午就到家，比 A/B 早一天</div><div class="pros">+ 回程票价 Google 标注「目前低价」</div><div class="cons">− 回程是中转，约 16h（比直飞多 5h）</div><div class="cons">− 总晚数 9 晚，比 A/B 少 1 晚</div><div class="cons">− 中转需在国内机场转机，春运前要留足时间</div></div>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
-<h2>逐日行程</h2><div id="days"></div>
-<h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v8.html">v8</a></div>
+<h2>行程一览</h2><div class="ovw" id="overview"></div>
+<h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
+<h2>历史版本</h2><div class="card hist"><a href="v9.html">v9</a><a href="v8.html">v8</a></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">方案 C · 布达佩斯进 / 布拉格中转回 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -189,6 +205,27 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
 }).join("");
 document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
   return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+"</div></div>";
+}).join("");
+
+const CCN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}, ITINOV=window.ITIN_C;
+document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
+  const cA = d.flight||d.train;
+  let seg="";
+  if(d.flight){
+    const f=d.flight;
+    seg='<span class="seg flt"><span class="ico">&#9992;</span><span class="tn">'+f.no+
+      '</span><span class="tm">'+f.dep+' '+f.time+' '+f.arr+'</span></span>';
+  }else if(d.train){
+    const t=d.train;
+    seg='<span class="seg trn"><span class="ico">&#128646;</span><span class="tn">'+t.no+
+      '</span><span class="tm">'+t.dep+' '+t.time+' '+t.arr+'</span></span>';
+  }
+  const mv = d.items.length ? " mv" : "";
+  return '<div class="row"><span class="dt">'+d.date+
+    '<span class="w">周'+d.w+'</span></span>'+
+    '<span class="city'+mv+'">'+(CCN[d.city]||d.city)+'</span>'+
+    (seg?'<span class="seg">'+seg+"</span>":"")+
+    '<span class="sights">'+d.items.join(" · ")+"</span></div>";
 }).join("");
 
 const HH=window.HOTELS||{}, CITYPHOTO={"vienna": "st_stephens_cathedral", "st_wolfgang": "st_wolfgang", "hallstatt": "hallstatt", "prague": "charles_bridge", "budapest": "chain_bridge"};
