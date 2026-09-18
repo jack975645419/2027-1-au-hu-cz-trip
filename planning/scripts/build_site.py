@@ -177,6 +177,7 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
 .ovw .seg .tn{color:var(--text);font-weight:500}
 .ovw .seg .tm{color:var(--dim);margin-left:4px}
+.ovw .seg .tm.pending{color:#8a94a1;font-style:italic}
 .ovw .sights{flex:1 1 auto;min-width:0;color:var(--dim);font-size:12px;line-height:1.55;text-align:right}
 @media(max-width:640px){
 .ovw .row{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
@@ -305,13 +306,15 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   if(d.flight){
     const f=d.flight;
     seg='<span class="seg flt"><span class="ico">&#9992;</span><span class="tn">'+f.no+
-      '</span><span class="tm">'+f.dep+' '+f.time+' '+f.arr+'</span></span>';
+      '</span><span class="tm">'+f.dep+' '+f.time+' '+f.arr+'</span>'+
+      (f.pending?'<span class="tm pending">（'+f.pending+'）</span>':'')+'</span>';
   }else if(d.train){
     const t=d.train;
     seg='<span class="seg trn"><span class="ico">&#128646;</span><span class="tn">'+t.no+
       '</span><span class="tm">'+t.dep+' '+t.time+' '+t.arr+'</span></span>';
   }
-  const mv = d.items.length ? " mv" : "";
+  const hasSeg = !!(d.flight||d.train);
+  const mv = hasSeg && d.items.length ? " mv" : "";
   return '<div class="row"><span class="dt">'+d.date+
     '<span class="w">周'+d.w+'</span></span>'+
     '<span class="city'+mv+'">'+(CCN[d.city]||d.city)+'</span>'+
