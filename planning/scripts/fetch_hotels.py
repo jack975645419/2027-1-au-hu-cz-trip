@@ -32,12 +32,6 @@ ENDPOINTS = [
 # (key, 中文名, 中心纬度, 中心经度, 搜索半径m, 所属 places.city, Nominatim 兜底搜索词)
 STOPS = [
     ("vienna", "维也纳", 48.20849, 16.37313, 2500, "Vienna", []),
-    ("st_wolfgang", "圣沃尔夫冈", 47.7386, 13.4482, 1500, "St. Wolfgang",
-     ["hotel Sankt Wolfgang im Salzkammergut", "Pension St. Wolfgang Salzkammergut",
-      "Gasthof St. Wolfgang Salzkammergut", "Hotel Weisses Rössl St. Wolfgang"]),
-    ("hallstatt", "哈尔施塔特", 47.5622, 13.6490, 1200, "Hallstatt",
-     ["hotel Hallstatt Oberosterreich", "Pension Hallstatt", "Gasthof Hallstatt",
-      "Seehotel Hallstatt", "Heritage Hotel Hallstatt"]),
     ("prague", "布拉格", 50.08745, 14.42097, 1800, "Prague", []),
     ("budapest", "布达佩斯", 47.50078, 19.05397, 2200, "Budapest", []),
     ("cesky_krumlov", "克鲁姆洛夫", 48.81060, 14.31500, 1200, "Cesky Krumlov",

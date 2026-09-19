@@ -34,23 +34,25 @@ itins = json.loads((ROOT / "data" / "itineraries.json").read_text(encoding="utf-
 _hp = ROOT / "data" / "hotels.json"
 HOTELS = json.loads(_hp.read_text(encoding="utf-8")) if _hp.exists() else {}
 
+# 每日一色：饱和度够、在浅色 Esri 底图上都能看清（不再用黑白灰渐变）
+DAY_COLORS = ["#d81e5b", "#e8590c", "#f2a20c", "#7cb518", "#2f9e44", "#12b886",
+              "#0ca678", "#1098ad", "#1c7ed6", "#4263eb", "#7048e8", "#ae3ec9"]
+
 # 住宿点 → 用来做「城区实景」兜底配图的景点 id
-CITY_PHOTO = {"vienna": "st_stephens_cathedral", "st_wolfgang": "st_wolfgang",
-              "hallstatt": "hallstatt", "prague": "charles_bridge",
+CITY_PHOTO = {"vienna": "st_stephens_cathedral", "prague": "charles_bridge",
               "budapest": "chain_bridge", "cesky_krumlov": "ck_old_town"}
 
 name2id = {p["name"]: p["id"] for p in places}
 name2place = {p["name"]: {"city": p["city"], "lat": p["lat"], "lon": p["lon"]}
                for p in places}
-CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特",
-           "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫",
-           "Guangzhou": "广州", "Shenzhen": "深圳"}
-COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a",
-          "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8",
-          "Guangzhou": "#9aa7b5", "Shenzhen": "#9aa7b5"}
+place_info = {p["name"]: {"dur": p.get("dur", ""), "desc": p.get("desc", "")}
+              for p in places if p.get("dur") or p.get("desc")}
+CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Prague": "布拉格",
+           "Cesky Krumlov": "克鲁姆洛夫", "Guangzhou": "广州", "Shenzhen": "深圳"}
+COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Prague": "#e8a33d",
+          "Cesky Krumlov": "#b08ee8", "Guangzhou": "#9aa7b5", "Shenzhen": "#9aa7b5"}
 # 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
 CITY_TOKENS = {"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"],
-               "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"],
                "Prague": ["PRG", "Praha", "Prague"],
                "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"],
                "Guangzhou": ["CAN", "Guangzhou"], "Shenzhen": ["SZX", "Shenzhen"]}
@@ -159,6 +161,11 @@ a.back{color:var(--dim);font-size:12px;text-decoration:none}
 .tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
 .note{color:#e8c07a;font-size:12px;margin-top:8px}
 .ampm{color:#9aa5b1;font-size:12px}
+.day .bd ul li{margin:7px 0}
+.pn{font-size:13px}
+.dur{display:inline-block;margin-left:6px;background:rgba(110,168,254,.13);color:#6ea8fe;
+ border:1px solid rgba(110,168,254,.28);border-radius:6px;padding:0 6px;font-size:11px}
+.pd{color:#9aa5b1;font-size:11.5px;line-height:1.55;margin:3px 0 0}
 .hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
 .hsec{margin-bottom:24px}
 .hsec h3{font-size:14px;margin:0 0 10px;color:var(--text)}
@@ -217,13 +224,14 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 """
 
 JS_MAP = """
-const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__, CITYTK=__CITYTK__;
+const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__, CITYTK=__CITYTK__,
+      DAYCOL=__DAYCOLORS__;
 const LAB=window.__LABELVAR__||{};
 const map=L.map("map").setView([47.9,16.5],6);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
   {maxZoom:19,attribution:"Tiles &copy; Esri"}).addTo(map);
 
-const groups={},layers={},bounds=[],placeM=[],cityM=[],cityPos={};
+const groups={},layers={},bounds=[],placeM=[],cityM=[],cityPos={},hM=[];
 window.PLACES.forEach(p=>(groups[p.city]=groups[p.city]||[]).push(p));
 
 Object.entries(groups).forEach(function(kv){
@@ -255,8 +263,7 @@ Object.entries(groups).forEach(function(kv){
 const N2P=__NAME2PLACE__, ITINM=window.__ITINVAR__||{days:[]};
 const DAYS=ITINM.days||[], UD=DAYS.map(function(d){return d.date}).filter(function(v,i,a){return a.indexOf(v)===i});
 const cityArr=L.layerGroup(), innerArr={}, arrowBox=L.layerGroup().addTo(map);
-function grayOf(t){const v=Math.round(242+(13-242)*t);return "rgb("+v+","+v+","+v+")";}
-function dayColor(dt){const i=UD.indexOf(dt);return grayOf(UD.length<2?0:i/(UD.length-1));}
+function dayColor(dt){const i=UD.indexOf(dt);return DAYCOL[(i<0?0:i)%DAYCOL.length];}
 const CASE="#3a3f45";
 function bearingOf(a,b){const P=Math.PI/180,l1=a[0]*P,l2=b[0]*P,dl=(b[1]-a[1])*P;
   const y=Math.sin(dl)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dl);
@@ -369,23 +376,31 @@ function nearestCity(ll){
   });
   return best;
 }
-function stylePlaceLabels(){   // 卡片底色 = 日期灰阶，深浅自动换字色
+function lumOf(c){   // 颜色亮度，用来决定卡片上放深字还是浅字
+  if(c && c.charAt(0)==="#"){
+    const r=parseInt(c.substr(1,2),16), g=parseInt(c.substr(3,2),16), b=parseInt(c.substr(5,2),16);
+    return 0.299*r+0.587*g+0.114*b;
+  }
+  const m=/(\d+)/.exec(c||""); return m?+m[0]:128;
+}
+function stylePlaceLabels(){   // 卡片底色 = 该天的颜色，亮度自动换字色
   placeM.forEach(function(m){
     if(!m._d) return;
     const t=m.getTooltip(); const e=t&&t.getElement(); if(!e) return;
-    const col=dayColor(m._d), v=+(/(\d+)/.exec(col)||[0,128])[1];
+    const col=dayColor(m._d), v=lumOf(col);
     e.style.background=col;
-    e.style.color=v>138?"#141a21":"#f2f5f8";
+    e.style.color=v>150?"#141a21":"#f2f5f8";
     e.style.borderColor="rgba(0,0,0,.35)";
     const lb=e.querySelector(".lb"), nt=e.querySelector(".nt");
-    if(lb) lb.style.color=v>138?"#0b4fa8":"#9ecbff";
-    if(nt) nt.style.color=v>138?"#4a5560":"#c3ccd6";
+    if(lb) lb.style.color=v>150?"#0b3d7a":"#cfe3ff";
+    if(nt) nt.style.color=v>150?"#3d4650":"#e3e9f0";
   });
 }
 function applyZoom(){
   const cityMode = map.getZoom() < CITY_ZOOM;
   stylePlaceLabels();
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
+  hM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
   arrowBox.clearLayers();
   if(!map.hasLayer(arrowBox)) return;
@@ -423,7 +438,7 @@ applyZoom();
 """
 
 JS_DAYS = """
-const P=window.PHOTOS||{}, NAME2ID=__NAME2ID__, ITIN=window.__ITINVAR__;
+const P=window.PHOTOS||{}, NAME2ID=__NAME2ID__, INFO=__PLACEINFO__, ITIN=window.__ITINVAR__;
 document.getElementById("days").innerHTML = ITIN.days.map(function(d){
   const n=d.items.length;
   const items = d.items.map(function(nm,i){
@@ -431,7 +446,10 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
     const th = ph.length ? '<div class="thumbs">'+ph.slice(0,3).map(function(f){return '<img src="../'+f.file+'" loading="lazy">';}).join("")+"</div>" : "";
     const sess = n<=1 ? "" : (i < (n+1)/2 ? "上午" : "下午");
     const ampm = n>1 ? ' <span class="ampm">'+sess+"</span>" : "";
-    return "<li>"+nm+ampm+th+"</li>";
+    const meta = INFO[nm]||{};
+    const dur = meta.dur ? ' <span class="dur">建议 '+meta.dur+"</span>" : "";
+    const desc = meta.desc ? '<div class="pd">'+meta.desc+"</div>" : "";
+    return '<li><div class="pn">'+nm+ampm+dur+"</div>"+desc+th+"</li>";
   }).join("");
   return '<div class="day"><div class="hd"><span class="d">'+d.date+
     '</span><span class="w">周'+d.w+'</span><span class="s">住 '+d.stay+'</span></div>'+
@@ -500,17 +518,27 @@ JS_HOTELS_LAYER = """
 const hLayer=L.layerGroup(); let hn=0;
 if(window.HOTELS){
   Object.keys(window.HOTELS).forEach(function(key){
-    const rec=window.HOTELS[key];
+    const rec=window.HOTELS[key], picks=rec.picks||[];
     (rec.candidates||[]).forEach(function(h){
+      if(picks.indexOf(h.name)<0) return;      // 地图只标推荐的那几家
       hn++;
-      L.circleMarker([h.lat,h.lon],{radius:5,color:"#fff",weight:1,fillColor:"#c98adf",fillOpacity:.85})
+      const adv=[];
+      if(h.stars) adv.push(h.stars+"★");
+      adv.push(h.kind==="hotel"?"酒店":(h.kind==="guest_house"?"民宿":(h.kind==="hostel"?"青旅":"住宿")));
+      if(h.dist_sights!=null) adv.push("距景点中心 "+h.dist_sights+"m");
+      if(h.dist_station!=null) adv.push("距车站 "+h.dist_station+"m");
+      if(h.website) adv.push("有官网");
+      const html="<b>"+h.name+'</b><div class="nt">'+adv.join(" · ")+"</div>";
+      const m=L.circleMarker([h.lat,h.lon],{radius:7,color:"#fff",weight:2,fillColor:"#c98adf",fillOpacity:.92})
+        .bindTooltip(html,{permanent:true,direction:"top",className:"plabel hcard",opacity:1,offset:[0,-6]})
         .bindPopup("<b>"+h.name+"</b>"+(h.stars?" ★"+h.stars:"")
-          +'<div class="note">'+(h.dist_sights?h.dist_sights+"m · ":"")+(h.website?"有官网":"")+"</div>")
+          +'<div class="note">'+adv.join(" · ")+"</div>")
         .addTo(hLayer);
+      hM.push(m);
     });
   });
 }
-layers["酒店 ("+hn+")"]=hLayer;
+layers["推荐酒店 ("+hn+")"]=hLayer;
 """
 
 JS_HOTELS = """
@@ -591,8 +619,8 @@ INDEX_TPL = """<!DOCTYPE html>
 <header><h1>2027-1 奥匈捷之旅</h1>
 <div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
-<h2>选择方案</h2>__PICKS__
-<h2>航班（方案 C / D）</h2>
+<h2>本行程</h2>__PICKS__
+<h2>航班</h2>
 <div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
 <div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287/人</div></div>
 <div class="card"><div style="font-weight:600">回程 · 2/1（一）→ 2/2（二）</div>
@@ -677,9 +705,11 @@ def build_pages():
                        .replace("__LABELVAR__", f"LABELS_{k}")
                        .replace("__ITINVAR__", f"ITIN_{k}")
                        .replace("__CITYTK__", json.dumps(CITY_TOKENS, ensure_ascii=False))
+                       .replace("__DAYCOLORS__", json.dumps(DAY_COLORS, ensure_ascii=False))
                        .replace("__NAME2PLACE__", json.dumps(name2place, ensure_ascii=False))
                        .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
+                         .replace("__PLACEINFO__", json.dumps(place_info, ensure_ascii=False))
                          .replace("__ITINVAR__", f"ITIN_{k}"))
         jsovw = overview_block().replace("__ITINVAR__", f"ITIN_{k}")
         jshotels = JS_HOTELS.replace("__CITYPHOTO__", json.dumps(CITY_PHOTO, ensure_ascii=False))
