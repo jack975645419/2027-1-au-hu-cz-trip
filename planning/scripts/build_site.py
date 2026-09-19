@@ -44,6 +44,10 @@ CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈�
            "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a",
           "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"}
+# 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
+CITY_TOKENS = {"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"],
+               "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"],
+               "Prague": ["PRG", "Praha", "Prague"]}
 
 
 def session_of(i, n):
@@ -171,7 +175,7 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .ovw .dt{flex:0 0 auto;min-width:74px;font-weight:700;color:var(--accent);font-size:14px}
 .ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
 .ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
-.ovw .city.mv::after{content:" →";color:var(--dim)}
+.ovw .city.in::before{content:"→ ";color:var(--dim)}.ovw .city.out::after{content:" →";color:var(--dim)}
 .ovw .seg{flex:0 0 auto;font-size:12px}
 .ovw .seg .ico{margin-right:3px}
 .ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
@@ -299,7 +303,7 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
 """
 
 JS_OVERVIEW = """
-const CCN=__CITYCN__, ITINOV=window.__ITINVAR__;
+const CCN=__CITYCN__, CITYTK=__CITYTK__, ITINOV=window.__ITINVAR__;
 document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   const cA = d.flight||d.train;
   let seg="";
@@ -313,8 +317,16 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
     seg='<span class="seg trn"><span class="ico">&#128646;</span><span class="tn">'+t.no+
       '</span><span class="tm">'+t.dep+' '+t.time+' '+t.arr+'</span></span>';
   }
-  const hasSeg = !!(d.flight||d.train);
-  const mv = hasSeg && d.items.length ? " mv" : "";
+  // 箭头方向：city 是到达地 → 箭头在左（进入）；是出发地 → 箭头在右（离开）
+  const tk = (CITYTK[d.city]||[]).map(function(s){return s.toUpperCase()});
+  const hit = function(v){return tk.indexOf((v||"").toUpperCase()) >= 0 ||
+    tk.some(function(t){return (v||"").toUpperCase().indexOf(t) >= 0});};
+  let mv = "";
+  if(cA){
+    if(hit(cA.arr)) mv = " in";
+    else if(hit(cA.dep)) mv = " out";
+    else mv = d.flight ? " in" : " out";
+  }
   return '<div class="row"><span class="dt">'+d.date+
     '<span class="w">周'+d.w+'</span></span>'+
     '<span class="city'+mv+'">'+(CCN[d.city]||d.city)+'</span>'+
@@ -326,7 +338,8 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
 
 def overview_block():
     """概览数据在客户端渲染；城市中文名复用 CITY_CN"""
-    return JS_OVERVIEW.replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
+    return (JS_OVERVIEW.replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
+                       .replace("__CITYTK__", json.dumps(CITY_TOKENS, ensure_ascii=False)))
 
 
 JS_HOTELS_LAYER = """
