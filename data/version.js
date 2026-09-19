@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v17", "built_at": "2026-09-19 20:50", "commit": "e0decf1", "note": "新增方案 E：CK 从布拉格当天往返（布拉格 4 晚）"};
+window.VERSION = {"version": "v18", "built_at": "2026-09-19 20:57", "commit": "da1b449", "note": "支持当天往返：地图⇄双向错开箭头；行程一览显示「布拉格 ⇄ 克鲁姆洛夫」"};

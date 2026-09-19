@@ -182,6 +182,7 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
 .ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
 .ovw .city.in::before{content:"→ ";color:var(--dim)}.ovw .city.out::after{content:" →";color:var(--dim)}
+.ovw .city .rt{color:var(--dim);font-weight:400}
 .ovw .seg{flex:0 0 auto;font-size:12px}
 .ovw .seg .ico{margin-right:3px}
 .ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
@@ -216,7 +217,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 """
 
 JS_MAP = """
-const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__;
+const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__, CITYTK=__CITYTK__;
 const LAB=window.__LABELVAR__||{};
 const map=L.map("map").setView([47.9,16.5],6);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
@@ -264,6 +265,28 @@ function along(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
 function kmOf(a,b){const P=Math.PI/180;
   return Math.acos(Math.min(1,Math.sin(a[0]*P)*Math.sin(b[0]*P)+
     Math.cos(a[0]*P)*Math.cos(b[0]*P)*Math.cos((b[1]-a[1])*P)))*6371;}
+function cityOf(v){   // 由 "Praha" / "Český Krumlov" 反查城市 key
+  for(const k in CITYTK){ if(hitCity(k,v)) return k; }
+  return null;
+}
+function hitCity(k,v){
+  return (CITYTK[k]||[]).some(function(t){
+    return (v||"").toUpperCase().indexOf(t.toUpperCase())>=0;});
+}
+function shift(a,b,km,side){   // 整条线沿法向平移，用于画往返两条不重叠的箭头
+  const P=Math.PI/180, be=bearingOf(a,b)*P;
+  const n=-Math.sin(be)*km*side, e=Math.cos(be)*km*side;
+  const mid=(a[0]+b[0])/2;
+  return [[a[0]+n/111.32, a[1]+e/(111.32*Math.cos(mid*P))],
+          [b[0]+n/111.32, b[1]+e/(111.32*Math.cos(mid*P))]];
+}
+function drawRound(lg,a,b,col,txt){
+  const o1=shift(a,b,7,1), o2=shift(a,b,7,-1);
+  drawSeg(lg,o1[0],o1[1],col);   // 去
+  drawSeg(lg,o2[1],o2[0],col);   // 回
+  if(txt) L.marker(along(o1[0],o1[1],.28),{icon:L.divIcon({className:"",iconSize:[0,0],
+    html:'<div class="arlab">'+txt+"</div>"}),interactive:false,keyboard:false}).addTo(lg);
+}
 function svgMark(a,b,d,fill,color,sw){
   return L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],
     html:'<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate('+rotOf(a,b)+'deg);display:block">'+
@@ -299,6 +322,20 @@ function drawSeg(lg,a,b,col){
       if(txt) L.marker(along(a,b,.28),{icon:L.divIcon({className:"",iconSize:[0,0],
         html:'<div class="arlab">'+txt+"</div>"}),interactive:false,keyboard:false}).addTo(lg);
       lg.addTo(cityArr);
+    }
+    // 当天往返（如布拉格 ⇄ 克鲁姆洛夫）：城市不变，画一去一回两条错开箭头
+    {
+      const t=d.train||{};
+      if(t.round && cityPos[d.city]){
+        const dst=cityOf(t.arr);
+        if(dst && dst!==d.city && cityPos[dst]){
+          let txt = "&#8644; "+(t.time||"");
+          if(t.price && t.price!=="待查") txt += " · "+t.price+(t.price_state==="预估"?"（预估）":"");
+          const lg=L.layerGroup();
+          drawRound(lg,cityPos[d.city],cityPos[dst],col,txt);
+          lg.addTo(cityArr);
+        }
+      }
     }
     // 城内：当天 items 按城市分组，顺序相连
     const seq=[]; (d.items||[]).forEach(function(nm){const p=N2P[nm]; if(p) seq.push(p);});
@@ -394,7 +431,7 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
 """
 
 JS_OVERVIEW = """
-const CCN=__CITYCN__, CITYTK=__CITYTK__, ITINOV=window.__ITINVAR__;
+const CCN=__CITYCN__, ITINOV=window.__ITINVAR__;
 document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   const cA = d.flight||d.train;
   let seg="";
@@ -417,13 +454,20 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
     tk.some(function(t){return (v||"").toUpperCase().indexOf(t) >= 0});};
   let mv = "";
   if(cA){
-    if(hit(cA.arr)) mv = " in";
+    if(cA.round) mv = "";                       // 当天往返：用 ⇄ 表达，不再画进出箭头
+    else if(hit(cA.arr)) mv = " in";
     else if(hit(cA.dep)) mv = " out";
     else mv = d.flight ? " in" : " out";
   }
+  // 当天往返：城市写成「布拉格 ⇄ 克鲁姆洛夫」
+  let cityTxt = CCN[d.city]||d.city;
+  if(cA && cA.round){
+    const dst = cityOf(cA.arr);
+    if(dst && dst!==d.city) cityTxt += ' <span class="rt">&#8644; '+(CCN[dst]||dst)+"</span>";
+  }
   return '<div class="row"><span class="dt">'+d.date+
     '<span class="w">周'+d.w+'</span></span>'+
-    '<span class="city'+mv+'">'+(CCN[d.city]||d.city)+'</span>'+
+    '<span class="city'+mv+'">'+cityTxt+'</span>'+
     (seg?'<span class="seg">'+seg+"</span>":"")+
     '<span class="sights">'+d.items.join(" · ")+"</span></div>";
 }).join("");
@@ -616,6 +660,7 @@ def build_pages():
                        .replace("__CITYZOOM__", str(CITY_ZOOM))
                        .replace("__LABELVAR__", f"LABELS_{k}")
                        .replace("__ITINVAR__", f"ITIN_{k}")
+                       .replace("__CITYTK__", json.dumps(CITY_TOKENS, ensure_ascii=False))
                        .replace("__NAME2PLACE__", json.dumps(name2place, ensure_ascii=False))
                        .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))

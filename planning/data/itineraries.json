@@ -1072,7 +1072,8 @@
           "arr": "Český Krumlov",
           "time": "往返 5–6h",
           "price": "€16–30",
-          "price_state": "预估"
+          "price_state": "预估",
+          "round": true
         }
       },
       {
