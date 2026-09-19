@@ -238,6 +238,8 @@ Object.entries(groups).forEach(function(kv){
         +(p.note?'<div class="note">'+p.note+"</div>":""))
       .bindTooltip(html,{permanent:true,direction:"top",className:"plabel",opacity:1,offset:[0,-6]})
       .addTo(lg);
+    // 卡片底色用「该景点第一天」的日期灰阶（与箭头同一套编码），着色在 stylePlaceLabels 里做
+    m._d = labArr.length ? String(labArr[0]).split(" ")[0] : "";
     placeM.push(m); bounds.push([p.lat,p.lon]);
   });
   lg.addTo(map); layers[(CITY_CN[city]||city)+" ("+items.length+")"]=lg;
@@ -367,8 +369,22 @@ function nearestCity(ll){
   });
   return best;
 }
+function stylePlaceLabels(){   // 卡片底色 = 日期灰阶，深浅自动换字色
+  placeM.forEach(function(m){
+    if(!m._d) return;
+    const t=m.getTooltip(); const e=t&&t.getElement(); if(!e) return;
+    const col=dayColor(m._d), v=+(/(\d+)/.exec(col)||[0,128])[1];
+    e.style.background=col;
+    e.style.color=v>138?"#141a21":"#f2f5f8";
+    e.style.borderColor="rgba(0,0,0,.35)";
+    const lb=e.querySelector(".lb"), nt=e.querySelector(".nt");
+    if(lb) lb.style.color=v>138?"#0b4fa8":"#9ecbff";
+    if(nt) nt.style.color=v>138?"#4a5560":"#c3ccd6";
+  });
+}
 function applyZoom(){
   const cityMode = map.getZoom() < CITY_ZOOM;
+  stylePlaceLabels();
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
   arrowBox.clearLayers();

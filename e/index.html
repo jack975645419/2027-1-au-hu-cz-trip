@@ -94,7 +94,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v19.html">v19</a><a href="v18.html">v18</a><a href="v17.html">v17</a></div>
+<h2>历史版本</h2><div class="card hist"><a href="v20.html">v20</a><a href="v19.html">v19</a><a href="v18.html">v18</a><a href="v17.html">v17</a></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">方案 E · 布达佩斯进 / 布拉格中转回 · CK 当天往返 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -126,6 +126,8 @@ Object.entries(groups).forEach(function(kv){
         +(p.note?'<div class="note">'+p.note+"</div>":""))
       .bindTooltip(html,{permanent:true,direction:"top",className:"plabel",opacity:1,offset:[0,-6]})
       .addTo(lg);
+    // 卡片底色用「该景点第一天」的日期灰阶（与箭头同一套编码），着色在 stylePlaceLabels 里做
+    m._d = labArr.length ? String(labArr[0]).split(" ")[0] : "";
     placeM.push(m); bounds.push([p.lat,p.lon]);
   });
   lg.addTo(map); layers[(CITY_CN[city]||city)+" ("+items.length+")"]=lg;
@@ -270,8 +272,22 @@ function nearestCity(ll){
   });
   return best;
 }
+function stylePlaceLabels(){   // 卡片底色 = 日期灰阶，深浅自动换字色
+  placeM.forEach(function(m){
+    if(!m._d) return;
+    const t=m.getTooltip(); const e=t&&t.getElement(); if(!e) return;
+    const col=dayColor(m._d), v=+(/(\d+)/.exec(col)||[0,128])[1];
+    e.style.background=col;
+    e.style.color=v>138?"#141a21":"#f2f5f8";
+    e.style.borderColor="rgba(0,0,0,.35)";
+    const lb=e.querySelector(".lb"), nt=e.querySelector(".nt");
+    if(lb) lb.style.color=v>138?"#0b4fa8":"#9ecbff";
+    if(nt) nt.style.color=v>138?"#4a5560":"#c3ccd6";
+  });
+}
 function applyZoom(){
   const cityMode = map.getZoom() < CITY_ZOOM;
+  stylePlaceLabels();
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
   arrowBox.clearLayers();
