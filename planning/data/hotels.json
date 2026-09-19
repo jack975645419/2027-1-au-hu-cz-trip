@@ -25,7 +25,8 @@
         "postcode": "1010",
         "dist_sights": 84,
         "dist_station": 144,
-        "score": -716
+        "score": -241,
+        "dist_metro": 195
       },
       {
         "osm_id": "way/628990501",
@@ -41,7 +42,8 @@
         "postcode": "",
         "dist_sights": 350,
         "dist_station": 148,
-        "score": -600
+        "score": -128,
+        "dist_metro": 282
       },
       {
         "osm_id": "node/10121439707",
@@ -57,7 +59,8 @@
         "postcode": "1010",
         "dist_sights": 203,
         "dist_station": 31,
-        "score": -597
+        "score": -358,
+        "dist_metro": 31
       },
       {
         "osm_id": "node/524673102",
@@ -73,7 +76,8 @@
         "postcode": "1060",
         "dist_sights": 199,
         "dist_station": 110,
-        "score": -401
+        "score": 91,
+        "dist_metro": 331
       },
       {
         "osm_id": "node/425471378",
@@ -89,7 +93,8 @@
         "postcode": "1010",
         "dist_sights": 60,
         "dist_station": 176,
-        "score": -140
+        "score": 122,
+        "dist_metro": 248
       },
       {
         "osm_id": "node/567059356",
@@ -105,7 +110,8 @@
         "postcode": "1010",
         "dist_sights": 697,
         "dist_station": 199,
-        "score": -103
+        "score": 34,
+        "dist_metro": 225
       },
       {
         "osm_id": "node/1760489894",
@@ -121,7 +127,8 @@
         "postcode": "1060",
         "dist_sights": 565,
         "dist_station": 288,
-        "score": -85
+        "score": 162,
+        "dist_metro": 326
       },
       {
         "osm_id": "node/823349738",
@@ -137,7 +144,8 @@
         "postcode": "",
         "dist_sights": 891,
         "dist_station": 228,
-        "score": -59
+        "score": 34,
+        "dist_metro": 228
       },
       {
         "osm_id": "node/567334295",
@@ -153,7 +161,8 @@
         "postcode": "1040",
         "dist_sights": 773,
         "dist_station": 558,
-        "score": -27
+        "score": 120,
+        "dist_metro": 281
       },
       {
         "osm_id": "node/956430138",
@@ -169,7 +178,8 @@
         "postcode": "1010",
         "dist_sights": 792,
         "dist_station": 51,
-        "score": -8
+        "score": -89,
+        "dist_metro": 64
       },
       {
         "osm_id": "way/1435247368",
@@ -185,7 +195,8 @@
         "postcode": "1010",
         "dist_sights": 946,
         "dist_station": 171,
-        "score": -4
+        "score": 104,
+        "dist_metro": 276
       },
       {
         "osm_id": "node/13306507393",
@@ -201,7 +212,8 @@
         "postcode": "",
         "dist_sights": 993,
         "dist_station": 128,
-        "score": 43
+        "score": 1,
+        "dist_metro": 154
       },
       {
         "osm_id": "node/4101228995",
@@ -217,7 +229,8 @@
         "postcode": "1010",
         "dist_sights": 655,
         "dist_station": 94,
-        "score": 55
+        "score": -64,
+        "dist_metro": 124
       },
       {
         "osm_id": "node/524673099",
@@ -233,7 +246,8 @@
         "postcode": "1060",
         "dist_sights": 273,
         "dist_station": 163,
-        "score": 73
+        "score": 328,
+        "dist_metro": 369
       },
       {
         "osm_id": "node/13236554402",
@@ -249,7 +263,8 @@
         "postcode": "1010",
         "dist_sights": 276,
         "dist_station": 63,
-        "score": 76
+        "score": 59,
+        "dist_metro": 99
       },
       {
         "osm_id": "node/13754786601",
@@ -265,7 +280,8 @@
         "postcode": "1010",
         "dist_sights": 289,
         "dist_station": 36,
-        "score": 89
+        "score": 8,
+        "dist_metro": 42
       },
       {
         "osm_id": "node/1196611171",
@@ -281,7 +297,8 @@
         "postcode": "1040",
         "dist_sights": 701,
         "dist_station": 568,
-        "score": 101
+        "score": 101,
+        "dist_metro": 205
       },
       {
         "osm_id": "node/3634692303",
@@ -297,7 +314,8 @@
         "postcode": "1010",
         "dist_sights": 961,
         "dist_station": 186,
-        "score": 161
+        "score": 100,
+        "dist_metro": 186
       },
       {
         "osm_id": "way/35335963",
@@ -313,7 +331,8 @@
         "postcode": "1010",
         "dist_sights": 370,
         "dist_station": 99,
-        "score": 170
+        "score": 139,
+        "dist_metro": 141
       },
       {
         "osm_id": "node/2129293754",
@@ -329,7 +348,8 @@
         "postcode": "",
         "dist_sights": 386,
         "dist_station": 143,
-        "score": 186
+        "score": 280,
+        "dist_metro": 276
       },
       {
         "osm_id": "node/11977748187",
@@ -345,7 +365,8 @@
         "postcode": "",
         "dist_sights": 405,
         "dist_station": 274,
-        "score": 205
+        "score": 385,
+        "dist_metro": 373
       },
       {
         "osm_id": "node/1191680219",
@@ -361,7 +382,8 @@
         "postcode": "1050",
         "dist_sights": 1006,
         "dist_station": 843,
-        "score": 206
+        "score": 361,
+        "dist_metro": 429
       },
       {
         "osm_id": "node/6325206621",
@@ -377,7 +399,8 @@
         "postcode": "",
         "dist_sights": 423,
         "dist_station": 221,
-        "score": 223
+        "score": 374,
+        "dist_metro": 355
       },
       {
         "osm_id": "node/297277443",
@@ -393,7 +416,8 @@
         "postcode": "1040",
         "dist_sights": 830,
         "dist_station": 560,
-        "score": 230
+        "score": 178,
+        "dist_metro": 166
       },
       {
         "osm_id": "node/457621239",
@@ -409,7 +433,8 @@
         "postcode": "",
         "dist_sights": 438,
         "dist_station": 147,
-        "score": 238
+        "score": 246,
+        "dist_metro": 221
       },
       {
         "osm_id": "node/1029355797",
@@ -425,7 +450,8 @@
         "postcode": "1040",
         "dist_sights": 459,
         "dist_station": 304,
-        "score": 259
+        "score": 502,
+        "dist_metro": 468
       },
       {
         "osm_id": "node/923938961",
@@ -441,7 +467,8 @@
         "postcode": "1030",
         "dist_sights": 1068,
         "dist_station": 154,
-        "score": 268
+        "score": 128,
+        "dist_metro": 171
       },
       {
         "osm_id": "node/948462303",
@@ -457,7 +484,8 @@
         "postcode": "1010",
         "dist_sights": 473,
         "dist_station": 202,
-        "score": 273
+        "score": 372,
+        "dist_metro": 333
       },
       {
         "osm_id": "node/567334311",
@@ -473,7 +501,8 @@
         "postcode": "1040",
         "dist_sights": 477,
         "dist_station": 277,
-        "score": 277
+        "score": 378,
+        "dist_metro": 337
       },
       {
         "osm_id": "node/3975425423",
@@ -489,7 +518,8 @@
         "postcode": "1060",
         "dist_sights": 519,
         "dist_station": 206,
-        "score": 319
+        "score": 303,
+        "dist_metro": 245
       },
       {
         "osm_id": "way/35336495",
@@ -505,7 +535,8 @@
         "postcode": "1010",
         "dist_sights": 320,
         "dist_station": 24,
-        "score": 320
+        "score": 282,
+        "dist_metro": 154
       },
       {
         "osm_id": "node/956159202",
@@ -521,7 +552,8 @@
         "postcode": "1010",
         "dist_sights": 527,
         "dist_station": 250,
-        "score": 327
+        "score": 439,
+        "dist_metro": 378
       },
       {
         "osm_id": "node/524581344",
@@ -537,7 +569,8 @@
         "postcode": "1040",
         "dist_sights": 534,
         "dist_station": 323,
-        "score": 334
+        "score": 439,
+        "dist_metro": 375
       },
       {
         "osm_id": "way/89696743",
@@ -553,7 +586,8 @@
         "postcode": "1040",
         "dist_sights": 538,
         "dist_station": 291,
-        "score": 338
+        "score": 385,
+        "dist_metro": 320
       },
       {
         "osm_id": "node/956159172",
@@ -569,7 +603,8 @@
         "postcode": "1010",
         "dist_sights": 545,
         "dist_station": 270,
-        "score": 345
+        "score": 467,
+        "dist_metro": 399
       },
       {
         "osm_id": "node/567053645",
@@ -585,7 +620,8 @@
         "postcode": "1010",
         "dist_sights": 550,
         "dist_station": 210,
-        "score": 350
+        "score": 321,
+        "dist_metro": 251
       },
       {
         "osm_id": "node/567053661",
@@ -601,7 +637,8 @@
         "postcode": "1010",
         "dist_sights": 586,
         "dist_station": 170,
-        "score": 386
+        "score": 294,
+        "dist_metro": 210
       },
       {
         "osm_id": "node/1202224004",
@@ -617,7 +654,8 @@
         "postcode": "1010",
         "dist_sights": 1190,
         "dist_station": 212,
-        "score": 390
+        "score": 280,
+        "dist_metro": 274
       },
       {
         "osm_id": "node/6328966977",
@@ -633,7 +671,8 @@
         "postcode": "",
         "dist_sights": 391,
         "dist_station": 109,
-        "score": 391
+        "score": 397,
+        "dist_metro": 241
       },
       {
         "osm_id": "node/577244083",
@@ -649,13 +688,17 @@
         "postcode": "1030",
         "dist_sights": 1349,
         "dist_station": 80,
-        "score": 399
+        "score": 144,
+        "dist_metro": 154
       }
     ],
     "picks": [
+      "Living Hotel an der Oper",
       "Am Opernring",
       "Hotel Sacher",
-      "Living Hotel an der Oper"
+      "Hotel Royal",
+      "Pension Neuer Markt",
+      "Mandarin Oriental Residence"
     ]
   },
   "prague": {
@@ -684,7 +727,8 @@
         "postcode": "11800",
         "dist_sights": 296,
         "dist_station": null,
-        "score": -654
+        "score": 373,
+        "dist_metro": 805
       },
       {
         "osm_id": "node/2532288331",
@@ -700,7 +744,8 @@
         "postcode": "11800",
         "dist_sights": 355,
         "dist_station": null,
-        "score": -595
+        "score": -83,
+        "dist_metro": 325
       },
       {
         "osm_id": "node/3154280210",
@@ -716,7 +761,8 @@
         "postcode": "11800",
         "dist_sights": 248,
         "dist_station": null,
-        "score": -552
+        "score": -26,
+        "dist_metro": 345
       },
       {
         "osm_id": "node/3391074374",
@@ -732,7 +778,8 @@
         "postcode": "11000",
         "dist_sights": 452,
         "dist_station": null,
-        "score": -498
+        "score": 86,
+        "dist_metro": 455
       },
       {
         "osm_id": "node/3689567199",
@@ -748,7 +795,8 @@
         "postcode": "11800",
         "dist_sights": 454,
         "dist_station": null,
-        "score": -496
+        "score": 312,
+        "dist_metro": 680
       },
       {
         "osm_id": "node/4281070242",
@@ -764,7 +812,8 @@
         "postcode": "11800",
         "dist_sights": 188,
         "dist_station": null,
-        "score": -412
+        "score": -412,
+        "dist_metro": 428
       },
       {
         "osm_id": "node/2658554461",
@@ -780,7 +829,8 @@
         "postcode": "11800",
         "dist_sights": 202,
         "dist_station": null,
-        "score": -398
+        "score": -398,
+        "dist_metro": 505
       },
       {
         "osm_id": "node/3617209525",
@@ -796,7 +846,8 @@
         "postcode": "11800",
         "dist_sights": 11,
         "dist_station": null,
-        "score": -389
+        "score": 286,
+        "dist_metro": 582
       },
       {
         "osm_id": "node/3393593676",
@@ -812,7 +863,8 @@
         "postcode": "11800",
         "dist_sights": 591,
         "dist_station": null,
-        "score": -359
+        "score": 33,
+        "dist_metro": 347
       },
       {
         "osm_id": "node/3617209522",
@@ -828,7 +880,8 @@
         "postcode": "11800",
         "dist_sights": 60,
         "dist_station": null,
-        "score": -340
+        "score": 337,
+        "dist_metro": 613
       },
       {
         "osm_id": "node/296490235",
@@ -844,7 +897,8 @@
         "postcode": "11000",
         "dist_sights": 414,
         "dist_station": null,
-        "score": -336
+        "score": 239,
+        "dist_metro": 473
       },
       {
         "osm_id": "node/3617209520",
@@ -860,7 +914,8 @@
         "postcode": "",
         "dist_sights": 71,
         "dist_station": null,
-        "score": -329
+        "score": 364,
+        "dist_metro": 636
       },
       {
         "osm_id": "node/11446193288",
@@ -876,7 +931,8 @@
         "postcode": "110 00",
         "dist_sights": 473,
         "dist_station": null,
-        "score": -327
+        "score": 195,
+        "dist_metro": 476
       },
       {
         "osm_id": "node/305075235",
@@ -892,7 +948,8 @@
         "postcode": "",
         "dist_sights": 554,
         "dist_station": null,
-        "score": -246
+        "score": 856,
+        "dist_metro": 1104
       },
       {
         "osm_id": "node/316726314",
@@ -908,7 +965,8 @@
         "postcode": "11800",
         "dist_sights": 560,
         "dist_station": null,
-        "score": -240
+        "score": -129,
+        "dist_metro": 117
       },
       {
         "osm_id": "node/309291509",
@@ -924,7 +982,8 @@
         "postcode": "11800",
         "dist_sights": 748,
         "dist_station": null,
-        "score": -202
+        "score": -89,
+        "dist_metro": 162
       },
       {
         "osm_id": "way/30286191",
@@ -940,7 +999,8 @@
         "postcode": "",
         "dist_sights": 421,
         "dist_station": null,
-        "score": -179
+        "score": 838,
+        "dist_metro": 990
       },
       {
         "osm_id": "node/3975404560",
@@ -956,7 +1016,8 @@
         "postcode": "11000",
         "dist_sights": 781,
         "dist_station": null,
-        "score": -169
+        "score": 84,
+        "dist_metro": 322
       },
       {
         "osm_id": "node/4242547981",
@@ -972,7 +1033,8 @@
         "postcode": "11000",
         "dist_sights": 446,
         "dist_station": null,
-        "score": -154
+        "score": 43,
+        "dist_metro": 315
       },
       {
         "osm_id": "node/5335234821",
@@ -988,7 +1050,8 @@
         "postcode": "11000",
         "dist_sights": 449,
         "dist_station": null,
-        "score": -151
+        "score": -151,
+        "dist_metro": 479
       },
       {
         "osm_id": "node/1382255589",
@@ -1004,7 +1067,8 @@
         "postcode": "11000",
         "dist_sights": 461,
         "dist_station": null,
-        "score": -139
+        "score": -139,
+        "dist_metro": 308
       },
       {
         "osm_id": "node/3461510161",
@@ -1020,7 +1084,8 @@
         "postcode": "110 00",
         "dist_sights": 685,
         "dist_station": null,
-        "score": -115
+        "score": 206,
+        "dist_metro": 402
       },
       {
         "osm_id": "node/2296487393",
@@ -1036,7 +1101,8 @@
         "postcode": "11800",
         "dist_sights": 93,
         "dist_station": null,
-        "score": -107
+        "score": 542,
+        "dist_metro": 655
       },
       {
         "osm_id": "node/3621362832",
@@ -1052,7 +1118,8 @@
         "postcode": "11000",
         "dist_sights": 568,
         "dist_station": null,
-        "score": -82
+        "score": 195,
+        "dist_metro": 358
       },
       {
         "osm_id": "node/4281070245",
@@ -1068,7 +1135,8 @@
         "postcode": "11000",
         "dist_sights": 533,
         "dist_station": null,
-        "score": -67
+        "score": -67,
+        "dist_metro": 439
       },
       {
         "osm_id": "way/30873149",
@@ -1084,7 +1152,8 @@
         "postcode": "",
         "dist_sights": 170,
         "dist_station": null,
-        "score": -30
+        "score": 407,
+        "dist_metro": 489
       },
       {
         "osm_id": "node/1562520976",
@@ -1100,7 +1169,8 @@
         "postcode": "11800",
         "dist_sights": 619,
         "dist_station": null,
-        "score": 19
+        "score": 19,
+        "dist_metro": 670
       },
       {
         "osm_id": "node/3617209526",
@@ -1116,7 +1186,8 @@
         "postcode": "11800",
         "dist_sights": 29,
         "dist_station": null,
-        "score": 29
+        "score": 572,
+        "dist_metro": 560
       },
       {
         "osm_id": "node/3617209519",
@@ -1132,7 +1203,8 @@
         "postcode": "11800",
         "dist_sights": 36,
         "dist_station": null,
-        "score": 36
+        "score": 638,
+        "dist_metro": 624
       },
       {
         "osm_id": "node/3617209524",
@@ -1148,7 +1220,8 @@
         "postcode": "11800",
         "dist_sights": 39,
         "dist_station": null,
-        "score": 39
+        "score": 591,
+        "dist_metro": 575
       },
       {
         "osm_id": "node/3617209521",
@@ -1164,7 +1237,8 @@
         "postcode": "11800",
         "dist_sights": 47,
         "dist_station": null,
-        "score": 47
+        "score": 635,
+        "dist_metro": 616
       },
       {
         "osm_id": "node/3617209523",
@@ -1180,7 +1254,8 @@
         "postcode": "11800",
         "dist_sights": 57,
         "dist_station": null,
-        "score": 57
+        "score": 625,
+        "dist_metro": 602
       },
       {
         "osm_id": "node/3621809577",
@@ -1196,7 +1271,8 @@
         "postcode": "11000",
         "dist_sights": 463,
         "dist_station": null,
-        "score": 63
+        "score": 227,
+        "dist_metro": 342
       },
       {
         "osm_id": "node/11039802932",
@@ -1212,7 +1288,8 @@
         "postcode": "",
         "dist_sights": 701,
         "dist_station": null,
-        "score": 101
+        "score": 257,
+        "dist_metro": 297
       },
       {
         "osm_id": "node/3393796278",
@@ -1228,7 +1305,8 @@
         "postcode": "11800",
         "dist_sights": 913,
         "dist_station": null,
-        "score": 113
+        "score": 862,
+        "dist_metro": 967
       },
       {
         "osm_id": "node/3393598655",
@@ -1244,7 +1322,8 @@
         "postcode": "11800",
         "dist_sights": 719,
         "dist_station": null,
-        "score": 119
+        "score": 119,
+        "dist_metro": 791
       },
       {
         "osm_id": "node/3621362833",
@@ -1260,7 +1339,8 @@
         "postcode": "11000",
         "dist_sights": 519,
         "dist_station": null,
-        "score": 119
+        "score": 204,
+        "dist_metro": 296
       },
       {
         "osm_id": "node/3154280213",
@@ -1276,7 +1356,8 @@
         "postcode": "118 00",
         "dist_sights": 123,
         "dist_station": null,
-        "score": 123
+        "score": 526,
+        "dist_metro": 477
       },
       {
         "osm_id": "node/3617209528",
@@ -1292,7 +1373,8 @@
         "postcode": "11800",
         "dist_sights": 131,
         "dist_station": null,
-        "score": 131
+        "score": 514,
+        "dist_metro": 462
       },
       {
         "osm_id": "node/3617209527",
@@ -1308,13 +1390,17 @@
         "postcode": "11800",
         "dist_sights": 137,
         "dist_station": null,
-        "score": 137
+        "score": 531,
+        "dist_metro": 476
       }
     ],
     "picks": [
-      "Mandarin Oriental Prague",
+      "Boutique Hotel Klarov",
+      "Hoffmeister",
       "Augustine",
-      "U Páva"
+      "U Páva",
+      "Hotel U Zlaté studně",
+      "Pension Karlova"
     ]
   },
   "budapest": {
@@ -1343,7 +1429,8 @@
         "postcode": "1054",
         "dist_sights": 131,
         "dist_station": 123,
-        "score": -669
+        "score": -295,
+        "dist_metro": 123
       },
       {
         "osm_id": "way/1317453263",
@@ -1359,7 +1446,8 @@
         "postcode": "1054",
         "dist_sights": 421,
         "dist_station": 184,
-        "score": -529
+        "score": -141,
+        "dist_metro": 241
       },
       {
         "osm_id": "node/13163049077",
@@ -1375,7 +1463,8 @@
         "postcode": "1054",
         "dist_sights": 145,
         "dist_station": 58,
-        "score": -455
+        "score": -455,
+        "dist_metro": 90
       },
       {
         "osm_id": "way/261301465",
@@ -1391,7 +1480,8 @@
         "postcode": "1065",
         "dist_sights": 359,
         "dist_station": 159,
-        "score": -441
+        "score": -153,
+        "dist_metro": 173
       },
       {
         "osm_id": "way/261301584",
@@ -1407,7 +1497,8 @@
         "postcode": "1061",
         "dist_sights": 393,
         "dist_station": 151,
-        "score": -407
+        "score": -162,
+        "dist_metro": 151
       },
       {
         "osm_id": "node/1886479599",
@@ -1423,7 +1514,8 @@
         "postcode": "1065",
         "dist_sights": 404,
         "dist_station": 175,
-        "score": -396
+        "score": -133,
+        "dist_metro": 175
       },
       {
         "osm_id": "way/24052086",
@@ -1439,7 +1531,8 @@
         "postcode": "1051",
         "dist_sights": 420,
         "dist_station": 270,
-        "score": -380
+        "score": 49,
+        "dist_metro": 351
       },
       {
         "osm_id": "node/262861756",
@@ -1455,7 +1548,8 @@
         "postcode": "1054",
         "dist_sights": 456,
         "dist_station": 342,
-        "score": -344
+        "score": 54,
+        "dist_metro": 342
       },
       {
         "osm_id": "way/261301503",
@@ -1471,7 +1565,8 @@
         "postcode": "1066",
         "dist_sights": 339,
         "dist_station": 112,
-        "score": -311
+        "score": -142,
+        "dist_metro": 112
       },
       {
         "osm_id": "node/6445088784",
@@ -1487,7 +1582,8 @@
         "postcode": "1066",
         "dist_sights": 357,
         "dist_station": 155,
-        "score": -243
+        "score": -243,
+        "dist_metro": 180
       },
       {
         "osm_id": "way/1285215308",
@@ -1503,7 +1599,8 @@
         "postcode": "1051",
         "dist_sights": 711,
         "dist_station": 82,
-        "score": -239
+        "score": -184,
+        "dist_metro": 82
       },
       {
         "osm_id": "node/9508146616",
@@ -1519,7 +1616,8 @@
         "postcode": "1061",
         "dist_sights": 391,
         "dist_station": 28,
-        "score": -209
+        "score": -209,
+        "dist_metro": 28
       },
       {
         "osm_id": "node/11657938169",
@@ -1535,7 +1633,8 @@
         "postcode": "",
         "dist_sights": 604,
         "dist_station": 100,
-        "score": -196
+        "score": -73,
+        "dist_metro": 155
       },
       {
         "osm_id": "way/264564798",
@@ -1551,7 +1650,8 @@
         "postcode": "1051",
         "dist_sights": 94,
         "dist_station": 259,
-        "score": -106
+        "score": 200,
+        "dist_metro": 312
       },
       {
         "osm_id": "node/4149847393",
@@ -1567,7 +1667,8 @@
         "postcode": "1051",
         "dist_sights": 307,
         "dist_station": 161,
-        "score": -93
+        "score": -93,
+        "dist_metro": 177
       },
       {
         "osm_id": "node/12735385804",
@@ -1583,7 +1684,8 @@
         "postcode": "1051",
         "dist_sights": 143,
         "dist_station": 191,
-        "score": -57
+        "score": 171,
+        "dist_metro": 264
       },
       {
         "osm_id": "way/191243451",
@@ -1599,7 +1701,8 @@
         "postcode": "1051",
         "dist_sights": 905,
         "dist_station": 91,
-        "score": -45
+        "score": 25,
+        "dist_metro": 213
       },
       {
         "osm_id": "way/763736063",
@@ -1615,7 +1718,8 @@
         "postcode": "1075",
         "dist_sights": 763,
         "dist_station": 207,
-        "score": -37
+        "score": 125,
+        "dist_metro": 290
       },
       {
         "osm_id": "node/2315294618",
@@ -1631,7 +1735,8 @@
         "postcode": "1061",
         "dist_sights": 589,
         "dist_station": 23,
-        "score": -11
+        "score": -11,
+        "dist_metro": 74
       },
       {
         "osm_id": "way/24157739",
@@ -1647,7 +1752,8 @@
         "postcode": "1051",
         "dist_sights": 194,
         "dist_station": 198,
-        "score": -6
+        "score": 149,
+        "dist_metro": 221
       },
       {
         "osm_id": "node/10652378886",
@@ -1663,7 +1769,8 @@
         "postcode": "1061",
         "dist_sights": 602,
         "dist_station": 180,
-        "score": 2
+        "score": 2,
+        "dist_metro": 189
       },
       {
         "osm_id": "way/24350598",
@@ -1679,7 +1786,8 @@
         "postcode": "1051",
         "dist_sights": 218,
         "dist_station": 282,
-        "score": 18
+        "score": 234,
+        "dist_metro": 297
       },
       {
         "osm_id": "node/2947494338",
@@ -1695,7 +1803,8 @@
         "postcode": "",
         "dist_sights": 630,
         "dist_station": 239,
-        "score": 30
+        "score": 30,
+        "dist_metro": 392
       },
       {
         "osm_id": "node/3632222159",
@@ -1711,7 +1820,8 @@
         "postcode": "1061",
         "dist_sights": 438,
         "dist_station": 36,
-        "score": 38
+        "score": 38,
+        "dist_metro": 41
       },
       {
         "osm_id": "way/293068529",
@@ -1727,7 +1837,8 @@
         "postcode": "1013",
         "dist_sights": 1010,
         "dist_station": 84,
-        "score": 60
+        "score": 658,
+        "dist_metro": 804
       },
       {
         "osm_id": "way/145114533",
@@ -1743,7 +1854,8 @@
         "postcode": "1067",
         "dist_sights": 862,
         "dist_station": 311,
-        "score": 62
+        "score": 282,
+        "dist_metro": 407
       },
       {
         "osm_id": "node/7903344749",
@@ -1759,7 +1871,8 @@
         "postcode": "1051",
         "dist_sights": 284,
         "dist_station": 184,
-        "score": 84
+        "score": 164,
+        "dist_metro": 200
       },
       {
         "osm_id": "node/3615677843",
@@ -1775,7 +1888,8 @@
         "postcode": "",
         "dist_sights": 512,
         "dist_station": 313,
-        "score": 112
+        "score": 112,
+        "dist_metro": 313
       },
       {
         "osm_id": "node/1648766627",
@@ -1791,7 +1905,8 @@
         "postcode": "",
         "dist_sights": 114,
         "dist_station": 307,
-        "score": 114
+        "score": 386,
+        "dist_metro": 340
       },
       {
         "osm_id": "way/24324025",
@@ -1807,7 +1922,8 @@
         "postcode": "1052",
         "dist_sights": 1073,
         "dist_station": 46,
-        "score": 123
+        "score": 36,
+        "dist_metro": 157
       },
       {
         "osm_id": "node/7889717311",
@@ -1823,7 +1939,8 @@
         "postcode": "1011",
         "dist_sights": 924,
         "dist_station": 144,
-        "score": 124
+        "score": 507,
+        "dist_metro": 607
       },
       {
         "osm_id": "way/238896339",
@@ -1839,7 +1956,8 @@
         "postcode": "1051",
         "dist_sights": 337,
         "dist_station": 229,
-        "score": 137
+        "score": 462,
+        "dist_metro": 477
       },
       {
         "osm_id": "node/13630707035",
@@ -1855,7 +1973,8 @@
         "postcode": "",
         "dist_sights": 746,
         "dist_station": 149,
-        "score": 146
+        "score": 146,
+        "dist_metro": 234
       },
       {
         "osm_id": "node/10045175567",
@@ -1871,7 +1990,8 @@
         "postcode": "",
         "dist_sights": 549,
         "dist_station": 60,
-        "score": 149
+        "score": 149,
+        "dist_metro": 76
       },
       {
         "osm_id": "node/4630192432",
@@ -1887,7 +2007,8 @@
         "postcode": "1051",
         "dist_sights": 354,
         "dist_station": 108,
-        "score": 154
+        "score": 126,
+        "dist_metro": 134
       },
       {
         "osm_id": "node/9214872097",
@@ -1903,7 +2024,8 @@
         "postcode": "",
         "dist_sights": 771,
         "dist_station": 142,
-        "score": 171
+        "score": 171,
+        "dist_metro": 160
       },
       {
         "osm_id": "node/417031682",
@@ -1919,7 +2041,8 @@
         "postcode": "1074",
         "dist_sights": 1124,
         "dist_station": 460,
-        "score": 174
+        "score": 380,
+        "dist_metro": 480
       },
       {
         "osm_id": "node/3556759217",
@@ -1935,7 +2058,8 @@
         "postcode": "1075",
         "dist_sights": 824,
         "dist_station": 235,
-        "score": 174
+        "score": 261,
+        "dist_metro": 321
       },
       {
         "osm_id": "node/10873276493",
@@ -1951,7 +2075,8 @@
         "postcode": "1051",
         "dist_sights": 175,
         "dist_station": 340,
-        "score": 175
+        "score": 464,
+        "dist_metro": 394
       },
       {
         "osm_id": "node/4423297090",
@@ -1967,13 +2092,17 @@
         "postcode": "",
         "dist_sights": 582,
         "dist_station": 166,
-        "score": 182
+        "score": 182,
+        "dist_metro": 182
       }
     ],
     "picks": [
       "Hotel President",
-      "Áurea Ana Palace Hotel",
-      "Boomerang Hostel"
+      "Dorothea Hotel, Budapest, Autograph Collection",
+      "Hotel Moments Budapest",
+      "Hilton Garden Inn Budapest City Centre",
+      "Hampton by Hilton Budapest City Centre",
+      "Áurea Ana Palace Hotel"
     ]
   },
   "cesky_krumlov": {
@@ -2002,7 +2131,8 @@
         "postcode": "38101",
         "dist_sights": 204,
         "dist_station": 761,
-        "score": -846
+        "score": 4392,
+        "dist_metro": null
       },
       {
         "osm_id": "way/37617029",
@@ -2018,7 +2148,8 @@
         "postcode": "381 01",
         "dist_sights": 43,
         "dist_station": 625,
-        "score": -757
+        "score": 4547,
+        "dist_metro": null
       },
       {
         "osm_id": "way/37604740",
@@ -2034,7 +2165,8 @@
         "postcode": "381 01",
         "dist_sights": 295,
         "dist_station": 346,
-        "score": -755
+        "score": 4428,
+        "dist_metro": null
       },
       {
         "osm_id": "node/360311211",
@@ -2050,7 +2182,8 @@
         "postcode": "",
         "dist_sights": 206,
         "dist_station": 413,
-        "score": -744
+        "score": 4532,
+        "dist_metro": null
       },
       {
         "osm_id": "way/37607235",
@@ -2066,7 +2199,8 @@
         "postcode": "381 01",
         "dist_sights": 64,
         "dist_station": 539,
-        "score": -736
+        "score": 4556,
+        "dist_metro": null
       },
       {
         "osm_id": "node/3368090594",
@@ -2082,7 +2216,8 @@
         "postcode": "381 01",
         "dist_sights": 74,
         "dist_station": 660,
-        "score": -726
+        "score": 4560,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38507343",
@@ -2098,7 +2233,8 @@
         "postcode": "381 01",
         "dist_sights": 86,
         "dist_station": 671,
-        "score": -714
+        "score": 4564,
+        "dist_metro": null
       },
       {
         "osm_id": "node/13076695676",
@@ -2114,7 +2250,8 @@
         "postcode": "381 01",
         "dist_sights": 89,
         "dist_station": 600,
-        "score": -711
+        "score": 4566,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38507802",
@@ -2130,7 +2267,8 @@
         "postcode": "381 01",
         "dist_sights": 95,
         "dist_station": 549,
-        "score": -705
+        "score": 4568,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38506743",
@@ -2146,7 +2284,8 @@
         "postcode": "38101",
         "dist_sights": 240,
         "dist_station": 359,
-        "score": -560
+        "score": 4626,
+        "dist_metro": null
       },
       {
         "osm_id": "way/37617041",
@@ -2162,7 +2301,8 @@
         "postcode": "381 01",
         "dist_sights": 42,
         "dist_station": 557,
-        "score": -558
+        "score": 4567,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12374633590",
@@ -2178,7 +2318,8 @@
         "postcode": "381 01",
         "dist_sights": 99,
         "dist_station": 498,
-        "score": -551
+        "score": 4650,
+        "dist_metro": null
       },
       {
         "osm_id": "node/7082135963",
@@ -2194,7 +2335,8 @@
         "postcode": "381 01",
         "dist_sights": 59,
         "dist_station": 534,
-        "score": -541
+        "score": 4574,
+        "dist_metro": null
       },
       {
         "osm_id": "node/1574144932",
@@ -2210,7 +2352,8 @@
         "postcode": "381 01",
         "dist_sights": 63,
         "dist_station": 544,
-        "score": -537
+        "score": 4575,
+        "dist_metro": null
       },
       {
         "osm_id": "node/455578388",
@@ -2226,7 +2369,8 @@
         "postcode": "38101",
         "dist_sights": 66,
         "dist_station": 649,
-        "score": -534
+        "score": 4706,
+        "dist_metro": null
       },
       {
         "osm_id": "node/4401670493",
@@ -2242,7 +2386,8 @@
         "postcode": "381 01",
         "dist_sights": 71,
         "dist_station": 538,
-        "score": -529
+        "score": 4578,
+        "dist_metro": null
       },
       {
         "osm_id": "node/7015759697",
@@ -2258,7 +2403,8 @@
         "postcode": "381 01",
         "dist_sights": 76,
         "dist_station": 559,
-        "score": -524
+        "score": 4580,
+        "dist_metro": null
       },
       {
         "osm_id": "node/360311212",
@@ -2274,7 +2420,8 @@
         "postcode": "381 01",
         "dist_sights": 77,
         "dist_station": 641,
-        "score": -523
+        "score": -523,
+        "dist_metro": null
       },
       {
         "osm_id": "node/4401706490",
@@ -2290,7 +2437,8 @@
         "postcode": "381 01",
         "dist_sights": 82,
         "dist_station": 670,
-        "score": -518
+        "score": 4583,
+        "dist_metro": null
       },
       {
         "osm_id": "node/4401651196",
@@ -2306,7 +2454,8 @@
         "postcode": "381 01",
         "dist_sights": 83,
         "dist_station": 672,
-        "score": -517
+        "score": 4583,
+        "dist_metro": null
       },
       {
         "osm_id": "node/7138413304",
@@ -2322,7 +2471,8 @@
         "postcode": "381 01",
         "dist_sights": 86,
         "dist_station": 608,
-        "score": -514
+        "score": 4584,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12374633591",
@@ -2338,7 +2488,8 @@
         "postcode": "381 01",
         "dist_sights": 87,
         "dist_station": 509,
-        "score": -513
+        "score": 4585,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38506094",
@@ -2354,7 +2505,8 @@
         "postcode": "381 01",
         "dist_sights": 88,
         "dist_station": 506,
-        "score": -512
+        "score": 4585,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38506763",
@@ -2370,7 +2522,8 @@
         "postcode": "381 01",
         "dist_sights": 91,
         "dist_station": 529,
-        "score": -509
+        "score": 4586,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12374633594",
@@ -2386,7 +2539,8 @@
         "postcode": "381 01",
         "dist_sights": 94,
         "dist_station": 499,
-        "score": -506
+        "score": 4588,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38507815",
@@ -2402,7 +2556,8 @@
         "postcode": "381 01",
         "dist_sights": 97,
         "dist_station": 647,
-        "score": -503
+        "score": 4589,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12374633592",
@@ -2418,7 +2573,8 @@
         "postcode": "381 01",
         "dist_sights": 104,
         "dist_station": 489,
-        "score": -496
+        "score": 4592,
+        "dist_metro": null
       },
       {
         "osm_id": "node/4401670490",
@@ -2434,7 +2590,8 @@
         "postcode": "38101",
         "dist_sights": 107,
         "dist_station": 640,
-        "score": -493
+        "score": 4593,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12374633593",
@@ -2450,7 +2607,8 @@
         "postcode": "",
         "dist_sights": 117,
         "dist_station": 476,
-        "score": -483
+        "score": 4597,
+        "dist_metro": null
       },
       {
         "osm_id": "node/8856268048",
@@ -2466,7 +2624,8 @@
         "postcode": "381 01",
         "dist_sights": 120,
         "dist_station": 613,
-        "score": -480
+        "score": 4598,
+        "dist_metro": null
       },
       {
         "osm_id": "node/455562164",
@@ -2482,7 +2641,8 @@
         "postcode": "38101",
         "dist_sights": 121,
         "dist_station": 480,
-        "score": -479
+        "score": 4598,
+        "dist_metro": null
       },
       {
         "osm_id": "node/8742091950",
@@ -2498,7 +2658,8 @@
         "postcode": "381 01",
         "dist_sights": 133,
         "dist_station": 623,
-        "score": -467
+        "score": 4603,
+        "dist_metro": null
       },
       {
         "osm_id": "way/60574717",
@@ -2514,7 +2675,8 @@
         "postcode": "381 01",
         "dist_sights": 349,
         "dist_station": 433,
-        "score": -451
+        "score": 4670,
+        "dist_metro": null
       },
       {
         "osm_id": "node/7106807300",
@@ -2530,7 +2692,8 @@
         "postcode": "381 01",
         "dist_sights": 202,
         "dist_station": 781,
-        "score": -448
+        "score": 4691,
+        "dist_metro": null
       },
       {
         "osm_id": "node/10973514129",
@@ -2546,7 +2709,8 @@
         "postcode": "",
         "dist_sights": 153,
         "dist_station": 456,
-        "score": -447
+        "score": 4611,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38506749",
@@ -2562,7 +2726,8 @@
         "postcode": "381 01",
         "dist_sights": 166,
         "dist_station": 428,
-        "score": -434
+        "score": 4616,
+        "dist_metro": null
       },
       {
         "osm_id": "node/470006708",
@@ -2578,7 +2743,8 @@
         "postcode": "38101",
         "dist_sights": 190,
         "dist_station": 463,
-        "score": -410
+        "score": 4626,
+        "dist_metro": null
       },
       {
         "osm_id": "node/12196922278",
@@ -2594,7 +2760,8 @@
         "postcode": "38101",
         "dist_sights": 197,
         "dist_station": 784,
-        "score": -403
+        "score": 4629,
+        "dist_metro": null
       },
       {
         "osm_id": "way/38506746",
@@ -2610,7 +2777,8 @@
         "postcode": "381 01",
         "dist_sights": 199,
         "dist_station": 397,
-        "score": -401
+        "score": 4630,
+        "dist_metro": null
       },
       {
         "osm_id": "node/7016858622",
@@ -2626,13 +2794,17 @@
         "postcode": "381 01",
         "dist_sights": 203,
         "dist_station": 396,
-        "score": -397
+        "score": 4631,
+        "dist_metro": null
       }
     ],
     "picks": [
       "Kapr",
+      "Hotel Garni Myší Díra",
+      "Hotel Růže",
       "Old Inn",
-      "Hotel Garni Myší Díra"
+      "Hotel Grand",
+      "Leonardo I"
     ]
   }
 }

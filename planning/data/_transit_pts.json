@@ -1,0 +1,50 @@
+[
+  {
+    "kind": "airport",
+    "name": "BUD",
+    "lat": 47.435273,
+    "lon": 19.253511
+  },
+  {
+    "kind": "airport",
+    "name": "VIE",
+    "lat": 48.104997,
+    "lon": 16.584899
+  },
+  {
+    "kind": "airport",
+    "name": "PRG",
+    "lat": 50.102045,
+    "lon": 14.270566
+  },
+  {
+    "kind": "train",
+    "name": "Budapest-Keleti",
+    "lat": 47.50048,
+    "lon": 19.08394
+  },
+  {
+    "kind": "train",
+    "name": "Wien Hbf",
+    "lat": 48.184988,
+    "lon": 16.377939
+  },
+  {
+    "kind": "train",
+    "name": "Praha hl.n.",
+    "lat": 50.082963,
+    "lon": 14.436094
+  },
+  {
+    "kind": "bus",
+    "name": "CK 大巴站",
+    "lat": 48.811468,
+    "lon": 14.322612
+  },
+  {
+    "kind": "bus",
+    "name": "Praha Na Knížecí",
+    "lat": 50.06879,
+    "lon": 14.405183
+  }
+]

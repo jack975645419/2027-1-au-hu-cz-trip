@@ -1,0 +1,214 @@
+{
+  "points": [
+    {
+      "kind": "airport",
+      "name": "布达佩斯李斯特·费伦茨机场",
+      "note": "BUD · 落地与去程",
+      "city": "Budapest",
+      "lat": 47.435273,
+      "lon": 19.253511
+    },
+    {
+      "kind": "airport",
+      "name": "维也纳国际机场",
+      "note": "VIE · 备用 / 参考",
+      "city": "Vienna",
+      "lat": 48.104997,
+      "lon": 16.584899
+    },
+    {
+      "kind": "airport",
+      "name": "布拉格瓦茨拉夫·哈韦尔机场",
+      "note": "PRG · 2/1 回程起飞",
+      "city": "Prague",
+      "lat": 50.102045,
+      "lon": 14.270566
+    },
+    {
+      "kind": "train",
+      "name": "布达佩斯东站",
+      "note": "Budapest-Keleti · 1/25 去维也纳",
+      "city": "Budapest",
+      "lat": 47.50048,
+      "lon": 19.08394
+    },
+    {
+      "kind": "train",
+      "name": "维也纳中央车站",
+      "note": "Wien Hbf · 1/25 到达 / 去布拉格",
+      "city": "Vienna",
+      "lat": 48.184988,
+      "lon": 16.377939
+    },
+    {
+      "kind": "train",
+      "name": "布拉格中央车站",
+      "note": "Praha hl.n. · 城际到达",
+      "city": "Prague",
+      "lat": 50.082963,
+      "lon": 14.436094
+    },
+    {
+      "kind": "bus",
+      "name": "维也纳国际大巴站",
+      "note": "Wien Erdberg VIB · 1/28 去克鲁姆洛夫",
+      "city": "Vienna",
+      "lat": 48.190587,
+      "lon": 16.412949
+    },
+    {
+      "kind": "bus",
+      "name": "克鲁姆洛夫大巴站",
+      "note": "Český Krumlov AN · 1/28 到达 / 1/29 出发",
+      "city": "Cesky Krumlov",
+      "lat": 48.811468,
+      "lon": 14.322612
+    },
+    {
+      "kind": "bus",
+      "name": "布拉格 Na Knížecí 大巴站",
+      "note": "Anděl · 1/29 CK 回布拉格",
+      "city": "Prague",
+      "lat": 50.06879,
+      "lon": 14.405183
+    }
+  ],
+  "metro": [
+    {
+      "city": "Budapest",
+      "name": "Kőbánya-Kispest",
+      "lat": 47.4637172,
+      "lon": 19.1480153,
+      "dist": 8540,
+      "for": "布达佩斯李斯特·费伦茨机场"
+    },
+    {
+      "city": "Budapest",
+      "name": "Keleti pályaudvar",
+      "lat": 47.499596,
+      "lon": 19.0822564,
+      "dist": 160,
+      "for": "布达佩斯东站"
+    },
+    {
+      "city": "Budapest",
+      "name": "Bajza utca",
+      "lat": 47.5113872,
+      "lon": 19.0725445,
+      "dist": 318,
+      "for": "1/23 景点群"
+    },
+    {
+      "city": "Budapest",
+      "name": "Batthyány tér",
+      "lat": 47.5068724,
+      "lon": 19.037782,
+      "dist": 545,
+      "for": "1/24 景点群"
+    },
+    {
+      "city": "Budapest",
+      "name": "Deák Ferenc tér",
+      "lat": 47.4977188,
+      "lon": 19.0537581,
+      "dist": 201,
+      "for": "1/25 景点群"
+    },
+    {
+      "city": "Vienna",
+      "name": "Simmering",
+      "lat": 48.1697771,
+      "lon": 16.4205339,
+      "dist": 14165,
+      "for": "维也纳国际机场"
+    },
+    {
+      "city": "Vienna",
+      "name": "Südtiroler Platz – Hauptbahnhof",
+      "lat": 48.187103,
+      "lon": 16.3734414,
+      "dist": 408,
+      "for": "维也纳中央车站"
+    },
+    {
+      "city": "Vienna",
+      "name": "Erdberg",
+      "lat": 48.1914392,
+      "lon": 16.4141276,
+      "dist": 129,
+      "for": "维也纳国际大巴站"
+    },
+    {
+      "city": "Vienna",
+      "name": "Stephansplatz",
+      "lat": 48.2084639,
+      "lon": 16.3720438,
+      "dist": 28,
+      "for": "1/25 景点群"
+    },
+    {
+      "city": "Vienna",
+      "name": "Neubaugasse",
+      "lat": 48.1993161,
+      "lon": 16.3526723,
+      "dist": 139,
+      "for": "1/26 景点群"
+    },
+    {
+      "city": "Vienna",
+      "name": "Karlsplatz",
+      "lat": 48.2003906,
+      "lon": 16.3695975,
+      "dist": 327,
+      "for": "1/27 景点群"
+    },
+    {
+      "city": "Prague",
+      "name": "Petřiny",
+      "lat": 50.086635,
+      "lon": 14.3450627,
+      "dist": 5584,
+      "for": "布拉格瓦茨拉夫·哈韦尔机场"
+    },
+    {
+      "city": "Prague",
+      "name": "Hlavní nádraží",
+      "lat": 50.0835035,
+      "lon": 14.4341259,
+      "dist": 153,
+      "for": "布拉格中央车站"
+    },
+    {
+      "city": "Prague",
+      "name": "Anděl",
+      "lat": 50.0702468,
+      "lon": 14.4039192,
+      "dist": 185,
+      "for": "布拉格 Na Knížecí 大巴站"
+    },
+    {
+      "city": "Prague",
+      "name": "Staroměstská",
+      "lat": 50.0882161,
+      "lon": 14.417628,
+      "dist": 253,
+      "for": "1/29 景点群"
+    },
+    {
+      "city": "Prague",
+      "name": "Malostranská",
+      "lat": 50.0915233,
+      "lon": 14.4093203,
+      "dist": 470,
+      "for": "1/30 景点群"
+    },
+    {
+      "city": "Prague",
+      "name": "Národní třída",
+      "lat": 50.0799521,
+      "lon": 14.4202946,
+      "dist": 255,
+      "for": "1/31 景点群"
+    }
+  ]
+}

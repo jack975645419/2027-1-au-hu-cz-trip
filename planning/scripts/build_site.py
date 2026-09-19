@@ -31,6 +31,8 @@ CITY_ZOOM = 11          # < 此缩放显示城市名，>= 显示景点名
 places = json.loads((ROOT / "data" / "places.json").read_text(encoding="utf-8"))
 photos = json.loads((ROOT / "data" / "photos.json").read_text(encoding="utf-8"))
 itins = json.loads((ROOT / "data" / "itineraries.json").read_text(encoding="utf-8"))
+_tp = ROOT / "data" / "transit.json"
+TRANSIT = json.loads(_tp.read_text(encoding="utf-8")) if _tp.exists() else {"points": [], "metro": []}
 _hp = ROOT / "data" / "hotels.json"
 HOTELS = json.loads(_hp.read_text(encoding="utf-8")) if _hp.exists() else {}
 
@@ -45,8 +47,9 @@ CITY_PHOTO = {"vienna": "st_stephens_cathedral", "prague": "charles_bridge",
 name2id = {p["name"]: p["id"] for p in places}
 name2place = {p["name"]: {"city": p["city"], "lat": p["lat"], "lon": p["lon"]}
                for p in places}
-place_info = {p["name"]: {"dur": p.get("dur", ""), "desc": p.get("desc", "")}
-              for p in places if p.get("dur") or p.get("desc")}
+place_info = {p["name"]: {"dur": p.get("dur", ""), "desc": p.get("desc", ""),
+                          "book": p.get("book", "")}
+              for p in places if p.get("dur") or p.get("desc") or p.get("book")}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Prague": "布拉格",
            "Cesky Krumlov": "克鲁姆洛夫", "Guangzhou": "广州", "Shenzhen": "深圳"}
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Prague": "#e8a33d",
@@ -126,6 +129,8 @@ def build_data():
     write_js("data/photos.js", "PHOTOS", web)
     if HOTELS:
         write_js("data/hotels.js", "HOTELS", HOTELS)
+    if TRANSIT.get("points") or TRANSIT.get("metro"):
+        write_js("data/transit.js", "TRANSIT", TRANSIT)
     for k, itin in itins.items():
         lid = k.lower()
         write_js(f"data/itinerary_{lid}.js", f"ITIN_{k}", itin)
@@ -166,6 +171,8 @@ a.back{color:var(--dim);font-size:12px;text-decoration:none}
 .dur{display:inline-block;margin-left:6px;background:rgba(110,168,254,.13);color:#6ea8fe;
  border:1px solid rgba(110,168,254,.28);border-radius:6px;padding:0 6px;font-size:11px}
 .pd{color:#9aa5b1;font-size:11.5px;line-height:1.55;margin:3px 0 0}
+.bk{color:#c9a86a;font-size:11.5px;line-height:1.55;margin:3px 0 0;background:rgba(201,168,106,.08);
+ border-left:2px solid rgba(201,168,106,.5);padding:3px 7px;border-radius:0 5px 5px 0}
 .hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
 .hsec{margin-bottom:24px}
 .hsec h3{font-size:14px;margin:0 0 10px;color:var(--text)}
@@ -218,6 +225,8 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 .leaflet-popup-tip{background:#1b212b}
 .leaflet-popup-content{margin:10px 12px;font-size:13px}
 .leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+.tcard{border-color:#6b7a8c}
+.tcard.sm{font-size:10.5px;padding:2px 6px}
 .arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(18,22,28,.9);
  border:1px solid #5a6673;color:#e8ecf1;border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
  box-shadow:0 1px 5px rgba(0,0,0,.45)}
@@ -250,7 +259,7 @@ Object.entries(groups).forEach(function(kv){
     m._d = labArr.length ? String(labArr[0]).split(" ")[0] : "";
     placeM.push(m); bounds.push([p.lat,p.lon]);
   });
-  lg.addTo(map); layers[(CITY_CN[city]||city)+" ("+items.length+")"]=lg;
+  lg.addTo(map);   // 城市景点层常开，不再占用图层开关
 
   const lat=items.reduce((s,p)=>s+p.lat,0)/items.length, lon=items.reduce((s,p)=>s+p.lon,0)/items.length;
   cityPos[city]=[lat,lon];
@@ -364,7 +373,25 @@ function drawSeg(lg,a,b,col){
     prev=d.city;
   });
 })();
-layers["日程箭头"]=arrowBox;
+arrowBox.addTo(map);   // 日程箭头常开
+// ---------- 交通点：机场 / 火车站 / 大巴站 / 相关地铁站 ----------
+const TR=window.TRANSIT||{points:[],metro:[]};
+const tLayer=L.layerGroup().addTo(map), tM=[];
+const TSTYLE={airport:["&#9992;","#e8590c"],train:["&#128646;","#1c7ed6"],bus:["&#128652;","#12b886"]};
+(TR.points||[]).forEach(function(p){
+  const s=TSTYLE[p.kind]||["&#9873;","#888"];
+  L.circleMarker([p.lat,p.lon],{radius:7,color:"#fff",weight:2,fillColor:s[1],fillOpacity:.95})
+    .bindTooltip("<b>"+s[0]+" "+p.name+"</b>"+(p.note?'<div class="nt">'+p.note+"</div>":""),
+      {permanent:true,direction:"top",className:"plabel tcard",opacity:1,offset:[0,-6]})
+    .addTo(tLayer);
+});
+(TR.metro||[]).forEach(function(m){
+  const mk=L.circleMarker([m.lat,m.lon],{radius:5,color:"#fff",weight:1.5,fillColor:"#7048e8",fillOpacity:.9})
+    .bindTooltip("<b>&#128647; "+m.name+'</b><div class="nt">'+m["for"]+" · 约 "+m.dist+"m</div>",
+      {permanent:true,direction:"top",className:"plabel tcard sm",opacity:1,offset:[0,-6]})
+    .addTo(tLayer);
+  tM.push(mk);
+});
 __JSHOTELSLAYER__
 L.control.layers({},layers,{collapsed:window.innerWidth<600}).addTo(map);
 
@@ -401,6 +428,7 @@ function applyZoom(){
   stylePlaceLabels();
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   hM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
+  tM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
   arrowBox.clearLayers();
   if(!map.hasLayer(arrowBox)) return;
@@ -449,7 +477,8 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
     const meta = INFO[nm]||{};
     const dur = meta.dur ? ' <span class="dur">建议 '+meta.dur+"</span>" : "";
     const desc = meta.desc ? '<div class="pd">'+meta.desc+"</div>" : "";
-    return '<li><div class="pn">'+nm+ampm+dur+"</div>"+desc+th+"</li>";
+    const book = meta.book ? '<div class="bk">&#127915; '+meta.book+"</div>" : "";
+    return '<li><div class="pn">'+nm+ampm+dur+"</div>"+desc+book+th+"</li>";
   }).join("");
   return '<div class="day"><div class="hd"><span class="d">'+d.date+
     '</span><span class="w">周'+d.w+'</span><span class="s">住 '+d.stay+'</span></div>'+
@@ -523,6 +552,7 @@ if(window.HOTELS){
       if(picks.indexOf(h.name)<0) return;      // 地图只标推荐的那几家
       hn++;
       const adv=[];
+      if(h.dist_metro!=null) adv.push("距地铁 "+h.dist_metro+"m");
       if(h.stars) adv.push(h.stars+"★");
       adv.push(h.kind==="hotel"?"酒店":(h.kind==="guest_house"?"民宿":(h.kind==="hostel"?"青旅":"住宿")));
       if(h.dist_sights!=null) adv.push("距景点中心 "+h.dist_sights+"m");
@@ -666,6 +696,7 @@ def data_block(k, lid, inline=False, ver=None, note=""):
             f"<script>window.LABELS_{k}=" + json.dumps(LABELS[k], ensure_ascii=False) + ";</script>",
             f"<script>window.ITIN_{k}=" + json.dumps(itins[k], ensure_ascii=False) + ";</script>",
             "<script>window.HOTELS=" + json.dumps(HOTELS, ensure_ascii=False) + ";</script>",
+            "<script>window.TRANSIT=" + json.dumps(TRANSIT, ensure_ascii=False) + ";</script>",
             "<script>window.VERSION=" + json.dumps(frozen, ensure_ascii=False) + ";</script>",
         ]))
     return "\n".join([
@@ -674,6 +705,7 @@ def data_block(k, lid, inline=False, ver=None, note=""):
         '<script src="../data/hotels.js"></script>',
         f'<script src="../data/labels_{lid}.js"></script>',
         f'<script src="../data/itinerary_{lid}.js"></script>',
+        '<script src="../data/transit.js"></script>',
         '<script src="../data/version.js"></script>',
     ])
 
