@@ -40,6 +40,8 @@ CITY_PHOTO = {"vienna": "st_stephens_cathedral", "st_wolfgang": "st_wolfgang",
               "budapest": "chain_bridge"}
 
 name2id = {p["name"]: p["id"] for p in places}
+name2place = {p["name"]: {"city": p["city"], "lat": p["lat"], "lon": p["lon"]}
+               for p in places}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特",
            "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a",
@@ -204,24 +206,26 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 .leaflet-popup-tip{background:#1b212b}
 .leaflet-popup-content{margin:10px 12px;font-size:13px}
 .leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+.arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(18,22,28,.9);
+ border:1px solid #5a6673;color:#e8ecf1;border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
+ box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.arleg{background:rgba(15,19,25,.92);border:1px solid #46525f;border-radius:10px;padding:8px 10px;
+ color:#e8ecf1;font-size:11px;line-height:1.5;box-shadow:0 2px 8px rgba(0,0,0,.5);max-width:236px}
+.arleg b{font-size:12px;display:block;margin-bottom:3px}
+.arleg .bar{height:9px;border-radius:5px;margin:5px 0 3px;border:1px solid #46525f;
+ background:linear-gradient(90deg,#f2f2f2,#0d0d0d)}
+.arleg .ends{display:flex;justify-content:space-between;color:#9aa5b1}
+.arleg .nt{color:#9aa5b1;margin-top:4px}
 """
 
 JS_MAP = """
 const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__;
 const LAB=window.__LABELVAR__||{};
 const map=L.map("map").setView([47.9,16.5],6);
-const bases={
- "暗色 CARTO":L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-   {maxZoom:19,subdomains:"abcd",attribution:"&copy; OpenStreetMap &copy; CARTO"}),
- "亮色 CARTO":L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-   {maxZoom:19,subdomains:"abcd",attribution:"&copy; OpenStreetMap &copy; CARTO"}),
- "Esri 街道":L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-   {maxZoom:19,attribution:"Tiles &copy; Esri"})
-};
-const DEF="暗色 CARTO"; bases[DEF].addTo(map);
-let te=0; bases[DEF].on("tileerror",function(){ if(++te>4&&map.hasLayer(bases[DEF])){map.removeLayer(bases[DEF]);bases["Esri 街道"].addTo(map);} });
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+  {maxZoom:19,attribution:"Tiles &copy; Esri"}).addTo(map);
 
-const groups={},layers={},bounds=[],placeM=[],cityM=[];
+const groups={},layers={},bounds=[],placeM=[],cityM=[],cityPos={};
 window.PLACES.forEach(p=>(groups[p.city]=groups[p.city]||[]).push(p));
 
 Object.entries(groups).forEach(function(kv){
@@ -241,19 +245,104 @@ Object.entries(groups).forEach(function(kv){
   lg.addTo(map); layers[(CITY_CN[city]||city)+" ("+items.length+")"]=lg;
 
   const lat=items.reduce((s,p)=>s+p.lat,0)/items.length, lon=items.reduce((s,p)=>s+p.lon,0)/items.length;
+  cityPos[city]=[lat,lon];
   const cm=L.marker([lat,lon],{icon:L.divIcon({className:"",html:"",iconSize:[0,0]}),interactive:false,keyboard:false})
     .bindTooltip(CITY_CN[city]||city,{permanent:true,direction:"center",className:"clabel",opacity:1});
   cm.addTo(map); cityM.push(cm);
 });
-__JSHOTELSLAYER__
-L.control.layers(bases,layers,{collapsed:window.innerWidth<600}).addTo(map);
 
+// ---------- 日程箭头：按日期从白到黑 ----------
+const N2P=__NAME2PLACE__, ITINM=window.__ITINVAR__||{days:[]};
+const DAYS=ITINM.days||[], UD=DAYS.map(function(d){return d.date}).filter(function(v,i,a){return a.indexOf(v)===i});
+const cityArr=L.layerGroup(), innerArr={}, arrowBox=L.layerGroup().addTo(map);
+function grayOf(t){const v=Math.round(242+(13-242)*t);return "rgb("+v+","+v+","+v+")";}
+function dayColor(dt){const i=UD.indexOf(dt);return grayOf(UD.length<2?0:i/(UD.length-1));}
+function casingOf(c){const m=/(\d+)/.exec(c);return (m&&+m[0]>128)?"#12161c":"#f0f3f7";}
+function bearingOf(a,b){const P=Math.PI/180,l1=a[0]*P,l2=b[0]*P,dl=(b[1]-a[1])*P;
+  const y=Math.sin(dl)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dl);
+  return (Math.atan2(y,x)/P+360)%360;}
+function along(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+function drawSeg(lg,a,b,col,dash){
+  L.polyline([a,b],{color:casingOf(col),weight:6,opacity:.85,interactive:false}).addTo(lg);
+  L.polyline([a,b],{color:col,weight:3,opacity:.98,dashArray:dash||"7 5",interactive:false}).addTo(lg);
+  L.marker(along(a,b,.72),{icon:L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],
+    html:'<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate('+bearingOf(a,b)+'deg);display:block">'+
+      '<path d="M2,9 L12,3 L12,15 Z" fill="'+col+'" stroke="'+casingOf(col)+'" stroke-width="1.4"/></svg>'}),
+    interactive:false,keyboard:false}).addTo(lg);
+}
+(function(){
+  let prev=null;
+  DAYS.forEach(function(d){
+    const col=dayColor(d.date);
+    // 城际：相邻两天城市变化即一条（洲际航班当天城市不变，天然被排除）
+    if(prev && d.city!==prev && cityPos[prev] && cityPos[d.city]){
+      const a=cityPos[prev], b=cityPos[d.city], t=d.train||{}, lg=L.layerGroup();
+      drawSeg(lg,a,b,col);
+      let txt = t.time ? "&#128646; "+t.time : "&#128646;";
+      if(t.price && t.price!=="待查") txt += " · "+t.price+(t.price_state==="预估"?"（预估）":"");
+      else if(t.time) txt += " · 价格待查";
+      if(txt) L.marker(along(a,b,.5),{icon:L.divIcon({className:"",iconSize:[0,0],
+        html:'<div class="arlab">'+txt+"</div>"}),interactive:false,keyboard:false}).addTo(lg);
+      lg.addTo(cityArr);
+    }
+    // 城内：当天 items 按城市分组，顺序相连
+    const seq=[]; (d.items||[]).forEach(function(nm){const p=N2P[nm]; if(p) seq.push(p);});
+    let i=0;
+    while(i<seq.length){
+      const c=seq[i].city, run=[];
+      while(i<seq.length && seq[i].city===c){run.push(seq[i]); i++;}
+      if(run.length>=2 && c===d.city){
+        innerArr[c]=innerArr[c]||L.layerGroup();
+        const lg2=L.layerGroup();
+        for(let j=0;j<run.length-1;j++)
+          drawSeg(lg2,[run[j].lat,run[j].lon],[run[j+1].lat,run[j+1].lon],col,"5 4");
+        lg2.addTo(innerArr[c]);
+      }
+    }
+    prev=d.city;
+  });
+})();
+layers["日程箭头"]=arrowBox;
+
+const LegCtl=L.control({position:"bottomleft"});
+LegCtl.onAdd=function(){
+  const d=L.DomUtil.create("div","arleg");
+  d.innerHTML='<b>日程箭头</b><div class="bar"></div>'+
+    '<div class="ends"><span>'+(UD[0]||"")+' 早</span><span>'+(UD[UD.length-1]||"")+" 晚</span></div>"+
+    '<div class="nt" id="armode"></div>'+
+    '<div class="nt">箭头方向 = 行程先后顺序（示意直线，非实际路线）</div>'+
+    '<div class="nt">城际标注为单人提前票价，2 人合计 ×2；带「预估」的待 2026-11 开票后复核</div>';
+  return d;
+};
+LegCtl.addTo(map);
+__JSHOTELSLAYER__
+L.control.layers({},layers,{collapsed:window.innerWidth<600}).addTo(map);
+
+function nearestCity(ll){
+  let best=null,bd=Infinity;
+  Object.keys(cityPos).forEach(function(c){
+    const p=cityPos[c], d=Math.pow(p[0]-ll.lat,2)+Math.pow(p[1]-ll.lng,2);
+    if(d<bd){bd=d;best=c;}
+  });
+  return best;
+}
 function applyZoom(){
   const cityMode = map.getZoom() < CITY_ZOOM;
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
+  arrowBox.clearLayers();
+  const am=document.getElementById("armode");
+  if(!map.hasLayer(arrowBox)){ if(am) am.textContent="箭头已关闭"; return; }
+  if(cityMode){ arrowBox.addLayer(cityArr); if(am) am.textContent="当前：城际视图"; }
+  else{
+    const c=nearestCity(map.getCenter());
+    if(c&&innerArr[c]){ arrowBox.addLayer(innerArr[c]); if(am) am.textContent="当前：城内视图（"+(CITY_CN[c]||c)+"）"; }
+    else if(am) am.textContent="当前：城内视图（该城市无行程箭头）";
+  }
 }
 map.on("zoomend",applyZoom);
+map.on("moveend",applyZoom);
+map.on("overlayadd overlayremove",applyZoom);
 
 function toggleFs(){
   const el=document.getElementById("map");
@@ -515,6 +604,8 @@ def build_pages():
                        .replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
                        .replace("__CITYZOOM__", str(CITY_ZOOM))
                        .replace("__LABELVAR__", f"LABELS_{k}")
+                       .replace("__ITINVAR__", f"ITIN_{k}")
+                       .replace("__NAME2PLACE__", json.dumps(name2place, ensure_ascii=False))
                        .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
                          .replace("__ITINVAR__", f"ITIN_{k}"))
