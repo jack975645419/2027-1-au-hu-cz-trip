@@ -93,7 +93,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v16.html">v16</a><a href="v15.html">v15</a><a href="v14.html">v14</a></div>
+<h2>历史版本</h2><div class="card hist"><a href="v17.html">v17</a><a href="v16.html">v16</a><a href="v15.html">v15</a><a href="v14.html">v14</a></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -194,7 +194,8 @@ function drawSeg(lg,a,b,col){
     while(i<seq.length){
       const c=seq[i].city, run=[];
       while(i<seq.length && seq[i].city===c){run.push(seq[i]); i++;}
-      if(run.length>=2 && c===d.city){
+      // 同一城市（或当天短途外出，如布拉格→CK 当天往返）的连续景点才连箭头
+      if(run.length>=2){
         innerArr[c]=innerArr[c]||L.layerGroup();
         const lg2=L.layerGroup();
         for(let j=0;j<run.length-1;j++)

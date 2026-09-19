@@ -306,7 +306,8 @@ function drawSeg(lg,a,b,col){
     while(i<seq.length){
       const c=seq[i].city, run=[];
       while(i<seq.length && seq[i].city===c){run.push(seq[i]); i++;}
-      if(run.length>=2 && c===d.city){
+      // 同一城市（或当天短途外出，如布拉格→CK 当天往返）的连续景点才连箭头
+      if(run.length>=2){
         innerArr[c]=innerArr[c]||L.layerGroup();
         const lg2=L.layerGroup();
         for(let j=0;j<run.length-1;j++)

@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v16", "built_at": "2026-09-19 17:05", "commit": "bb3d6af", "note": "回程携程实测联程：PRG→PEK→CAN ¥2,379/人（海航）"};
+window.VERSION = {"version": "v17", "built_at": "2026-09-19 20:50", "commit": "e0decf1", "note": "新增方案 E：CK 从布拉格当天往返（布拉格 4 晚）"};
