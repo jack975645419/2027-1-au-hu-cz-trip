@@ -382,7 +382,7 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
   return '<div class="day"><div class="hd"><span class="d">'+d.date+
     '</span><span class="w">周'+d.w+'</span><span class="s">住 '+d.stay+'</span></div>'+
     '<div class="bd">'+
-    (d.transport?'<div class="tp"><b>&#128646;</b> '+d.transport+"</div>":"")+
+    (d.transport?'<div class="tp"><b>'+(d.flight?"&#9992;":"&#128646;")+"</b> "+d.transport+"</div>":"")+
     (items?"<ul>"+items+"</ul>":"")+
     (d.note?'<div class="note">'+d.note+"</div>":"")+
     "</div></div>";
@@ -399,8 +399,10 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   let seg="";
   if(d.flight){
     const f=d.flight;
+    const tm=f.route?f.route:(f.dep+' '+f.time+' '+f.arr);
     seg='<span class="seg flt"><span class="ico">&#9992;</span><span class="tn">'+f.no+
-      '</span><span class="tm">'+f.dep+' '+f.time+' '+f.arr+'</span>'+
+      '</span><span class="tm">'+tm+'</span>'+
+      (f.price?'<span class="tm"> · '+f.price+'</span>':'')+
       (f.pending?'<span class="tm pending">（'+f.pending+'）</span>':'')+'</span>';
   }else if(d.train){
     const t=d.train;
@@ -529,11 +531,14 @@ INDEX_TPL = """<!DOCTYPE html>
 <div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
 <h2>选择方案</h2>__PICKS__
-<h2>航班（两个方案相同）</h2>
+<h2>航班（方案 C / D）</h2>
 <div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
-<div class="sub">深圳 SZX 01:45 → 维也纳 VIE · 海航 HU789 · 实测直飞 ¥3,357</div></div>
-<div class="card"><div style="font-weight:600">回程 · 2/2（二）</div>
-<div class="sub">布达佩斯 BUD 11:45 → 广州 CAN · 南航 CZ650 · 实测直飞 ¥3,313</div></div>
+<div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287/人</div></div>
+<div class="card"><div style="font-weight:600">回程 · 2/1（一）→ 2/2（二）</div>
+<div class="sub">布拉格 PRG 13:00 → 北京 PEK 次日 05:15（中转 3h15m）→ 广州 CAN 12:00 ·
+海航联程 · <b>携程实测 ¥2,379/人</b></div></div>
+<div class="card"><div class="sub" style="color:#9aa5b1">已否决的方案 A / B 用的是另一套：深圳 SZX 01:45 → 维也纳
+HU789 ¥3,357 / 布达佩斯 BUD 11:45 → 广州 CZ650 ¥3,313（均为直飞）</div></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">行程草稿 · 地图数据 OpenStreetMap</div></footer>
 </div>
 <script src="data/version.js"></script>

@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v15", "built_at": "2026-09-19 17:00", "commit": "254654a", "note": "1/22 改为国内出发日（深圳→广州），跨洲航班归到 1/23；2/2 抵达广州"};
+window.VERSION = {"version": "v16", "built_at": "2026-09-19 17:05", "commit": "bb3d6af", "note": "回程携程实测联程：PRG→PEK→CAN ¥2,379/人（海航）"};
