@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v12", "built_at": "2026-09-19 11:26", "commit": "6e3c8d9", "note": "地图：日程箭头（按日期白→黑+城际时长票价+图例+缩放分级）；底图改为单一 Esri 街道"};
+window.VERSION = {"version": "v13", "built_at": "2026-09-19 11:32", "commit": "301f9c3", "note": "箭头改实线+轻微描边（固定色）；移除图例"};

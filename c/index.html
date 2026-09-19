@@ -83,13 +83,6 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 .arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(18,22,28,.9);
  border:1px solid #5a6673;color:#e8ecf1;border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
  box-shadow:0 1px 5px rgba(0,0,0,.45)}
-.arleg{background:rgba(15,19,25,.92);border:1px solid #46525f;border-radius:10px;padding:8px 10px;
- color:#e8ecf1;font-size:11px;line-height:1.5;box-shadow:0 2px 8px rgba(0,0,0,.5);max-width:236px}
-.arleg b{font-size:12px;display:block;margin-bottom:3px}
-.arleg .bar{height:9px;border-radius:5px;margin:5px 0 3px;border:1px solid #46525f;
- background:linear-gradient(90deg,#f2f2f2,#0d0d0d)}
-.arleg .ends{display:flex;justify-content:space-between;color:#9aa5b1}
-.arleg .nt{color:#9aa5b1;margin-top:4px}
 </style></head><body><div class="wrap">
 <header><a class="back" href="../index.html">← 全部方案</a>
 <h1>方案 C · 布达佩斯进 / 布拉格中转回</h1><div class="sub">机票最省 · 火车最短 · 到家最早</div>
@@ -100,7 +93,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v12.html">v12</a><a href="v11.html">v11</a><a href="v10.html">v10</a><a href="v9.html">v9</a><a href="v8.html">v8</a></div>
+<h2>历史版本</h2><div class="card hist"><a href="v13.html">v13</a><a href="v12.html">v12</a><a href="v11.html">v11</a><a href="v10.html">v10</a><a href="v9.html">v9</a><a href="v8.html">v8</a></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">方案 C · 布达佩斯进 / 布拉格中转回 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -149,17 +142,17 @@ const DAYS=ITINM.days||[], UD=DAYS.map(function(d){return d.date}).filter(functi
 const cityArr=L.layerGroup(), innerArr={}, arrowBox=L.layerGroup().addTo(map);
 function grayOf(t){const v=Math.round(242+(13-242)*t);return "rgb("+v+","+v+","+v+")";}
 function dayColor(dt){const i=UD.indexOf(dt);return grayOf(UD.length<2?0:i/(UD.length-1));}
-function casingOf(c){const m=/(\d+)/.exec(c);return (m&&+m[0]>128)?"#12161c":"#f0f3f7";}
+const CASE="#3a3f45";
 function bearingOf(a,b){const P=Math.PI/180,l1=a[0]*P,l2=b[0]*P,dl=(b[1]-a[1])*P;
   const y=Math.sin(dl)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dl);
   return (Math.atan2(y,x)/P+360)%360;}
 function along(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
-function drawSeg(lg,a,b,col,dash){
-  L.polyline([a,b],{color:casingOf(col),weight:6,opacity:.85,interactive:false}).addTo(lg);
-  L.polyline([a,b],{color:col,weight:3,opacity:.98,dashArray:dash||"7 5",interactive:false}).addTo(lg);
-  L.marker(along(a,b,.72),{icon:L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],
-    html:'<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate('+bearingOf(a,b)+'deg);display:block">'+
-      '<path d="M2,9 L12,3 L12,15 Z" fill="'+col+'" stroke="'+casingOf(col)+'" stroke-width="1.4"/></svg>'}),
+function drawSeg(lg,a,b,col){
+  L.polyline([a,b],{color:CASE,weight:4.5,opacity:.5,interactive:false}).addTo(lg);
+  L.polyline([a,b],{color:col,weight:3,opacity:.95,interactive:false}).addTo(lg);
+  L.marker(along(a,b,.72),{icon:L.divIcon({className:"",iconSize:[14,14],iconAnchor:[7,7],
+    html:'<svg width="14" height="14" viewBox="0 0 14 14" style="transform:rotate('+bearingOf(a,b)+'deg);display:block">'+
+      '<path d="M2,7 L10.5,2.5 L10.5,11.5 Z" fill="'+col+'" stroke="'+CASE+'" stroke-width="1"/></svg>'}),
     interactive:false,keyboard:false}).addTo(lg);
 }
 (function(){
@@ -187,7 +180,7 @@ function drawSeg(lg,a,b,col,dash){
         innerArr[c]=innerArr[c]||L.layerGroup();
         const lg2=L.layerGroup();
         for(let j=0;j<run.length-1;j++)
-          drawSeg(lg2,[run[j].lat,run[j].lon],[run[j+1].lat,run[j+1].lon],col,"5 4");
+          drawSeg(lg2,[run[j].lat,run[j].lon],[run[j+1].lat,run[j+1].lon],col);
         lg2.addTo(innerArr[c]);
       }
     }
@@ -195,18 +188,6 @@ function drawSeg(lg,a,b,col,dash){
   });
 })();
 layers["日程箭头"]=arrowBox;
-
-const LegCtl=L.control({position:"bottomleft"});
-LegCtl.onAdd=function(){
-  const d=L.DomUtil.create("div","arleg");
-  d.innerHTML='<b>日程箭头</b><div class="bar"></div>'+
-    '<div class="ends"><span>'+(UD[0]||"")+' 早</span><span>'+(UD[UD.length-1]||"")+" 晚</span></div>"+
-    '<div class="nt" id="armode"></div>'+
-    '<div class="nt">箭头方向 = 行程先后顺序（示意直线，非实际路线）</div>'+
-    '<div class="nt">城际标注为单人提前票价，2 人合计 ×2；带「预估」的待 2026-11 开票后复核</div>';
-  return d;
-};
-LegCtl.addTo(map);
 
 const hLayer=L.layerGroup(); let hn=0;
 if(window.HOTELS){
@@ -238,13 +219,11 @@ function applyZoom(){
   placeM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"none":"";});
   cityM.forEach(function(m){const t=m.getTooltip();const e=t&&t.getElement();if(e)e.style.display=cityMode?"":"none";});
   arrowBox.clearLayers();
-  const am=document.getElementById("armode");
-  if(!map.hasLayer(arrowBox)){ if(am) am.textContent="箭头已关闭"; return; }
-  if(cityMode){ arrowBox.addLayer(cityArr); if(am) am.textContent="当前：城际视图"; }
+  if(!map.hasLayer(arrowBox)) return;
+  if(cityMode){ arrowBox.addLayer(cityArr); }
   else{
     const c=nearestCity(map.getCenter());
-    if(c&&innerArr[c]){ arrowBox.addLayer(innerArr[c]); if(am) am.textContent="当前：城内视图（"+(CITY_CN[c]||c)+"）"; }
-    else if(am) am.textContent="当前：城内视图（该城市无行程箭头）";
+    if(c&&innerArr[c]) arrowBox.addLayer(innerArr[c]);
   }
 }
 map.on("zoomend",applyZoom);
