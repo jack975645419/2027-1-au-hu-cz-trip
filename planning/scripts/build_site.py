@@ -43,14 +43,17 @@ name2id = {p["name"]: p["id"] for p in places}
 name2place = {p["name"]: {"city": p["city"], "lat": p["lat"], "lon": p["lon"]}
                for p in places}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特",
-           "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}
+           "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫",
+           "Guangzhou": "广州", "Shenzhen": "深圳"}
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a",
-          "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8"}
+          "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8",
+          "Guangzhou": "#9aa7b5", "Shenzhen": "#9aa7b5"}
 # 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
 CITY_TOKENS = {"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"],
                "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"],
                "Prague": ["PRG", "Praha", "Prague"],
-               "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"]}
+               "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"],
+               "Guangzhou": ["CAN", "Guangzhou"], "Shenzhen": ["SZX", "Shenzhen"]}
 
 
 def session_of(i, n):

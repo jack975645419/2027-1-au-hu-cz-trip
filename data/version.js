@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v14", "built_at": "2026-09-19 11:40", "commit": "df18e96", "note": "新增方案 D：克鲁姆洛夫替换湖区（CK 景点/酒店/图片；页头按方案生成）"};
+window.VERSION = {"version": "v15", "built_at": "2026-09-19 17:00", "commit": "254654a", "note": "1/22 改为国内出发日（深圳→广州），跨洲航班归到 1/23；2/2 抵达广州"};

@@ -93,7 +93,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v14.html">v14</a></div>
+<h2>历史版本</h2><div class="card hist"><a href="v15.html">v15</a><a href="v14.html">v14</a></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -104,7 +104,7 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 <script src="../data/itinerary_d.js"></script>
 <script src="../data/version.js"></script>
 <script>
-const COLORS={"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8"}, CITY_CN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}, CITY_ZOOM=11;
+const COLORS={"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8", "Guangzhou": "#9aa7b5", "Shenzhen": "#9aa7b5"}, CITY_CN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫", "Guangzhou": "广州", "Shenzhen": "深圳"}, CITY_ZOOM=11;
 const LAB=window.LABELS_D||{};
 const map=L.map("map").setView([47.9,16.5],6);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
@@ -292,7 +292,7 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
   return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+"</div></div>";
 }).join("");
 
-const CCN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}, CITYTK={"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"], "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"], "Prague": ["PRG", "Praha", "Prague"], "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"]}, ITINOV=window.ITIN_D;
+const CCN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫", "Guangzhou": "广州", "Shenzhen": "深圳"}, CITYTK={"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"], "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"], "Prague": ["PRG", "Praha", "Prague"], "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"], "Guangzhou": ["CAN", "Guangzhou"], "Shenzhen": ["SZX", "Shenzhen"]}, ITINOV=window.ITIN_D;
 document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   const cA = d.flight||d.train;
   let seg="";
