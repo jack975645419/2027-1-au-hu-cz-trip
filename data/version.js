@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v18", "built_at": "2026-09-19 20:57", "commit": "da1b449", "note": "支持当天往返：地图⇄双向错开箭头；行程一览显示「布拉格 ⇄ 克鲁姆洛夫」"};
+window.VERSION = {"version": "v19", "built_at": "2026-09-19 21:09", "commit": "cb8f1e0", "note": "方案 D 改夜数：布达佩斯 2 / 维也纳 3 / CK 1 / 布拉格 3；1/25 午后去维也纳"};
