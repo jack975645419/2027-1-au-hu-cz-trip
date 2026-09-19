@@ -293,5 +293,85 @@
     "lat": 50.0754264,
     "lon": 14.4141719,
     "note": "待确认"
+  },
+  {
+    "id": "ck_old_town",
+    "name": "CK 老城广场",
+    "query": "Namesti Svornosti, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81091,
+    "lon": 14.31482,
+    "note": "小镇心脏，冬季游客极少",
+    "en": "Cesky Krumlov old town square"
+  },
+  {
+    "id": "ck_castle",
+    "name": "CK 城堡",
+    "query": "Castle Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81289,
+    "lon": 14.31555,
+    "note": "内部与塔11月-3月关闭；庭院/花园免费开放",
+    "en": "Cesky Krumlov Castle"
+  },
+  {
+    "id": "ck_bridge",
+    "name": "CK 理发师桥",
+    "query": "Most Lazebnicky, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81182,
+    "lon": 14.31571,
+    "note": "连老城与城堡区，伏尔塔瓦河弯经典机位",
+    "en": "Lazebnicky most Cesky Krumlov"
+  },
+  {
+    "id": "ck_castle_garden",
+    "name": "CK 城堡花园",
+    "query": "Zamecka zahrada Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81185,
+    "lon": 14.30858,
+    "note": "冬季 8:00-17:00 视天气开放",
+    "en": "Cesky Krumlov castle garden"
+  },
+  {
+    "id": "ck_schiele",
+    "name": "Egon Schiele 艺术中心",
+    "query": "Egon Schiele Art Centrum, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81065,
+    "lon": 14.31332,
+    "note": "冬季周三-周日 10:00-17:00",
+    "en": "Egon Schiele Art Centrum"
+  },
+  {
+    "id": "ck_museum",
+    "name": "CK 地区博物馆",
+    "query": "Regionalni muzeum, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81069,
+    "lon": 14.31779,
+    "note": "冬季周三-周日 9:00-16:00",
+    "en": "Regional museum Cesky Krumlov"
+  },
+  {
+    "id": "ck_st_vitus",
+    "name": "CK 圣维特教堂",
+    "query": "Kostel svateho Vita, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.81016,
+    "lon": 14.31614,
+    "note": "",
+    "en": "Church of Saint Vitus Cesky Krumlov"
+  },
+  {
+    "id": "ck_seidel",
+    "name": "Seidel 照相馆",
+    "query": "Museum Fotoatelier Seidel, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.80834,
+    "lon": 14.31641,
+    "note": "冬季周三-周日 9:00-16:00",
+    "en": "Fotoatelier Seidel"
   }
 ]

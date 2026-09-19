@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-<title>方案 B · 只玩哈尔施塔特 · 2027-1 奥匈捷之旅</title>
+<title>方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫 · 2027-1 奥匈捷之旅</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
@@ -85,27 +85,27 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
  box-shadow:0 1px 5px rgba(0,0,0,.45)}
 </style></head><body><div class="wrap">
 <header><a class="back" href="../index.html">← 全部方案</a>
-<h1>方案 B · 只玩哈尔施塔特</h1><div class="sub">湖区集中，布拉格保留 2 个整天</div>
-<div class="sub"><b>1/22 – 2/2</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
+<h1>方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫</h1><div class="sub">舍湖区换 CK 小镇 · 地面交通最短 · 冬季照常营业</div>
+<div class="sub"><b>1/22 – 2/2</b> · 9 晚 10 天 · 广州 → 布达佩斯 / 布拉格 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
-<h2>取舍</h2><div class="card"><div class="pros">+ 布拉格保留 2 个整天</div><div class="pros">+ 哈尔施塔特占满晨昏两个黄金时段</div><div class="pros">+ 1/27 转场比 A 短，更从容</div><div class="cons">− 不去圣沃尔夫冈</div></div>
+<h2>取舍</h2><div class="card"><div class="pros">+ 机票最省（与 C 相同 ¥5,694）</div><div class="pros">+ 地面交通约 9h，比 C 少约 2.5h</div><div class="pros">+ CK 冬季老城/城堡庭院/4 家博物馆照常营业，抗坏天气</div><div class="pros">+ 小镇 + 伏尔塔瓦河 + 雪，正是要的「僻静小镇」感</div><div class="cons">− 城堡内部与城堡塔 11-3 月关闭（最高观景台没了）</div><div class="cons">− 完全放弃湖区雪山湖景</div><div class="cons">− 1/29 行程较满：上午 CK 博物馆 + 下午大巴</div></div>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
-<h2>历史版本</h2><div class="card hist"><a href="v14.html">v14</a><a href="v13.html">v13</a><a href="v12.html">v12</a><a href="v11.html">v11</a><a href="v10.html">v10</a><a href="v9.html">v9</a><a href="v8.html">v8</a><a href="v7.html">v7</a><a href="v6.html">v6</a></div>
-<footer><div id="verfoot"></div><div style="margin-top:6px">方案 B · 只玩哈尔施塔特 · 草稿</div></footer>
+<h2>历史版本</h2><div class="card hist"><a href="v14.html">v14</a></div>
+<footer><div id="verfoot"></div><div style="margin-top:6px">方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫 · 草稿</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../data/places.js"></script>
 <script src="../data/photos.js"></script>
 <script src="../data/hotels.js"></script>
-<script src="../data/labels_b.js"></script>
-<script src="../data/itinerary_b.js"></script>
+<script src="../data/labels_d.js"></script>
+<script src="../data/itinerary_d.js"></script>
 <script src="../data/version.js"></script>
 <script>
 const COLORS={"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a", "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8"}, CITY_CN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}, CITY_ZOOM=11;
-const LAB=window.LABELS_B||{};
+const LAB=window.LABELS_D||{};
 const map=L.map("map").setView([47.9,16.5],6);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
   {maxZoom:19,attribution:"Tiles &copy; Esri"}).addTo(map);
@@ -137,7 +137,7 @@ Object.entries(groups).forEach(function(kv){
 });
 
 // ---------- 日程箭头：按日期从白到黑 ----------
-const N2P={"纽约咖啡厅": {"city": "Budapest", "lat": 47.4986782, "lon": 19.0704636}, "塞切尼温泉浴场": {"city": "Budapest", "lat": 47.5184354, "lon": 19.0825223}, "英雄广场": {"city": "Budapest", "lat": 47.5153516, "lon": 19.0770869}, "塞切尼链桥": {"city": "Budapest", "lat": 47.4989791, "lon": 19.0436494}, "渔人堡": {"city": "Budapest", "lat": 47.5023053, "lon": 19.0346998}, "马加什教堂": {"city": "Budapest", "lat": 47.5020118, "lon": 19.0342109}, "国会大厦观景点": {"city": "Budapest", "lat": 47.5068724, "lon": 19.037782}, "布达堡": {"city": "Budapest", "lat": 47.5019564, "lon": 19.0324788}, "多瑙河游船码头": {"city": "Budapest", "lat": 47.4958194, "lon": 19.0491946}, "匈牙利国家歌剧院": {"city": "Budapest", "lat": 47.5028701, "lon": 19.0581577}, "圣伊什特万圣殿": {"city": "Budapest", "lat": 47.5007766, "lon": 19.053965}, "自由桥": {"city": "Budapest", "lat": 47.4857237, "lon": 19.0549035}, "匈牙利国会大厦": {"city": "Budapest", "lat": 47.5070496, "lon": 19.0459186}, "斯蒂芬大教堂": {"city": "Vienna", "lat": 48.2084923, "lon": 16.3731269}, "霍夫堡宫": {"city": "Vienna", "lat": 48.2063293, "lon": 16.3656259}, "卡尔教堂": {"city": "Vienna", "lat": 48.1982785, "lon": 16.3718951}, "莫扎特咖啡馆": {"city": "Vienna", "lat": 48.2040163, "lon": 16.3689146}, "绿桥（爱在黎明破晓前）": {"city": "Vienna", "lat": 48.2098048, "lon": 16.3843875}, "约瑟夫广场": {"city": "Vienna", "lat": 48.2065252, "lon": 16.3675025}, "格拉本大街": {"city": "Vienna", "lat": 48.2083656, "lon": 16.3702037}, "美景宫": {"city": "Vienna", "lat": 48.1921648, "lon": 16.3789337}, "艺术史博物馆": {"city": "Vienna", "lat": 48.2037395, "lon": 16.3617819}, "美泉宫": {"city": "Vienna", "lat": 48.1849894, "lon": 16.3115684}, "金色大厅": {"city": "Vienna", "lat": 48.2004865, "lon": 16.3727252}, "哈尔施塔特": {"city": "Hallstatt", "lat": 47.5622, "lon": 13.649}, "圣沃尔夫冈": {"city": "St. Wolfgang", "lat": 47.7386, "lon": 13.4482}, "老城广场（天文钟）": {"city": "Prague", "lat": 50.0874453, "lon": 14.4209714}, "查理大桥": {"city": "Prague", "lat": 50.0866258, "lon": 14.4101485}, "布拉格城堡": {"city": "Prague", "lat": 50.0908114, "lon": 14.4005225}, "圣维特大教堂": {"city": "Prague", "lat": 50.0908638, "lon": 14.400571}, "列侬墙": {"city": "Prague", "lat": 50.0862417, "lon": 14.4068148}, "跳舞的房子": {"city": "Prague", "lat": 50.0754264, "lon": 14.4141719}, "CK 老城广场": {"city": "Cesky Krumlov", "lat": 48.81091, "lon": 14.31482}, "CK 城堡": {"city": "Cesky Krumlov", "lat": 48.81289, "lon": 14.31555}, "CK 理发师桥": {"city": "Cesky Krumlov", "lat": 48.81182, "lon": 14.31571}, "CK 城堡花园": {"city": "Cesky Krumlov", "lat": 48.81185, "lon": 14.30858}, "Egon Schiele 艺术中心": {"city": "Cesky Krumlov", "lat": 48.81065, "lon": 14.31332}, "CK 地区博物馆": {"city": "Cesky Krumlov", "lat": 48.81069, "lon": 14.31779}, "CK 圣维特教堂": {"city": "Cesky Krumlov", "lat": 48.81016, "lon": 14.31614}, "Seidel 照相馆": {"city": "Cesky Krumlov", "lat": 48.80834, "lon": 14.31641}}, ITINM=window.ITIN_B||{days:[]};
+const N2P={"纽约咖啡厅": {"city": "Budapest", "lat": 47.4986782, "lon": 19.0704636}, "塞切尼温泉浴场": {"city": "Budapest", "lat": 47.5184354, "lon": 19.0825223}, "英雄广场": {"city": "Budapest", "lat": 47.5153516, "lon": 19.0770869}, "塞切尼链桥": {"city": "Budapest", "lat": 47.4989791, "lon": 19.0436494}, "渔人堡": {"city": "Budapest", "lat": 47.5023053, "lon": 19.0346998}, "马加什教堂": {"city": "Budapest", "lat": 47.5020118, "lon": 19.0342109}, "国会大厦观景点": {"city": "Budapest", "lat": 47.5068724, "lon": 19.037782}, "布达堡": {"city": "Budapest", "lat": 47.5019564, "lon": 19.0324788}, "多瑙河游船码头": {"city": "Budapest", "lat": 47.4958194, "lon": 19.0491946}, "匈牙利国家歌剧院": {"city": "Budapest", "lat": 47.5028701, "lon": 19.0581577}, "圣伊什特万圣殿": {"city": "Budapest", "lat": 47.5007766, "lon": 19.053965}, "自由桥": {"city": "Budapest", "lat": 47.4857237, "lon": 19.0549035}, "匈牙利国会大厦": {"city": "Budapest", "lat": 47.5070496, "lon": 19.0459186}, "斯蒂芬大教堂": {"city": "Vienna", "lat": 48.2084923, "lon": 16.3731269}, "霍夫堡宫": {"city": "Vienna", "lat": 48.2063293, "lon": 16.3656259}, "卡尔教堂": {"city": "Vienna", "lat": 48.1982785, "lon": 16.3718951}, "莫扎特咖啡馆": {"city": "Vienna", "lat": 48.2040163, "lon": 16.3689146}, "绿桥（爱在黎明破晓前）": {"city": "Vienna", "lat": 48.2098048, "lon": 16.3843875}, "约瑟夫广场": {"city": "Vienna", "lat": 48.2065252, "lon": 16.3675025}, "格拉本大街": {"city": "Vienna", "lat": 48.2083656, "lon": 16.3702037}, "美景宫": {"city": "Vienna", "lat": 48.1921648, "lon": 16.3789337}, "艺术史博物馆": {"city": "Vienna", "lat": 48.2037395, "lon": 16.3617819}, "美泉宫": {"city": "Vienna", "lat": 48.1849894, "lon": 16.3115684}, "金色大厅": {"city": "Vienna", "lat": 48.2004865, "lon": 16.3727252}, "哈尔施塔特": {"city": "Hallstatt", "lat": 47.5622, "lon": 13.649}, "圣沃尔夫冈": {"city": "St. Wolfgang", "lat": 47.7386, "lon": 13.4482}, "老城广场（天文钟）": {"city": "Prague", "lat": 50.0874453, "lon": 14.4209714}, "查理大桥": {"city": "Prague", "lat": 50.0866258, "lon": 14.4101485}, "布拉格城堡": {"city": "Prague", "lat": 50.0908114, "lon": 14.4005225}, "圣维特大教堂": {"city": "Prague", "lat": 50.0908638, "lon": 14.400571}, "列侬墙": {"city": "Prague", "lat": 50.0862417, "lon": 14.4068148}, "跳舞的房子": {"city": "Prague", "lat": 50.0754264, "lon": 14.4141719}, "CK 老城广场": {"city": "Cesky Krumlov", "lat": 48.81091, "lon": 14.31482}, "CK 城堡": {"city": "Cesky Krumlov", "lat": 48.81289, "lon": 14.31555}, "CK 理发师桥": {"city": "Cesky Krumlov", "lat": 48.81182, "lon": 14.31571}, "CK 城堡花园": {"city": "Cesky Krumlov", "lat": 48.81185, "lon": 14.30858}, "Egon Schiele 艺术中心": {"city": "Cesky Krumlov", "lat": 48.81065, "lon": 14.31332}, "CK 地区博物馆": {"city": "Cesky Krumlov", "lat": 48.81069, "lon": 14.31779}, "CK 圣维特教堂": {"city": "Cesky Krumlov", "lat": 48.81016, "lon": 14.31614}, "Seidel 照相馆": {"city": "Cesky Krumlov", "lat": 48.80834, "lon": 14.31641}}, ITINM=window.ITIN_D||{days:[]};
 const DAYS=ITINM.days||[], UD=DAYS.map(function(d){return d.date}).filter(function(v,i,a){return a.indexOf(v)===i});
 const cityArr=L.layerGroup(), innerArr={}, arrowBox=L.layerGroup().addTo(map);
 function grayOf(t){const v=Math.round(242+(13-242)*t);return "rgb("+v+","+v+","+v+")";}
@@ -270,7 +270,7 @@ document.addEventListener("webkitfullscreenchange",function(){setTimeout(functio
 if(bounds.length){ map.fitBounds(bounds,{padding:[40,40]}); }
 applyZoom();
 
-const P=window.PHOTOS||{}, NAME2ID={"纽约咖啡厅": "nyc_cafe", "塞切尼温泉浴场": "szechenyi_bath", "英雄广场": "heroes_square", "塞切尼链桥": "chain_bridge", "渔人堡": "fishermans_bastion", "马加什教堂": "matthias_church", "国会大厦观景点": "parliament_view", "布达堡": "buda_castle", "多瑙河游船码头": "danube_cruise", "匈牙利国家歌剧院": "state_opera", "圣伊什特万圣殿": "st_stephens", "自由桥": "liberty_bridge", "匈牙利国会大厦": "parliament", "斯蒂芬大教堂": "st_stephens_cathedral", "霍夫堡宫": "hofburg", "卡尔教堂": "karlskirche", "莫扎特咖啡馆": "cafe_mozart", "绿桥（爱在黎明破晓前）": "zollamtssteg", "约瑟夫广场": "josefsplatz", "格拉本大街": "graben", "美景宫": "belvedere", "艺术史博物馆": "kunsthistorisches", "美泉宫": "schonbrunn", "金色大厅": "musikverein", "哈尔施塔特": "hallstatt", "圣沃尔夫冈": "st_wolfgang", "老城广场（天文钟）": "old_town_square", "查理大桥": "charles_bridge", "布拉格城堡": "prague_castle", "圣维特大教堂": "st_vitus", "列侬墙": "lenon_wall", "跳舞的房子": "dancing_house", "CK 老城广场": "ck_old_town", "CK 城堡": "ck_castle", "CK 理发师桥": "ck_bridge", "CK 城堡花园": "ck_castle_garden", "Egon Schiele 艺术中心": "ck_schiele", "CK 地区博物馆": "ck_museum", "CK 圣维特教堂": "ck_st_vitus", "Seidel 照相馆": "ck_seidel"}, ITIN=window.ITIN_B;
+const P=window.PHOTOS||{}, NAME2ID={"纽约咖啡厅": "nyc_cafe", "塞切尼温泉浴场": "szechenyi_bath", "英雄广场": "heroes_square", "塞切尼链桥": "chain_bridge", "渔人堡": "fishermans_bastion", "马加什教堂": "matthias_church", "国会大厦观景点": "parliament_view", "布达堡": "buda_castle", "多瑙河游船码头": "danube_cruise", "匈牙利国家歌剧院": "state_opera", "圣伊什特万圣殿": "st_stephens", "自由桥": "liberty_bridge", "匈牙利国会大厦": "parliament", "斯蒂芬大教堂": "st_stephens_cathedral", "霍夫堡宫": "hofburg", "卡尔教堂": "karlskirche", "莫扎特咖啡馆": "cafe_mozart", "绿桥（爱在黎明破晓前）": "zollamtssteg", "约瑟夫广场": "josefsplatz", "格拉本大街": "graben", "美景宫": "belvedere", "艺术史博物馆": "kunsthistorisches", "美泉宫": "schonbrunn", "金色大厅": "musikverein", "哈尔施塔特": "hallstatt", "圣沃尔夫冈": "st_wolfgang", "老城广场（天文钟）": "old_town_square", "查理大桥": "charles_bridge", "布拉格城堡": "prague_castle", "圣维特大教堂": "st_vitus", "列侬墙": "lenon_wall", "跳舞的房子": "dancing_house", "CK 老城广场": "ck_old_town", "CK 城堡": "ck_castle", "CK 理发师桥": "ck_bridge", "CK 城堡花园": "ck_castle_garden", "Egon Schiele 艺术中心": "ck_schiele", "CK 地区博物馆": "ck_museum", "CK 圣维特教堂": "ck_st_vitus", "Seidel 照相馆": "ck_seidel"}, ITIN=window.ITIN_D;
 document.getElementById("days").innerHTML = ITIN.days.map(function(d){
   const n=d.items.length;
   const items = d.items.map(function(nm,i){
@@ -292,7 +292,7 @@ document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
   return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+"</div></div>";
 }).join("");
 
-const CCN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}, CITYTK={"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"], "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"], "Prague": ["PRG", "Praha", "Prague"], "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"]}, ITINOV=window.ITIN_B;
+const CCN={"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特", "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}, CITYTK={"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"], "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"], "Prague": ["PRG", "Praha", "Prague"], "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"]}, ITINOV=window.ITIN_D;
 document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
   const cA = d.flight||d.train;
   let seg="";

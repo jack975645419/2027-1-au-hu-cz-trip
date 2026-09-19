@@ -638,5 +638,125 @@
         "page": "https://unsplash.com/photos/illuminated-cafe-exterior-with-outdoor-tables-at-night-92emRwuQhoo"
       }
     ]
+  },
+  "ck_old_town": {
+    "name": "CK 老城广场",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_old_town_1.jpg",
+        "source": "unsplash",
+        "author": "Genet Schneider",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-group-of-people-walking-around-a-cobblestone-street-9O_cf8oM1oY"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_old_town_2.jpg",
+        "source": "unsplash",
+        "author": "Ahmet Yüksek ✪",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-historic-tower-against-a-cloudy-sky-BlKSwPC-H18"
+      }
+    ]
+  },
+  "ck_castle": {
+    "name": "CK 城堡",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_castle_1.jpg",
+        "source": "unsplash",
+        "author": "Polly",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/trees-and-orange-houses-C8qtg9NQO7w"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_castle_2.jpg",
+        "source": "unsplash",
+        "author": "Kingsuk Pasari",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-view-of-a-town-from-a-hill-p-RBcO5Busc"
+      }
+    ]
+  },
+  "ck_bridge": {
+    "name": "CK 理发师桥",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_bridge_1.jpg",
+        "source": "unsplash",
+        "author": "Maria Ivanova",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/mountains-and-a-lake-shrouded-in-mist-ZVuZ9PrjFVA"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_bridge_2.jpg",
+        "source": "unsplash",
+        "author": "Alain Gehri",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/green-grass-field-under-cloudy-sky-during-daytime-CoDpgpmAu30"
+      }
+    ]
+  },
+  "ck_castle_garden": {
+    "name": "CK 城堡花园",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_castle_garden_1.jpg",
+        "source": "unsplash",
+        "author": "ERIC JIA",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-view-of-a-city-with-a-clock-tower-D2wkHDJN99I"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_castle_garden_2.jpg",
+        "source": "unsplash",
+        "author": "Aleksei Tertychnyi",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-statue-on-top-of-a-building-overlooking-a-city-avjWWFuL0hw"
+      }
+    ]
+  },
+  "ck_museum": {
+    "name": "CK 地区博物馆",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_museum_1.jpg",
+        "source": "unsplash",
+        "author": "Andreas Weilguny",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-group-of-buildings-with-a-tower-3suANp3AFH8"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_museum_2.jpg",
+        "source": "unsplash",
+        "author": "Luciani Koroshec",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/historic-castle-tower-and-buildings-under-stormy-sky-8Py3oiQh0f0"
+      }
+    ]
+  },
+  "ck_st_vitus": {
+    "name": "CK 圣维特教堂",
+    "city": "Cesky Krumlov",
+    "files": [
+      {
+        "file": "pictures/CeskyKrumlov_ck_st_vitus_1.jpg",
+        "source": "unsplash",
+        "author": "Jocelyn Allen",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/a-large-wooden-building-with-a-clock-on-the-top-of-it-OM-nDdmcLgY"
+      },
+      {
+        "file": "pictures/CeskyKrumlov_ck_st_vitus_2.jpg",
+        "source": "unsplash",
+        "author": "Beau Swierstra",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/cathedral-near-houses-during-daytime-MjnjWj5ffp4"
+      }
+    ]
   }
 }

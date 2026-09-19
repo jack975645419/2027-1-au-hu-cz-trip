@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v13", "built_at": "2026-09-19 11:32", "commit": "301f9c3", "note": "箭头改实线+轻微描边（固定色）；移除图例"};
+window.VERSION = {"version": "v14", "built_at": "2026-09-19 11:40", "commit": "df18e96", "note": "新增方案 D：克鲁姆洛夫替换湖区（CK 景点/酒店/图片；页头按方案生成）"};

@@ -37,19 +37,20 @@ HOTELS = json.loads(_hp.read_text(encoding="utf-8")) if _hp.exists() else {}
 # 住宿点 → 用来做「城区实景」兜底配图的景点 id
 CITY_PHOTO = {"vienna": "st_stephens_cathedral", "st_wolfgang": "st_wolfgang",
               "hallstatt": "hallstatt", "prague": "charles_bridge",
-              "budapest": "chain_bridge"}
+              "budapest": "chain_bridge", "cesky_krumlov": "ck_old_town"}
 
 name2id = {p["name"]: p["id"] for p in places}
 name2place = {p["name"]: {"city": p["city"], "lat": p["lat"], "lon": p["lon"]}
                for p in places}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Hallstatt": "哈尔施塔特",
-           "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格"}
+           "St. Wolfgang": "圣沃尔夫冈", "Prague": "布拉格", "Cesky Krumlov": "克鲁姆洛夫"}
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Hallstatt": "#5fc98a",
-          "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d"}
+          "St. Wolfgang": "#5fc98a", "Prague": "#e8a33d", "Cesky Krumlov": "#b08ee8"}
 # 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
 CITY_TOKENS = {"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"],
                "Hallstatt": ["Hallstatt"], "St. Wolfgang": ["St. Wolfgang", "St Wolfgang"],
-               "Prague": ["PRG", "Praha", "Prague"]}
+               "Prague": ["PRG", "Praha", "Prague"],
+               "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"]}
 
 
 def session_of(i, n):
@@ -254,14 +255,32 @@ const CASE="#3a3f45";
 function bearingOf(a,b){const P=Math.PI/180,l1=a[0]*P,l2=b[0]*P,dl=(b[1]-a[1])*P;
   const y=Math.sin(dl)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dl);
   return (Math.atan2(y,x)/P+360)%360;}
+// SVG 图形默认朝东，bearing 从正北起算 → CSS 旋转角要减 90
+function rotOf(a,b){return bearingOf(a,b)-90;}
 function along(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+function kmOf(a,b){const P=Math.PI/180;
+  return Math.acos(Math.min(1,Math.sin(a[0]*P)*Math.sin(b[0]*P)+
+    Math.cos(a[0]*P)*Math.cos(b[0]*P)*Math.cos((b[1]-a[1])*P)))*6371;}
+function svgMark(a,b,d,fill,color,sw){
+  return L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],
+    html:'<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate('+rotOf(a,b)+'deg);display:block">'+
+      '<path d="'+d+'" fill="'+fill+'" stroke="'+color+'" stroke-width="'+sw+'" '+
+      'stroke-linecap="round" stroke-linejoin="round"/></svg>'});
+}
+const TRI="M3,9 L13.5,3 L13.5,15 Z", CHEV="M5,3.5 L12,9 L5,14.5";
 function drawSeg(lg,a,b,col){
-  L.polyline([a,b],{color:CASE,weight:4.5,opacity:.5,interactive:false}).addTo(lg);
-  L.polyline([a,b],{color:col,weight:3,opacity:.95,interactive:false}).addTo(lg);
-  L.marker(along(a,b,.72),{icon:L.divIcon({className:"",iconSize:[14,14],iconAnchor:[7,7],
-    html:'<svg width="14" height="14" viewBox="0 0 14 14" style="transform:rotate('+bearingOf(a,b)+'deg);display:block">'+
-      '<path d="M2,7 L10.5,2.5 L10.5,11.5 Z" fill="'+col+'" stroke="'+CASE+'" stroke-width="1"/></svg>'}),
-    interactive:false,keyboard:false}).addTo(lg);
+  L.polyline([a,b],{color:CASE,weight:5,opacity:.5,interactive:false}).addTo(lg);
+  L.polyline([a,b],{color:col,weight:3.4,opacity:.95,interactive:false}).addTo(lg);
+  const long = kmOf(a,b) > 60;
+  // 长线段铺 3 个人字箭头（描边 + 主色双层，黑白线都看得清），末端补一个实心三角
+  (long?[.50,.66,.82]:[]).forEach(function(t){
+    const p=along(a,b,t);
+    L.marker(p,{icon:svgMark(a,b,CHEV,"none",CASE,3.6),interactive:false,keyboard:false}).addTo(lg);
+    L.marker(p,{icon:svgMark(a,b,CHEV,"none",col,1.8),interactive:false,keyboard:false}).addTo(lg);
+  });
+  const q=along(a,b,long?.92:.78);
+  L.marker(q,{icon:svgMark(a,b,TRI,col,CASE,3.2),interactive:false,keyboard:false}).addTo(lg);
+  L.marker(q,{icon:svgMark(a,b,TRI,col,col,1),interactive:false,keyboard:false}).addTo(lg);
 }
 (function(){
   let prev=null;
@@ -274,7 +293,7 @@ function drawSeg(lg,a,b,col){
       let txt = t.time ? "&#128646; "+t.time : "&#128646;";
       if(t.price && t.price!=="待查") txt += " · "+t.price+(t.price_state==="预估"?"（预估）":"");
       else if(t.time) txt += " · 价格待查";
-      if(txt) L.marker(along(a,b,.5),{icon:L.divIcon({className:"",iconSize:[0,0],
+      if(txt) L.marker(along(a,b,.28),{icon:L.divIcon({className:"",iconSize:[0,0],
         html:'<div class="arlab">'+txt+"</div>"}),interactive:false,keyboard:false}).addTo(lg);
       lg.addTo(cityArr);
     }
@@ -382,7 +401,8 @@ document.getElementById("overview").innerHTML = ITINOV.days.map(function(d){
       (f.pending?'<span class="tm pending">（'+f.pending+'）</span>':'')+'</span>';
   }else if(d.train){
     const t=d.train;
-    seg='<span class="seg trn"><span class="ico">&#128646;</span><span class="tn">'+t.no+
+    const ico = /大巴|Bus|bus/.test(t.no) ? "&#128652;" : "&#128646;";
+    seg='<span class="seg trn"><span class="ico">'+ico+'</span><span class="tn">'+t.no+
       '</span><span class="tm">'+t.dep+' '+t.time+' '+t.arr+'</span></span>';
   }
   // 箭头方向：city 是到达地 → 箭头在左（进入）；是出发地 → 箭头在右（离开）
@@ -482,7 +502,7 @@ PLAN_TPL = """<!DOCTYPE html>
 <style>__CSS__</style></head><body><div class="wrap">
 <header><a class="back" href="../index.html">← 全部方案</a>
 <h1>__TITLE__</h1><div class="sub">__SUBTITLE__</div>
-<div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
+<div class="sub">__HEAD__</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
 <h2>取舍</h2><div class="card">__TRADEOFF__</div>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
@@ -579,6 +599,9 @@ def build_pages():
         lid = k.lower()
         trade = "".join(f'<div class="pros">+ {x}</div>' for x in itin["pros"]) + \
                 "".join(f'<div class="cons">− {x}</div>' for x in itin["cons"])
+        d0, d1 = itin["days"][0]["date"], itin["days"][-1]["date"]
+        n = sum(s[1] for s in itin["stay"])
+        head = f"<b>{d0} – {d1}</b> · {n} 晚 {n + 1} 天 · {itin['route']}"
         jsmap = (JS_MAP.replace("__COLORS__", json.dumps(COLORS))
                        .replace("__CITYCN__", json.dumps(CITY_CN, ensure_ascii=False))
                        .replace("__CITYZOOM__", str(CITY_ZOOM))
@@ -594,6 +617,7 @@ def build_pages():
         def render(inline, hist):
             return (PLAN_TPL.replace("__TITLE__", itin["title"])
                             .replace("__SUBTITLE__", itin["subtitle"])
+                            .replace("__HEAD__", head)
                             .replace("__TRADEOFF__", trade)
                             .replace("__LID__", lid)
                             .replace("__CSS__", CSS)

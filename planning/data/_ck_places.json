@@ -1,0 +1,65 @@
+[
+  {
+    "id": "ck_old_town",
+    "name": "老城广场（斯沃尔诺斯蒂广场）",
+    "query": "Namesti Svornosti, Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.8109074,
+    "lon": 14.3148172,
+    "note": ""
+  },
+  {
+    "id": "ck_castle",
+    "name": "克鲁姆洛夫城堡",
+    "query": "Castle Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.8128866,
+    "lon": 14.3155525,
+    "note": ""
+  },
+  {
+    "id": "ck_castle_garden",
+    "name": "城堡花园",
+    "query": "Zamecka zahrada Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.811854,
+    "lon": 14.3085795,
+    "note": ""
+  },
+  {
+    "id": "ck_schiele",
+    "name": "Egon Schiele 艺术中心",
+    "query": "Egon Schiele Art Centrum Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.8106543,
+    "lon": 14.3133236,
+    "note": ""
+  },
+  {
+    "id": "ck_museum",
+    "name": "地区博物馆",
+    "query": "Regionalni muzeum Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.8106866,
+    "lon": 14.3177915,
+    "note": ""
+  },
+  {
+    "id": "ck_st_vitus",
+    "name": "圣维特教堂",
+    "query": "Kostel svateho Vita Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.810165,
+    "lon": 14.3161376,
+    "note": ""
+  },
+  {
+    "id": "ck_seidel",
+    "name": "Seidel 照相馆博物馆",
+    "query": "Fotoatelier Seidel Cesky Krumlov",
+    "city": "Cesky Krumlov",
+    "lat": 48.8083383,
+    "lon": 14.3164056,
+    "note": ""
+  }
+]

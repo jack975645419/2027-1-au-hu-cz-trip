@@ -40,6 +40,9 @@ STOPS = [
       "Seehotel Hallstatt", "Heritage Hotel Hallstatt"]),
     ("prague", "布拉格", 50.08745, 14.42097, 1800, "Prague", []),
     ("budapest", "布达佩斯", 47.50078, 19.05397, 2200, "Budapest", []),
+    ("cesky_krumlov", "克鲁姆洛夫", 48.81060, 14.31500, 1200, "Cesky Krumlov",
+     ["hotel Cesky Krumlov", "Pension Cesky Krumlov", "Gasthof Cesky Krumlov",
+      "Hotel Dvorak Cesky Krumlov", "Pension Müllner Cesky Krumlov"]),
 ]
 
 PICK = 3     # 每个住宿点推荐几家
