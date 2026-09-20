@@ -392,6 +392,7 @@ const TSTYLE={airport:["&#9992;","#e8590c"],train:["&#128646;","#1c7ed6"],bus:["
     .addTo(tLayer);
   tM.push(mk);
 });
+layers["交通站点 ("+((TR.points||[]).length+(TR.metro||[]).length)+")"]=tLayer;
 __JSHOTELSLAYER__
 L.control.layers({},layers,{collapsed:window.innerWidth<600}).addTo(map);
 
