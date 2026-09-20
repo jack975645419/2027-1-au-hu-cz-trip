@@ -108,7 +108,14 @@ def read_history():
     if not CSV_PATH.exists():
         return []
     with open(CSV_PATH, "r", encoding="utf-8-sig") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for r in rows:      # 兼容旧版 CSV：一趟拆成 nonstop / any 两行
+        if "stops" in r:
+            if r.get("stops") == "nonstop":
+                r["lowest_direct"], r["lowest"] = r["lowest"], ""
+            r.setdefault("signal", "")
+            r.setdefault("direct_airline", "")
+    return rows
 
 
 def refresh_site_json(cfg):
@@ -119,7 +126,7 @@ def refresh_site_json(cfg):
         series = {}
         for key, col in (("any", "lowest"), ("direct", "lowest_direct")):
             pts = [{"t": r["checked_at"][:10], "price": int(r[col])}
-                   for r in mine if r[col]]
+                   for r in mine if r.get(col)]
             if pts:
                 series[key] = pts
         if series:
@@ -143,9 +150,9 @@ def show_history(cfg):
             continue
         last = mine[-1]
         print(f"\n{leg['label']}  {leg['date']}   目标 ¥{leg.get('target')}")
-        print(f"  最新 {last['checked_at']}  {last['signal']}")
+        print(f"  最新 {last['checked_at']}  {last.get('signal','')}")
         for tag, col in (("直飞", "lowest_direct"), ("含中转", "lowest")):
-            pts = [(r["checked_at"][5:10], int(r[col])) for r in mine if r[col]]
+            pts = [(r["checked_at"][5:10], int(r[col])) for r in mine if r.get(col)]
             if not pts:
                 continue
             arrow = ""
@@ -153,7 +160,7 @@ def show_history(cfg):
                 d = pts[-1][1] - pts[-2][1]
                 arrow = f"   (较上次 {'↑+' if d > 0 else '↓'}{abs(d)})"
             print(f"  [{tag}] " + "  ".join(f"{t} ¥{p:,}" for t, p in pts[-8:]) + arrow)
-        if last["direct_airline"]:
+        if last.get("direct_airline"):
             print(f"  最低直飞承运: {last['direct_airline']}")
 
 

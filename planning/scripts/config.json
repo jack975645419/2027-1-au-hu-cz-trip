@@ -3,20 +3,20 @@
   "providers": ["google"],
   "legs": [
     {
-      "id": "go_szx_vie",
-      "label": "去程 深圳(SZX)→维也纳(VIE)",
-      "origin": "SZX",
-      "dest": "VIE",
+      "id": "go_can_bud",
+      "label": "去程 广州(CAN)→布达佩斯(BUD)",
+      "origin": "CAN",
+      "dest": "BUD",
       "date": "2027-01-23",
-      "target": 3357
+      "target": 3287
     },
     {
-      "id": "back_bud_can",
-      "label": "回程 布达佩斯(BUD)→广州(CAN)",
-      "origin": "BUD",
+      "id": "back_prg_can",
+      "label": "回程 布拉格(PRG)→广州(CAN)",
+      "origin": "PRG",
       "dest": "CAN",
-      "date": "2027-02-02",
-      "target": 3313
+      "date": "2027-02-01",
+      "target": 2379
     }
   ]
 }

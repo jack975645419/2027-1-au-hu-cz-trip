@@ -1,58 +1,48 @@
 {
-  "updated": "2026-09-16 14:48",
+  "updated": "2026-09-21 07:44",
   "currency": "CNY",
   "legs": [
     {
-      "id": "go_can_bud_nonstop",
+      "id": "go_can_bud",
       "label": "去程 广州(CAN)→布达佩斯(BUD)",
       "date": "2027-01-23",
-      "stops": "nonstop",
-      "target": 3800,
-      "points": [
-        {
-          "t": "2026-09-16",
-          "price": 3287
-        }
-      ]
+      "target": 3287,
+      "series": {
+        "any": [
+          {
+            "t": "2026-09-16",
+            "price": 3098
+          },
+          {
+            "t": "2026-09-21",
+            "price": 3096
+          }
+        ],
+        "direct": [
+          {
+            "t": "2026-09-16",
+            "price": 3287
+          },
+          {
+            "t": "2026-09-21",
+            "price": 3287
+          }
+        ]
+      }
     },
     {
-      "id": "go_can_bud_any",
-      "label": "去程 广州(CAN)→布达佩斯(BUD)",
-      "date": "2027-01-23",
-      "stops": "any",
-      "target": 3800,
-      "points": [
-        {
-          "t": "2026-09-16",
-          "price": 3098
-        }
-      ]
-    },
-    {
-      "id": "back_bud_can_nonstop",
-      "label": "回程 布达佩斯(BUD)→广州(CAN)",
-      "date": "2027-02-02",
-      "stops": "nonstop",
-      "target": 4200,
-      "points": [
-        {
-          "t": "2026-09-16",
-          "price": 3313
-        }
-      ]
-    },
-    {
-      "id": "back_bud_can_any",
-      "label": "回程 布达佩斯(BUD)→广州(CAN)",
-      "date": "2027-02-02",
-      "stops": "any",
-      "target": 4200,
-      "points": [
-        {
-          "t": "2026-09-16",
-          "price": 3251
-        }
-      ]
+      "id": "back_prg_can",
+      "label": "回程 布拉格(PRG)→广州(CAN)",
+      "date": "2027-02-01",
+      "target": 2379,
+      "series": {
+        "any": [
+          {
+            "t": "2026-09-21",
+            "price": 2410
+          }
+        ]
+      }
     }
   ]
 }
