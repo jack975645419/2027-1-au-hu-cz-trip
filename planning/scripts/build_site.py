@@ -376,7 +376,7 @@ function drawSeg(lg,a,b,col){
 arrowBox.addTo(map);   // 日程箭头常开
 // ---------- 交通点：机场 / 火车站 / 大巴站 / 相关地铁站 ----------
 const TR=window.TRANSIT||{points:[],metro:[]};
-const tLayer=L.layerGroup().addTo(map), tM=[];
+const tLayer=L.layerGroup(), tM=[];   // 默认不显示，由图层控件「交通站点」开启
 const TSTYLE={airport:["&#9992;","#e8590c"],train:["&#128646;","#1c7ed6"],bus:["&#128652;","#12b886"]};
 (TR.points||[]).forEach(function(p){
   const s=TSTYLE[p.kind]||["&#9873;","#888"];
