@@ -11,7 +11,9 @@
     仓库/data/*.js           地点 / 图片 / 行程 / 标注 / 版本
     仓库/pics/*.jpg          压缩后的景点图
 """
+import html
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -36,9 +38,10 @@ TRANSIT = json.loads(_tp.read_text(encoding="utf-8")) if _tp.exists() else {"poi
 _hp = ROOT / "data" / "hotels.json"
 HOTELS = json.loads(_hp.read_text(encoding="utf-8")) if _hp.exists() else {}
 
-# 每日一色：饱和度够、在浅色 Esri 底图上都能看清（不再用黑白灰渐变）
-DAY_COLORS = ["#d81e5b", "#e8590c", "#f2a20c", "#7cb518", "#2f9e44", "#12b886",
-              "#0ca678", "#1098ad", "#1c7ed6", "#4263eb", "#7048e8", "#ae3ec9"]
+# 每日一色：按色相排序的 12 色，饱和度够、在浅色 Esri 底图上都能看清
+PALETTE = ["#e03131", "#e8590c", "#f59f00", "#74b816", "#2f9e44", "#0ca678",
+           "#1098ad", "#1c7ed6", "#4263eb", "#7048e8", "#9c36b5", "#d6336c"]
+DEF_COLOR = PALETTE[0]
 
 # 住宿点 → 用来做「城区实景」兜底配图的景点 id
 CITY_PHOTO = {"vienna": "st_stephens_cathedral", "prague": "charles_bridge",
@@ -52,6 +55,9 @@ place_info = {p["name"]: {"dur": p.get("dur", ""), "desc": p.get("desc", ""),
               for p in places if p.get("dur") or p.get("desc") or p.get("book")}
 CITY_CN = {"Budapest": "布达佩斯", "Vienna": "维也纳", "Prague": "布拉格",
            "Cesky Krumlov": "克鲁姆洛夫", "Guangzhou": "广州", "Shenzhen": "深圳"}
+
+# 仓库根目录的 交通指引.md 是源文件，构建时渲染成 guide/index.html（GitHub Pages 不会把 .md 渲染成网页）
+GUIDE_MD = REPO / "交通指引.md"
 COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Prague": "#e8a33d",
           "Cesky Krumlov": "#b08ee8", "Guangzhou": "#9aa7b5", "Shenzhen": "#9aa7b5"}
 # 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
@@ -75,6 +81,31 @@ def compute_labels(itin):
         for i, nm in enumerate(items):
             lab.setdefault(nm, []).append(f"{d['date']} {session_of(i, len(items))}")
     return lab
+
+
+def day_colors(itin):
+    """日期 → 颜色。
+
+    需求：**同一城市内的各天颜色不能雷同，不同城市之间允许重复**。
+    做法：按城市分组，同城日期在色相环（PALETTE 已按色相排序）上等间隔取色，
+    例如 3 天取下标 +0/+4/+8（相位差 120°），4 天取 +0/+3/+6/+9；
+    起点相位按城市首次出现的次序错开，避免每个城市都从同一个色开始。
+    """
+    order, by_city = [], {}
+    for d in itin["days"]:
+        if d["city"] not in by_city:
+            by_city[d["city"]] = []
+            order.append(d["city"])
+        by_city[d["city"]].append(d["date"])
+    n_pal = len(PALETTE)
+    out = {}
+    for ci, city in enumerate(order):
+        dates = by_city[city]
+        step = max(1, n_pal // len(dates))
+        off = (ci * 3) % n_pal
+        for j, dt in enumerate(dates):
+            out[dt] = PALETTE[(off + j * step) % n_pal]
+    return out
 
 
 # ---------- 图片 ----------
@@ -230,11 +261,27 @@ footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
 .arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(18,22,28,.9);
  border:1px solid #5a6673;color:#e8ecf1;border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
  box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.gdoc{max-width:820px}
+.gdoc h1{font-size:20px;margin:22px 0 8px}
+.gdoc h2{font-size:16px;margin:26px 0 10px;color:var(--accent);
+ padding-bottom:6px;border-bottom:1px solid var(--line)}
+.gdoc h3{font-size:14px;margin:18px 0 8px}
+.gdoc p,.gdoc li{font-size:13.5px;color:var(--text);line-height:1.75}
+.gdoc ul{margin:0 0 10px;padding-left:20px}
+.gdoc li{margin:4px 0}
+.gdoc table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px}
+.gdoc th,.gdoc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+.gdoc th{background:#202832;color:var(--text);font-weight:600}
+.gdoc code{background:#222b36;padding:1px 5px;border-radius:4px;font-size:12px}
+.gdoc pre{background:#161b22;border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-size:12px}
+.gdoc hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.gdoc .q{color:var(--dim);font-size:12.5px;border-left:2px solid var(--line);padding-left:10px;margin:8px 0}
+@media(max-width:640px){.gdoc table{font-size:12px}.gdoc th,.gdoc td{padding:5px 6px}}
 """
 
 JS_MAP = """
 const COLORS=__COLORS__, CITY_CN=__CITYCN__, CITY_ZOOM=__CITYZOOM__, CITYTK=__CITYTK__,
-      DAYCOL=__DAYCOLORS__;
+      DAYCOL=__DAYCOLORS__, DEFCOL=__DEFCOLOR__;
 const LAB=window.__LABELVAR__||{};
 const map=L.map("map").setView([47.9,16.5],6);
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
@@ -268,11 +315,11 @@ Object.entries(groups).forEach(function(kv){
   cm.addTo(map); cityM.push(cm);
 });
 
-// ---------- 日程箭头：按日期从白到黑 ----------
+// ---------- 日程箭头：颜色按「城市内各天拉开」分配 ----------
 const N2P=__NAME2PLACE__, ITINM=window.__ITINVAR__||{days:[]};
-const DAYS=ITINM.days||[], UD=DAYS.map(function(d){return d.date}).filter(function(v,i,a){return a.indexOf(v)===i});
+const DAYS=ITINM.days||[];
 const cityArr=L.layerGroup(), innerArr={}, arrowBox=L.layerGroup().addTo(map);
-function dayColor(dt){const i=UD.indexOf(dt);return DAYCOL[(i<0?0:i)%DAYCOL.length];}
+function dayColor(dt){return DAYCOL[dt]||DEFCOL;}
 const CASE="#3a3f45";
 function bearingOf(a,b){const P=Math.PI/180,l1=a[0]*P,l2=b[0]*P,dl=(b[1]-a[1])*P;
   const y=Math.sin(dl)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dl);
@@ -311,7 +358,8 @@ function svgMark(a,b,d,fill,color,sw){
       '<path d="'+d+'" fill="'+fill+'" stroke="'+color+'" stroke-width="'+sw+'" '+
       'stroke-linecap="round" stroke-linejoin="round"/></svg>'});
 }
-const TRI="M3,9 L13.5,3 L13.5,15 Z", CHEV="M5,3.5 L12,9 L5,14.5";
+// 两个图形都朝 +x（SVG 默认方向），配合 rotOf=bearing-90 即指向 a→b
+const TRI="M15,9 L6,3 L6,15 Z", CHEV="M5,3.5 L12,9 L5,14.5";
 function drawSeg(lg,a,b,col){
   L.polyline([a,b],{color:CASE,weight:5,opacity:.5,interactive:false}).addTo(lg);
   L.polyline([a,b],{color:col,weight:3.4,opacity:.95,interactive:false}).addTo(lg);
@@ -642,6 +690,19 @@ __DATA__
 <script>__JSMAP____JSDAYS____JSOVW____JSHOTELS____JSVER__</script>
 </body></html>"""
 
+GUIDE_TPL = """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>交通指引 · 2027-1 奥匈捷之旅</title>
+<style>__CSS__</style></head><body><div class="wrap">
+<header><a class="back" href="../index.html">← 返回行程站</a>
+<h1>交通指引</h1>
+<div class="sub">落地进城 · 城际火车与大巴 · 市内交通与买票 · 注意事项</div>
+<div class="sub" style="margin-top:6px">票价为 2026 年公开价，<b>下单前以官网为准</b></div></header>
+<div class="gdoc">__BODY__</div>
+<footer><a href="../交通指引.md">原始 Markdown</a> · 行程草稿 · 2027-1 奥匈捷之旅</footer>
+</div></body></html>"""
+
 INDEX_TPL = """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
@@ -651,6 +712,12 @@ INDEX_TPL = """<!DOCTYPE html>
 <div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
 <h2>本行程</h2>__PICKS__
+<h2>交通指引</h2>
+<div class="card"><div style="font-weight:600">机场进城 · 城际火车与大巴 · 市内买票</div>
+<div class="sub">落地布达佩斯怎么进城、去火车站和大巴站怎么走、票在哪买、冬季与查票注意什么，一页看完</div>
+<div class="sub" style="margin-top:8px">
+<a href="guide/index.html" style="color:var(--accent)">网页版 →</a>　·　
+<a href="交通指引.md" style="color:var(--accent)">原始 Markdown</a></div></div>
 <h2>航班</h2>
 <div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
 <div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287/人</div></div>
@@ -711,6 +778,112 @@ def data_block(k, lid, inline=False, ver=None, note=""):
     ])
 
 
+# ---------- 交通指引：md → 网页 ----------
+def md_inline(s):
+    s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    s = s.replace("&lt;br&gt;", "<br>")     # 表格单元格里允许用 <br> 换行
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
+    s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)",
+               r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
+    return s
+
+
+def md_table(rows):
+    head = [c.strip() for c in rows[0].strip().strip("|").split("|")]
+    th = "".join(f"<th>{md_inline(c)}</th>" for c in head)
+    tb = "".join("<tr>" + "".join(f"<td>{md_inline(c)}</td>" for c in
+                                  [x.strip() for x in r.strip().strip("|").split("|")])
+                 + "</tr>" for r in rows[2:])
+    return f"<table><thead><tr>{th}</tr></thead><tbody>{tb}</tbody></table>"
+
+
+def md_to_html(text):
+    """够用就好的 md → html：标题 / 表格 / 列表 / 引用 / 代码块 / 行内加粗与链接。"""
+    lines, out, i = text.split("\n"), [], 0
+    para, in_ul = [], False
+
+    def flush():
+        nonlocal para, in_ul
+        if para:
+            out.append("<p>" + md_inline(" ".join(para)) + "</p>")
+            para = []
+        if in_ul:
+            out.append("</ul>")
+            in_ul = False
+
+    while i < len(lines):
+        ln = lines[i].rstrip()
+        if ln.startswith("```"):
+            flush()
+            i += 1
+            buf = []
+            while i < len(lines) and not lines[i].startswith("```"):
+                buf.append(lines[i])
+                i += 1
+            out.append("<pre>" + html.escape("\n".join(buf)) + "</pre>")
+            i += 1
+            continue
+        if ln.startswith("|"):
+            flush()
+            buf = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                buf.append(lines[i])
+                i += 1
+            out.append(md_table(buf))
+            continue
+        m = re.match(r"^(#{1,6})\s+(.*)", ln)
+        if m:
+            flush()
+            lv = min(len(m.group(1)), 3)
+            out.append(f"<h{lv}>{md_inline(m.group(2))}</h{lv}>")
+            i += 1
+            continue
+        if ln.strip() in ("---", "***"):
+            flush()
+            out.append("<hr>")
+            i += 1
+            continue
+        if re.match(r"^[-*]\s+", ln):
+            flush()
+            if not in_ul:
+                out.append("<ul>")
+                in_ul = True
+            out.append("<li>" + md_inline(re.sub(r"^[-*]\s+", "", ln)) + "</li>")
+            i += 1
+            continue
+        if ln.startswith(">"):
+            flush()
+            out.append('<div class="q">' + md_inline(ln.lstrip("> ").strip()) + "</div>")
+            i += 1
+            continue
+        if not ln.strip():
+            flush()
+            i += 1
+            continue
+        para.append(ln.strip())
+        i += 1
+    flush()
+    return "\n".join(out)
+
+
+def build_guide():
+    """把仓库根目录的 交通指引.md 渲染成 guide/index.html
+    （GitHub Pages 不会把 .md 渲染成网页，所以网页版是构建产物、md 是源文件）。"""
+    if not GUIDE_MD.exists():
+        print("  交通指引.md 不存在，跳过")
+        return
+    md = GUIDE_MD.read_text(encoding="utf-8")
+    # 去掉 md 自己的一级标题（页面模板已有 h1），避免重复一个大标题
+    md = re.sub(r"^#\s+.*\n?", "", md, count=1)
+    body = md_to_html(md)
+    page = GUIDE_TPL.replace("__CSS__", CSS).replace("__BODY__", body)
+    d = REPO / "guide"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "index.html").write_text(page, encoding="utf-8")
+    print("  guide/index.html（交通指引）")
+
+
 def hist_block(lid):
     """列出该方案已存档的历史版本"""
     files = sorted((REPO / lid).glob("v*.html"),
@@ -738,7 +911,8 @@ def build_pages():
                        .replace("__LABELVAR__", f"LABELS_{k}")
                        .replace("__ITINVAR__", f"ITIN_{k}")
                        .replace("__CITYTK__", json.dumps(CITY_TOKENS, ensure_ascii=False))
-                       .replace("__DAYCOLORS__", json.dumps(DAY_COLORS, ensure_ascii=False))
+                       .replace("__DAYCOLORS__", json.dumps(day_colors(itin), ensure_ascii=False))
+                       .replace("__DEFCOLOR__", json.dumps(DEF_COLOR))
                        .replace("__NAME2PLACE__", json.dumps(name2place, ensure_ascii=False))
                        .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
@@ -787,4 +961,5 @@ if __name__ == "__main__":
     build_pics()
     build_data()
     build_pages()
+    build_guide()
     print("完成")

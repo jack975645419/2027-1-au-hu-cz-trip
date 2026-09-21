@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>交通指引 · 2027-1 奥匈捷之旅</title>
+<style>
+:root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+header{padding:16px 0 8px;border-bottom:1px solid var(--line);margin-bottom:16px}
+h1{margin:6px 0;font-size:22px}
+h2{font-size:15px;margin:26px 0 10px;color:var(--accent)}
+.sub{color:var(--dim);font-size:13px}.sub b{color:var(--text)}
+.badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
+.badge b{color:var(--accent)}
+a.back{color:var(--dim);font-size:12px;text-decoration:none}
+#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#0e1218;z-index:1}
+#map:fullscreen{height:100vh!important;width:100vw!important;border-radius:0;border:0;position:fixed;inset:0;z-index:9999}
+#map:-webkit-full-screen{height:100vh!important;width:100vw!important;border-radius:0;position:fixed;inset:0;z-index:9999}
+.fsbtn a{display:flex!important;align-items:center;justify-content:center;width:32px!important;height:32px!important;line-height:32px!important;font-size:15px;color:#222;text-decoration:none;background:#fff;border-radius:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.day .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:#202832;border-bottom:1px solid var(--line)}
+.day .d{font-size:17px;font-weight:700;color:var(--accent)}
+.day .w{color:var(--dim);font-size:12px}
+.day .s{margin-left:auto;color:var(--dim);font-size:12px}
+.day .bd{padding:12px 16px}
+.tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
+.note{color:#e8c07a;font-size:12px;margin-top:8px}
+.ampm{color:#9aa5b1;font-size:12px}
+.day .bd ul li{margin:7px 0}
+.pn{font-size:13px}
+.dur{display:inline-block;margin-left:6px;background:rgba(110,168,254,.13);color:#6ea8fe;
+ border:1px solid rgba(110,168,254,.28);border-radius:6px;padding:0 6px;font-size:11px}
+.pd{color:#9aa5b1;font-size:11.5px;line-height:1.55;margin:3px 0 0}
+.bk{color:#c9a86a;font-size:11.5px;line-height:1.55;margin:3px 0 0;background:rgba(201,168,106,.08);
+ border-left:2px solid rgba(201,168,106,.5);padding:3px 7px;border-radius:0 5px 5px 0}
+.hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
+.hsec{margin-bottom:24px}
+.hsec h3{font-size:14px;margin:0 0 10px;color:var(--text)}
+.hcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.hcard .hn{font-weight:600;font-size:15px}
+.hcard .hstars{color:#e8c07a;font-size:12px;margin-left:6px}
+.hcard .hm{color:var(--dim);font-size:12px;margin-top:4px}
+.hcard .ha{margin-top:8px}
+.hcard .ha a{color:var(--accent);text-decoration:none;font-size:12px;margin-right:16px}
+.more{color:var(--accent);font-size:12px;cursor:pointer;background:none;border:none;padding:0}
+.morelist{display:none;margin-top:10px;font-size:12px;color:var(--dim);line-height:2}
+.morelist.on{display:block}
+ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
+.pros{color:#7fd39a}.cons{color:#e08a8a}
+.ovw{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 4px;margin-bottom:12px}
+.ovw .row{display:flex;align-items:baseline;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.ovw .row:last-child{border-bottom:0}
+.ovw .dt{flex:0 0 auto;min-width:74px;font-weight:700;color:var(--accent);font-size:14px}
+.ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
+.ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
+.ovw .city.in::before{content:"→ ";color:var(--dim)}.ovw .city.out::after{content:" →";color:var(--dim)}
+.ovw .city .rt{color:var(--dim);font-weight:400}
+.ovw .seg{flex:0 0 auto;font-size:12px}
+.ovw .seg .ico{margin-right:3px}
+.ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
+.ovw .seg .tn{color:var(--text);font-weight:500}
+.ovw .seg .tm{color:var(--dim);margin-left:4px}
+.ovw .seg .tm.pending{color:#8a94a1;font-style:italic}
+.ovw .sights{flex:1 1 auto;min-width:0;color:var(--dim);font-size:12px;line-height:1.55;text-align:right}
+@media(max-width:640px){
+.ovw .row{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
+.ovw .sights{text-align:left;width:100%;padding-top:2px;border-top:1px dashed var(--line);margin-top:2px;padding-left:0}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .n{font-size:22px;font-weight:600}.stat .l{color:var(--dim);font-size:12px}
+.pick{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;color:var(--text);text-decoration:none}
+.pick:hover{border-color:var(--accent)}
+.pick .t{font-size:17px;font-weight:600;margin-bottom:4px}
+.pick .s{color:var(--dim);font-size:13px}
+footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
+.plabel{background:rgba(20,25,33,.92);border:1px solid #39434f;color:#e8ecf1;border-radius:6px;padding:3px 7px;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.plabel::before{display:none!important}
+.plabel .lb{color:#6ea8fe;font-size:10px;margin-top:2px}
+.plabel .nt{color:#9aa5b1;font-size:10px}
+.clabel{background:rgba(15,19,25,.9);border:1px solid #46525f;color:#fff;border-radius:9px;padding:5px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.clabel::before{display:none!important}
+.leaflet-popup-content-wrapper{background:#1b212b;color:#e8ecf1;border-radius:10px}
+.leaflet-popup-tip{background:#1b212b}
+.leaflet-popup-content{margin:10px 12px;font-size:13px}
+.leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+.tcard{border-color:#6b7a8c}
+.tcard.sm{font-size:10.5px;padding:2px 6px}
+.arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(18,22,28,.9);
+ border:1px solid #5a6673;color:#e8ecf1;border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
+ box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.gdoc{max-width:820px}
+.gdoc h1{font-size:20px;margin:22px 0 8px}
+.gdoc h2{font-size:16px;margin:26px 0 10px;color:var(--accent);
+ padding-bottom:6px;border-bottom:1px solid var(--line)}
+.gdoc h3{font-size:14px;margin:18px 0 8px}
+.gdoc p,.gdoc li{font-size:13.5px;color:var(--text);line-height:1.75}
+.gdoc ul{margin:0 0 10px;padding-left:20px}
+.gdoc li{margin:4px 0}
+.gdoc table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px}
+.gdoc th,.gdoc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+.gdoc th{background:#202832;color:var(--text);font-weight:600}
+.gdoc code{background:#222b36;padding:1px 5px;border-radius:4px;font-size:12px}
+.gdoc pre{background:#161b22;border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-size:12px}
+.gdoc hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.gdoc .q{color:var(--dim);font-size:12.5px;border-left:2px solid var(--line);padding-left:10px;margin:8px 0}
+@media(max-width:640px){.gdoc table{font-size:12px}.gdoc th,.gdoc td{padding:5px 6px}}
+</style></head><body><div class="wrap">
+<header><a class="back" href="../index.html">← 返回行程站</a>
+<h1>交通指引</h1>
+<div class="sub">落地进城 · 城际火车与大巴 · 市内交通与买票 · 注意事项</div>
+<div class="sub" style="margin-top:6px">票价为 2026 年公开价，<b>下单前以官网为准</b></div></header>
+<div class="gdoc"><div class="q">覆盖：<b>落地进城 → 市内交通 → 去火车站/大巴站/机场 → 城际火车与大巴怎么买票 → 注意事项</b></div>
+<div class="q">行程：广州 → 布达佩斯 2 晚 → 维也纳 3 晚 → 克鲁姆洛夫 1 晚 → 布拉格 3 晚 → 广州（1/23–2/2）</div>
+<div class="q">票价口径：2026 年公开价 / 官方价目，2027 年 1 月可能微调，<b>下单前以官网或售票机为准</b></div>
+<div class="q">三城机场与车站都没有直连地铁/高铁，全部靠公交或大巴接驳 —— 提前量留够是这份文档唯一的核心建议</div>
+<hr>
+<h2>〇、速查表</h2>
+<table><thead><tr><th>什么时候</th><th>从哪到哪</th><th>首选</th><th>票价（单人）</th><th>耗时</th></tr></thead><tbody><tr><td>1/23 落地</td><td>布达佩斯机场 BUD → 市区</td><td><b>100E 机场快线</b> 到 Deák Ferenc tér</td><td>2 500 Ft</td><td>约 40 min</td></tr><tr><td>1/23–1/25</td><td>布达佩斯市内</td><td>地铁 M1–M4 + 电车</td><td>500 Ft / 90 min 票 850 Ft</td><td>—</td></tr><tr><td>1/25 午后</td><td>布达佩斯东站 Keleti → 维也纳 Wien Hbf</td><td><b>ÖBB Railjet</b></td><td>€15–35（预估，提前买更便宜）</td><td>2h20–2h40</td></tr><tr><td>1/28 上午</td><td>维也纳 Erdberg 大巴站 → 克鲁姆洛夫</td><td><b>FlixBus / RegioJet</b></td><td>€15–30（预估）</td><td>约 3h55m</td></tr><tr><td>1/29 下午</td><td>克鲁姆洛夫 → 布拉格</td><td><b>RegioJet / FlixBus</b></td><td>€8–15（预估）</td><td>2.5–3h</td></tr><tr><td>2/1 上午</td><td>布拉格市区 → 机场 PRG</td><td><b>59 路无轨电车 + 地铁 A</b> 或 <b>AE 机场快线</b></td><td>40 CZK / 100 CZK</td><td>45–55 min / 约 40 min</td></tr></tbody></table>
+<div class="q">货币：匈牙利 <b>福林 HUF/Ft</b>、捷克 <b>克朗 CZK</b>、奥地利 <b>欧元 EUR</b>。</div>
+<hr>
+<h2>一、刚下飞机：布达佩斯机场 BUD → 市区</h2>
+<p>1/23（六）<b>07:10</b> 落地（南航 CZ649）。入境 + 取行李约 <b>40–60 分钟</b>，出关时天刚亮（1 月日出约 07:20）。</p>
+<p>出站后跟着 <b>Bus</b> 指示牌走到到达层外的公交站台（T2）。四条路：</p>
+<table><thead><tr><th>方式</th><th>票价</th><th>耗时</th><th>买票 / 上车</th><th>适合谁</th></tr></thead><tbody><tr><td><b>100E 机场快线</b>（推荐）</td><td><b>2 500 Ft</b><br>持通票补票 1 000 Ft</td><td>约 40 min</td><td>站台的紫色 BKK 售票机（可刷卡）/ <b>BudapestGO</b> App；<b>车上不卖票</b></td><td>第一次来、行李多、想一趟到市中心</td></tr><tr><td>200E + 地铁 M3</td><td><b>850 Ft</b>（90 分钟票）<br>或 500 Ft 单程</td><td>约 55 min</td><td>200E 坐到终点 <b>Kőbánya-Kispest</b>，换 M3 进城</td><td>想省钱、不介意拖箱换乘</td></tr><tr><td>Főtaxi（机场唯一官方出租）</td><td><b>11 000–14 000 Ft</b></td><td>约 30 min</td><td>到达层<b>官方出租排队点</b>上车，按表计价</td><td>凌晨红眼落地、想直接到酒店门口</td></tr><tr><td>miniBUD 共享小巴</td><td>约 4 500 Ft</td><td>—</td><td>需<b>提前预约</b>，按航班匹配，门到门</td><td>两人以上、行李特别多</td></tr></tbody></table>
+<p><b>100E 的关键坑</b></p>
+<ul>
+<li>普通单程票和 24/72 小时通票<b>都不能</b>直接坐 100E，必须买"机场巴士单程票"（持通票可买 1 000 Ft 的补票）。</li>
+</ul>
+<ul>
+<li><b>车上不卖票</b>，别上车才找司机。</li>
+</ul>
+<ul>
+<li>终点 <b>Deák Ferenc tér</b> 是 M1/M2/M3 三线交汇点，去哪都好换；中途停 Kálvin tér、Astoria。</li>
+</ul>
+<ul>
+<li>24 小时运营，白天 7–10 分钟一班。</li>
+</ul>
+<p><b>落地当天建议动线</b> 07:10 落地 → 08:15 左右上 100E → 09:00 到 Deák Ferenc tér → 换一站地铁去<b>酒店寄存行李</b>（多数酒店 15:00 才能入住）→ 纽约咖啡厅早餐 → 英雄广场 → 塞切尼温泉（<b>M1 黄线 Széchenyi fürdő 站</b>）。</p>
+<hr>
+<h2>二、布达佩斯（1/23–1/25）</h2>
+<h3>市内票价（BKK 官方价目）</h3>
+<table><thead><tr><th>票种</th><th>价格</th></tr></thead><tbody><tr><td>单程票（不换乘）</td><td><b>500 Ft</b>（车上买 700 Ft）</td></tr><tr><td>30 分钟票</td><td>600 Ft</td></tr><tr><td>90 分钟票（可换乘，最实用）</td><td><b>850 Ft</b></td></tr><tr><td>10 张本票</td><td>4 500 Ft</td></tr><tr><td>24 小时通票</td><td>2 750 Ft</td></tr><tr><td>72 小时通票</td><td>5 750 Ft</td></tr></tbody></table>
+<ul>
+<li>我们只待约 2 天（1/23 午后–1/25 中午），<b>按次买 90 分钟票</b>通常比通票划算；一天坐 4 次以上再考虑 24 小时票。</li>
+</ul>
+<ul>
+<li>⚠️ <b>不上打票机 = 逃票</b>：现场罚 12 000 Ft，30 天内 25 000 Ft。M1 没有闸机也要打票。</li>
+</ul>
+<ul>
+<li>便衣查票员随时上车，手机没电 = 没票。</li>
+</ul>
+<h3>主要站点怎么去</h3>
+<table><thead><tr><th>站点</th><th>地铁</th><th>用途</th></tr></thead><tbody><tr><td><b>Keleti pályaudvar（东站）</b></td><td><b>M2 / M4</b></td><td>1/25 去维也纳的 Railjet 从这里发</td></tr><tr><td>Nyugati（西站）</td><td>M3</td><td>备用</td></tr><tr><td>Déli（南站）</td><td>M2</td><td>备用</td></tr><tr><td>Deák Ferenc tér</td><td>M1 / M2 / M3</td><td>市中心枢纽，100E 终点</td></tr><tr><td>Széchenyi fürdő</td><td>M1</td><td>塞切尼温泉（我们的 1/23 下午）</td></tr></tbody></table>
+<hr>
+<h2>三、布达佩斯 → 维也纳（1/25）· 城际火车</h2>
+<ul>
+<li><b>车次</b>：ÖBB <b>Railjet</b>，Budapest-Keleti → <b>Wien Hbf</b>，2h20–2h40（文档按 2.5h 排）</li>
+</ul>
+<ul>
+<li><b>买票</b>：<code>oebb.at</code> 官网 或 <b>ÖBB App</b>；<b>Sparschiene</b> 提前票最便宜（约 €15 起，越早越便宜），但<b>绑定车次、不可退改</b> → 行程定死再买</li>
+</ul>
+<ul>
+<li><b>开售时间</b>：ÖBB 约提前 <b>6 个月</b>放票（2027 年 1 月的票约 2026 年 7 月已开；我们 11 月买时按"预估"复核）</li>
+</ul>
+<ul>
+<li><b>去车站</b>：地铁 M2 或 M4 直达 Keleti，跨国列车<b>提前 30 分钟</b>到站足够（没有安检和边检）</li>
+</ul>
+<ul>
+<li><b>车上</b>：对号入座（Sparschiene 含座位），护照随身 —— 申根内部无例行边检，但偶尔抽查证件</li>
+</ul>
+<ul>
+<li><b>备选</b>：FlixBus / RegioJet 大巴约 3h（便宜，但冬天路上时间更不可控）</li>
+</ul>
+<hr>
+<h2>四、维也纳（1/25–1/28）</h2>
+<h3>市内</h3>
+<ul>
+<li>单程约 <b>€2.4</b>，24 小时 <b>€8</b>，<b>72 小时 €17.1</b>（我们住 3 晚，72 小时票最省心）</li>
+</ul>
+<ul>
+<li>同样<b>自觉打票</b>，查到罚款约 €105</li>
+</ul>
+<ul>
+<li>老城内步行 + U 线即可；<b>U4 → Schönbrunn</b> 去美泉宫，U1/U3/U4 基本覆盖全部景点</li>
+</ul>
+<h3>去车站 / 大巴站</h3>
+<table><thead><tr><th>站点</th><th>怎么到</th><th>用途</th></tr></thead><tbody><tr><td><b>Wien Hauptbahnhof（中央车站）</b></td><td><b>U1</b>（Hauptbahnhof 站；相邻站 Südtiroler Platz 也可）+ 电车 D / 18</td><td>1/25 从布达佩斯抵达</td></tr><tr><td><b>Erdberg（VIB 国际大巴站）</b></td><td><b>U3 Erdberg 站</b>，出站即到</td><td><b>1/28 去克鲁姆洛夫的上车点</b></td></tr><tr><td>维也纳机场 VIE</td><td>CAT 机场快线 16 min（约 €13）/ S-Bahn / 打车 €35–45</td><td>本次行程<b>用不到</b>（进出都坐火车）</td></tr></tbody></table>
+<hr>
+<h2>五、维也纳 → 克鲁姆洛夫（1/28）· 城际大巴</h2>
+<ul>
+<li><b>上车</b>：维也纳 <b>Erdberg 大巴站</b>（U3 Erdberg）；<b>下车</b>：Český Krumlov 大巴站（AN），步行进老城 <b>10–15 分钟</b></li>
+</ul>
+<ul>
+<li><b>时长</b>：约 3h55m（官网标称），我们排 09:00 发、约 13:00 到</li>
+</ul>
+<ul>
+<li><b>运营商</b>：<b>FlixBus</b> / <b>RegioJet</b>，分别在 <code>flixbus.com</code> / <code>regiojet.com</code> 或各自 App 买，<b>提前买便宜</b></li>
+</ul>
+<ul>
+<li>⚠️ <b>冬季班次 10 月必须查</b>：官网会换冬季时刻表，<b>首末班车时刻是关键</b>（我们待办清单里的第一项）</li>
+</ul>
+<ul>
+<li>⚠️ <b>行李</b>：石板路 + 上坡 + 可能积雪 → 行李以"能提着走 10 分钟"为准；大巴一般含 1 件 20kg 托运 + 1 件手提（以票面为准）</li>
+</ul>
+<ul>
+<li>⚠️ <b>找车</b>：大巴按<b>车牌号</b>认车，站台可能与 Google 地图标的位置不同，提前 15–20 分钟到</li>
+</ul>
+<hr>
+<h2>六、克鲁姆洛夫（1/28–1/29）</h2>
+<ul>
+<li><b>小镇没有地铁、没有打车</b>（Bolt 在 CK 基本叫不到），全靠走：老城横穿 10–15 分钟</li>
+</ul>
+<ul>
+<li>⚠️ 冬季部分餐厅旅馆歇业，<b>住宿务必订在老城内</b></li>
+</ul>
+<ul>
+<li>⚠️ 小镇刷卡不如大城市普及，<b>多带现金</b>（CZK）</li>
+</ul>
+<ul>
+<li>去布拉格：CK 大巴站上车，<b>RegioJet / FlixBus</b>，2.5–3h；到布拉格多为 <b>Na Knížecí</b>（地铁 B 线 Anděl/Na Knížecí）或 <b>Praha hlavní nádraží</b>（中央车站，地铁 C 线）/ <b>ÚAN Florenc</b>（B/C 线 Florenc）</li>
+<p>→ 买票时看清<b>到达站名</b>，直接决定你到布拉格后怎么换地铁</p>
+</ul>
+<hr>
+<h2>七、布拉格（1/29–2/1）</h2>
+<h3>市内</h3>
+<ul>
+<li>30 分钟 <b>30 CZK</b>，90 分钟 <b>40 CZK</b>，24 小时 <b>120 CZK</b>，72 小时 <b>330 CZK</b></li>
+</ul>
+<ul>
+<li>⚠️ 上车<b>前</b>在黄色打票机打票（地铁在闸机前），现场罚款约 800 CZK</li>
+</ul>
+<ul>
+<li>老城靠走；去城堡区坐 <b>22 路电车</b></li>
+</ul>
+<h3>2/1 去机场（13:00 起飞，海航联程 PRG→PEK→CAN）</h3>
+<table><thead><tr><th>方式</th><th>票价</th><th>耗时</th><th>说明</th></tr></thead><tbody><tr><td><b>59 路无轨电车（原 119 路公交）+ 地铁 A</b></td><td><b>40 CZK</b>（90 分钟票）</td><td>约 45–55 min</td><td>机场 → <b>Nádraží Veleslavín</b>（终点）换 A 线进城；机场段仅 <b>16 min</b>，3–10 分钟一班，约 04:22–23:32</td></tr><tr><td><b>AE 机场快线</b></td><td><b>100 CZK</b>（儿童 50）</td><td>约 40 min</td><td>直达 <b>Náměstí Republiky</b>（B 线）→ 终点 <b>Praha hlavní nádraží</b>（C 线）；24 小时运营，可在车上刷卡买</td></tr><tr><td>Uber Airport / Bolt</td><td>约 €27 / 600 CZK 上下</td><td>约 30 min</td><td>行李多、赶时间；<b>别理航站楼里自称官方出租的拉客</b></td></tr></tbody></table>
+<ul>
+<li>⚠️ 2024 年起原 <b>119 路</b>已改为 <b>59 路无轨电车</b>，老攻略还在写 119，路线相同</li>
+</ul>
+<ul>
+<li>⚠️ 站台别走错：无轨电车站在 T1/T2 的 <b>Exit D</b> 外，AE 站在 T1 前的停车场，<b>两个不同的站</b></li>
+</ul>
+<ul>
+<li>⚠️ <b>13:00 起飞、春运、联程中转</b> → 建议 <b>10:00 前</b>到机场，也就是 09:00 前后从市区出发；出票后确认 PEK 中转 3h15m 是否行李直挂</li>
+</ul>
+<hr>
+<h2>八、通用注意事项</h2>
+<p><b>打票与查票</b></p>
+<ul>
+<li>三城都是"自觉打票 + 便衣查票"，<b>没有闸机不等于不用买票</b>；M1（布达佩斯）无闸机也要打</li>
+</ul>
+<ul>
+<li>电子票在官方 App 买最省事（BudapestGO / WienMobil / PID Lítačka），<b>激活后再上车</b></li>
+</ul>
+<ul>
+<li>手机没电 = 没票，随身带一张纸质票或充好电</li>
+</ul>
+<p><b>买票渠道（都用官网，别用第三方）</b></p>
+<table><thead><tr><th>类型</th><th>渠道</th></tr></thead><tbody><tr><td>奥地利 / 跨国火车</td><td><code>oebb.at</code> + <b>ÖBB App</b></td></tr><tr><td>捷克境内火车</td><td><code>cd.cz</code> + ČD App</td></tr><tr><td>大巴（私营，常更便宜）</td><td><code>regiojet.com</code>、<code>flixbus.com</code> + 各自 App</td></tr><tr><td>布达佩斯市内</td><td><b>BudapestGO</b></td></tr><tr><td>维也纳市内</td><td><b>WienMobil</b></td></tr><tr><td>布拉格市内</td><td><b>PID Lítačka</b></td></tr></tbody></table>
+<p><b>提前量</b></p>
+<ul>
+<li>城际火车：<b>提前 20–30 分钟</b>到站（无安检无边检）</li>
+</ul>
+<ul>
+<li>城际大巴：<b>提前 15–20 分钟</b>，按车牌找车</li>
+</ul>
+<ul>
+<li>国际航班：<b>提前 3 小时</b>到机场（本次还要在北京中转）</li>
+</ul>
+<p><b>票价与退改</b></p>
+<ul>
+<li>火车/大巴<b>越早买越便宜</b>；ÖBB 约提前 6 个月开售，RegioJet / FlixBus 越早越便宜</li>
+</ul>
+<ul>
+<li>低价档（ÖBB Sparschiene）<b>绑定车次、不可退改</b>，行程定死再买</li>
+</ul>
+<ul>
+<li>电子票<b>离线保存</b>（PDF / 截图），境外流量断了也能出示</li>
+</ul>
+<p><b>冬季（1 月下旬是最冷的时候）</b></p>
+<ul>
+<li>雪天列车/大巴可能晚点，转场当天别把行程排太紧</li>
+</ul>
+<ul>
+<li>出发前一天在 App 里看实时状态；路面结冰，穿防水防滑鞋</li>
+</ul>
+<p><b>钱与证件</b></p>
+<ul>
+<li>三国三种货币：HUF / EUR / CZK；刷卡被问"人民币还是当地货币"→ <b>永远选当地货币</b>（DCC 会吃掉 5–8%）</li>
+</ul>
+<ul>
+<li>城际虽无例行边检，<b>护照随身</b>（列车/大巴偶尔查证件，住宿也要登记）</li>
+</ul>
+<ul>
+<li>紧急电话全欧统一 <b>112</b></li>
+</ul>
+<hr>
+<h2>九、待办 / 待查</h2>
+<ul>
+<li>[ ] <b>2026-10</b>：查维也纳 Erdberg → CK、CK → 布拉格的<b>冬季班次与首末班车时刻</b>（FlixBus / RegioJet）</li>
+</ul>
+<ul>
+<li>[ ] <b>2026-11</b>：冬季列车/大巴开票后复核票价，把本文件里的"预估"改成实测价</li>
+</ul>
+<ul>
+<li>[ ] 回程联程票出票后：确认 PRG→PEK→CAN <b>行李是否直挂</b>、是否换航站楼</li>
+</ul>
+<ul>
+<li>[ ] 出发前：确认布达佩斯酒店在 <b>M1 沿线</b>（落地当天 + 温泉动线最顺）</li>
+</ul></div>
+<footer><a href="../交通指引.md">原始 Markdown</a> · 行程草稿 · 2027-1 奥匈捷之旅</footer>
+</div></body></html>
