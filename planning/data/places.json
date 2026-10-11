@@ -36,6 +36,31 @@
     "desc": "1896 年为匈牙利建国千年建的地标，两侧是国家美术馆与艺术宫，中央是千年纪念碑。紧邻塞切尼浴场，顺路看完即可。"
   },
   {
+    "id": "vajdahunyad",
+    "name": "沃伊达胡尼奥德城堡",
+    "query": "Vajdahunyad Castle, Budapest",
+    "city": "Budapest",
+    "lat": 47.5153549,
+    "lon": 19.0818753,
+    "note": "城市公园内，庭院免费全天开放",
+    "en": "Vajdahunyad Castle Budapest",
+    "dur": "0.5–1h",
+    "desc": "1896 年为建国千年展建的“拼贴城堡”，把匈牙利各地的建筑风格抄在一座堡上：罗马式、哥特式、文艺复兴、巴洛克全都有。庭院免费、全天可进，冬季雪后红顶尖塔配结冰的湖面，是城市公园最好的机位。紧邻塞切尼浴场，步行约 5 分钟。",
+    "book": "庭院免费、无需预约；堡内的匈牙利农业博物馆通常 10:00–17:00（周一闭馆），出发前查官网。"
+  },
+  {
+    "id": "andrassy_ave",
+    "name": "安德拉什大道",
+    "query": "Andrassy Avenue, Budapest",
+    "city": "Budapest",
+    "lat": 47.5052654,
+    "lon": 19.0633996,
+    "note": "含 Oktogon 圆环与李斯特·费伦茨广场",
+    "en": "Andrassy Avenue Budapest",
+    "dur": "0.5–1h",
+    "desc": "1870 年代建成的林荫大道，2002 年列入世界遗产，从市中心一路通到英雄广场。Oktogon 圆环到李斯特·费伦茨广场这一段餐厅、咖啡馆最密，入夜路灯亮起来，是散步收尾最舒服的一段。"
+  },
+  {
     "id": "chain_bridge",
     "name": "塞切尼链桥",
     "query": "Szechenyi Lanchid, Budapest",
@@ -396,19 +421,6 @@
     "desc": "城堡后的巴洛克阶梯花园，冬季 8:00–17:00 视天气开放（免费）。雪后从花园台阶俯拍红顶，是城堡塔关闭后的最佳替代。"
   },
   {
-    "id": "ck_schiele",
-    "name": "Egon Schiele 艺术中心",
-    "query": "Egon Schiele Art Centrum, Cesky Krumlov",
-    "city": "Cesky Krumlov",
-    "lat": 48.81065,
-    "lon": 14.31332,
-    "note": "冬季周三-周日 10:00-17:00",
-    "en": "Egon Schiele Art Centrum",
-    "dur": "1–1.5h",
-    "desc": "以席勒母亲出生于此为缘起的美术馆，常设展介绍席勒生平与作品。冬季周三–周日 10:00–17:00（1/28 周四、1/29 周五都开）。",
-    "book": "一般无需预约，现场买票即可（冬季周三–周日 10:00–17:00）；成人票价在小馆里算偏高，约 €10 上下（以现场为准）。"
-  },
-  {
     "id": "ck_museum",
     "name": "CK 地区博物馆",
     "query": "Regionalni muzeum, Cesky Krumlov",
@@ -440,5 +452,143 @@
     "lon": 14.31641,
     "note": "冬季周三-周日 9:00-16:00",
     "en": "Fotoatelier Seidel"
+  },
+  {
+    "id": "hallstatt",
+    "name": "哈尔施塔特",
+    "query": "Hallstatt, Oberosterreich",
+    "city": "Hallstatt",
+    "lat": 47.5622,
+    "lon": 13.649,
+    "note": "火车站需换渡船过湖"
+  },
+  {
+    "id": "st_wolfgang",
+    "name": "圣沃尔夫冈",
+    "query": "St. Wolfgang im Salzkammergut",
+    "city": "St. Wolfgang",
+    "lat": 47.7386,
+    "lon": 13.4482,
+    "note": "沙夫山齿轨火车"
+  },
+  {
+    "id": "tyn_church",
+    "name": "泰恩教堂",
+    "query": "Kostel Matky Bozi pred Tynem, Praha",
+    "city": "Prague",
+    "lat": 50.087823,
+    "lon": 14.422727,
+    "note": "老城广场东侧地标双塔，免费",
+    "en": "Church of Our Lady before Týn",
+    "dur": "0.3h",
+    "desc": "老城广场东侧地标，黑色哥特双塔（80 米高），始建于 14 世纪。布拉格最经典的画面之一，冬季阴沉天空配双塔尖顶尤其出片。免费，内部平日有弥撒。"
+  },
+  {
+    "id": "old_town_hall",
+    "name": "旧市政厅塔楼",
+    "query": "Staromestska radnice, Praha",
+    "city": "Prague",
+    "lat": 50.086985,
+    "lon": 14.420764,
+    "note": "天文钟所在，登塔看老城红顶全景",
+    "en": "Old Town Hall Prague",
+    "dur": "0.5–1h",
+    "desc": "老城广场西侧，包含著名的天文钟（1410 年装，世界仍在运转最古老的之一）：整点耶稣十二使徒巡游。钟楼可登顶看老城红顶全景，门票 CZK 250 / €10。"
+  },
+  {
+    "id": "wenceslas_square",
+    "name": "瓦茨拉夫广场",
+    "query": "Vaclavske namesti, Praha",
+    "city": "Prague",
+    "lat": 50.081309,
+    "lon": 14.425577,
+    "note": "新城核心商业大街，地铁A/C线Můstek直达",
+    "en": "Wenceslas Square Prague",
+    "dur": "0.5h",
+    "desc": "新城核心长街（750m × 60m），国家博物馆坐镇南端。1989 年天鹅绒革命在此发起。两侧是酒店、赌场、夜店；地铁 A/C 线 Můstek 直达。"
+  },
+  {
+    "id": "petrin_tower",
+    "name": "佩特任塔 + 佩特任山",
+    "query": "Petrin lookout tower, Praha",
+    "city": "Prague",
+    "lat": 50.08359,
+    "lon": 14.391081,
+    "note": "布拉格的'小埃菲尔'，上山免费（缆车另收费）登塔€5",
+    "en": "Petřín Lookout Tower",
+    "dur": "1–1.5h",
+    "desc": "佩特任山（海拔 327m）顶的'小埃菲尔铁塔'（1891 年建，比埃菲尔早先）。上山免费（步行或缆车，缆车需另票）；登塔 CZK 150 / €6。1 月山顶可能结冰，要穿防滑鞋。"
+  },
+  {
+    "id": "letna_park",
+    "name": "莱特纳公园 + 节拍器",
+    "query": "Letna Park, Praha",
+    "city": "Prague",
+    "lat": 50.094191,
+    "lon": 14.41775,
+    "note": "免费观景台，看伏尔塔瓦河+布拉格城堡",
+    "en": "Letná Park + Metronome",
+    "dur": "0.5–1h",
+    "desc": "莱特纳公园山顶平台，免费。1962 年斯大林像被炸后留下的巨型节拍器（25m 高），站在那看伏尔塔瓦河+老城+布拉格城堡是经典机位。冬天风大但游客极少。"
+  },
+  {
+    "id": "mucha_museum",
+    "name": "穆哈博物馆",
+    "query": "Mucha Museum, Praha",
+    "city": "Prague",
+    "lat": 50.081009,
+    "lon": 14.424658,
+    "note": "新艺术运动画家穆哈作品展，室内避寒，€11-13",
+    "en": "Mucha Museum Prague",
+    "dur": "1.5h",
+    "desc": "捷克新艺术运动画家 Alphonse Mucha（1860–1939）作品专馆。馆藏《斯拉夫史诗》20 幅草稿（原作在国家美术馆）。成人 CZK 250 / €10。室内避寒必选。"
+  },
+  {
+    "id": "jewish_quarter",
+    "name": "犹太区（旧犹太公墓+西班牙会堂）",
+    "query": "Stary zidovsky hrbitov, Praha",
+    "city": "Prague",
+    "lat": 50.090149,
+    "lon": 14.419742,
+    "note": "套票约€25，周六闭馆（安息日），1/30周六禁排",
+    "en": "Jewish Quarter Josefov",
+    "dur": "1.5–2.5h",
+    "desc": "布拉格历史上受保护的犹太区，欧洲保留最完整的中世纪犹太区之一。套票 CZK 600 / €25，含旧犹太公墓（旧-新犹太会堂、平卡斯、西班牙、Maisel、Klausen 共 6 处）。⚠️ 周六安息日闭馆。公墓 12 万人埋于此地，墓碑层层堆叠至 11 层。"
+  },
+  {
+    "id": "strahov_monastery",
+    "name": "斯特拉霍夫修道院图书馆",
+    "query": "Strahov Monastery, Praha",
+    "city": "Prague",
+    "lat": 50.085778,
+    "lon": 14.388972,
+    "note": "世界最美巴洛克图书馆，每天9-17点，仅图书馆€5",
+    "en": "Strahov Monastery Library",
+    "dur": "0.5–1h",
+    "desc": "900 年普雷蒙特雷修会修道院。'神学厅'（Theological Hall，1710）和'哲学厅'（Philosophical Hall，1794）是世界最美巴洛克/新古典图书馆之二。仅图书馆票 CZK 130 / €5，每天 9-17 点开放。室内避寒。"
+  },
+  {
+    "id": "kampa_island",
+    "name": "坎帕岛 + 大水磨坊",
+    "query": "Kampa Island, Praha",
+    "city": "Prague",
+    "lat": 50.083989,
+    "lon": 14.404564,
+    "note": "伏尔塔瓦河分叉岛，免费散步，磨坊水车+河景；列侬墙在岛上另一侧",
+    "en": "Kampa Island Prague",
+    "dur": "0.5–1h",
+    "desc": "伏尔塔瓦河分叉形成的小岛，'布拉格小威尼斯'。西南角大水磨坊（Grand Priory Mill）的水车是岛上最显眼画面。冬季阳光伤草地无花但草原河景依然特别出片。免费散步。注：列侬墙位于岛另一侧，已列。"
+  },
+  {
+    "id": "ck_egon_schiele",
+    "name": "Egon Schiele 艺术中心",
+    "query": "Egon Schiele Art Centrum, Cesky Krumlov",
+    "city": "Český Krumlov",
+    "lat": 48.81265,
+    "lon": 14.31165,
+    "note": "现代艺术博物馆，1月开",
+    "en": "Egon Schiele Art Centrum",
+    "dur": "1–1.5h",
+    "desc": "CK 老城内的现代艺术博物馆，纪念 20 世纪初表现主义画家席勒（1890–1918，其母亲是 CK 人）。成人票约 CZK 200 / €8。1 月照常开放（周二至周日 10–18 点）。室内避寒。"
   }
 ]

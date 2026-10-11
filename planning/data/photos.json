@@ -758,5 +758,45 @@
         "page": "https://unsplash.com/photos/cathedral-near-houses-during-daytime-MjnjWj5ffp4"
       }
     ]
+  },
+  "vajdahunyad": {
+    "name": "沃伊达胡尼奥德城堡",
+    "city": "Budapest",
+    "files": [
+      {
+        "file": "pictures/Budapest_vajdahunyad_1.jpg",
+        "source": "unsplash",
+        "author": "Emma Fabbri",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/fishermans-bastion-in-budapest-during-daytime-2TmsyZXMNTE"
+      },
+      {
+        "file": "pictures/Budapest_vajdahunyad_2.jpg",
+        "source": "unsplash",
+        "author": "Tobias Reich",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/white-castle-PwK4H7zykHE"
+      }
+    ]
+  },
+  "andrassy_ave": {
+    "name": "安德拉什大道",
+    "city": "Budapest",
+    "files": [
+      {
+        "file": "pictures/Budapest_andrassy_ave_1.jpg",
+        "source": "unsplash",
+        "author": "Ljubomir Žarković",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/people-walking-on-street-near-brown-concrete-building-during-daytime-7jW0_pYGqSA"
+      },
+      {
+        "file": "pictures/Budapest_andrassy_ave_2.jpg",
+        "source": "unsplash",
+        "author": "Ljubomir Žarković",
+        "license": "Unsplash License",
+        "page": "https://unsplash.com/photos/people-walking-on-sidewalk-near-cars-and-building-during-daytime-_lqjcOK4T5M"
+      }
+    ]
   }
 }
