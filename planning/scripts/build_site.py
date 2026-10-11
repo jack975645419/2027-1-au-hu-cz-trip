@@ -594,6 +594,7 @@ def overview_block():
 
 JS_HOTELS_LAYER = """
 // 酒店 marker 默认常驻地图，但不进 layer control 开关（用户 2026-10-11 要求）
+// 同时画酒店 ↔ 交通站点的双向箭头，归在"交通站点"层（用户 2026-10-11 要求）
 const hLayer=L.layerGroup(); let hn=0;
 if(window.HOTELS){
   Object.keys(window.HOTELS).forEach(function(key){
@@ -616,6 +617,39 @@ if(window.HOTELS){
     });
   });
 }
+
+// 酒店 ↔ 交通站点 双向箭头
+const HOTEL_LINKS = __HOTELLINKS__;   // [{hid, pid, label}]
+const HOTEL_BY_ID = {};
+const TRANSIT_BY_ID = {};
+if(window.HOTELS) Object.keys(window.HOTELS).forEach(function(key){
+  const rec=window.HOTELS[key];
+  (rec.candidates||[]).forEach(function(h){
+    if(rec.picks && rec.picks.indexOf(h.name)>=0) HOTEL_BY_ID[h.id] = h;
+  });
+});
+const TRANSIT_REF = window.TRANSIT || {points:[],metro:[]};
+(TRANSIT_REF.points||[]).forEach(function(p){ TRANSIT_BY_ID[p.key || p.name] = p; });
+
+const arrow = (latlngs) => L.polyline(latlngs, {color:"#c98adf", weight:2, opacity:0.6, dashArray:"5 5"}).addTo(hLayer);
+HOTEL_LINKS.forEach(function(link){
+  const h = HOTEL_BY_ID[link.hid], p = TRANSIT_BY_ID[link.pid];
+  if(!h || !p) return;
+  // 酒店 → 交通点
+  arrow([[h.lat, h.lon], [p.lat, p.lon]]);
+  // 交通点 → 酒店（同坐标反过来画，因 dashArray 偏移会自然看出方向不同）
+  arrow([[p.lat, p.lon], [h.lat, h.lon]]);
+  // 两端加箭头头部（小三角 marker）
+  const tri = (lat, lng, prevLat, prevLng) => {
+    const b = Math.atan2(lng - prevLng, lat - prevLat) * 180 / Math.PI;
+    const icon = L.divIcon({className:"", iconSize:[12,12], iconAnchor:[6,6],
+      html:'<svg width="12" height="12" viewBox="0 0 12 12" style="transform:rotate('+b+'deg);transform-origin:6px 6px"><polygon points="2,2 10,6 2,10" fill="#c98adf"/></svg>'});
+    return L.marker([lat, lng], {icon, interactive:false}).addTo(hLayer);
+  };
+  tri(p.lat, p.lon, h.lat, h.lon);  // 箭头朝 p（酒店→p 方向）
+  tri(h.lat, h.lon, p.lat, p.lon);  // 箭头朝 h（p→酒店 方向）
+});
+
 hLayer.addTo(map);   // 酒店 marker 默认显示，但不在 layer control 开关里
 """
 
@@ -895,6 +929,23 @@ def hist_block(lid):
 
 
 def build_pages():
+    # 酒店 ↔ 交通站点 双向链接（每个已订酒店连到几个相关交通点）
+    global _HOTEL_LINKS
+    _HOTEL_LINKS = [
+        # Budapest ibis
+        {"hid": "ibis_budapest_city", "pid": "BUD",    "label": "机场"},
+        {"hid": "ibis_budapest_city", "pid": "Keleti", "label": "东站"},
+        # Vienna Royal
+        {"hid": "hotel_royal_wien",   "pid": "WienHbf", "label": "中央车站"},
+        {"hid": "hotel_royal_wien",   "pid": "Erdberg", "label": "大巴站"},
+        {"hid": "hotel_royal_wien",   "pid": "VIE",     "label": "机场"},
+        # CK Pohádka
+        {"hid": "krumlovska_pohadka", "pid": "CKBus",   "label": "大巴站"},
+        # Prague Klarov
+        {"hid": "klarov",             "pid": "PrahaHln", "label": "中央车站"},
+        {"hid": "klarov",             "pid": "NaKnizeci", "label": "大巴站"},
+        {"hid": "klarov",             "pid": "PRG",     "label": "机场"},
+    ]
     ver = git_count() + 1
     note = BUILD_NOTE
     for k, itin in itins.items():
@@ -913,7 +964,8 @@ def build_pages():
                        .replace("__DAYCOLORS__", json.dumps(day_colors(itin), ensure_ascii=False))
                        .replace("__DEFCOLOR__", json.dumps(DEF_COLOR))
                        .replace("__NAME2PLACE__", json.dumps(name2place, ensure_ascii=False))
-                       .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER))
+                       .replace("__JSHOTELSLAYER__", JS_HOTELS_LAYER)
+                       .replace("__HOTELLINKS__", json.dumps(_HOTEL_LINKS, ensure_ascii=False)))
         jsdays = (JS_DAYS.replace("__NAME2ID__", json.dumps(name2id, ensure_ascii=False))
                          .replace("__PLACEINFO__", json.dumps(place_info, ensure_ascii=False))
                          .replace("__ITINVAR__", f"ITIN_{k}"))

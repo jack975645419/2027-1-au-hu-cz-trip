@@ -1,6 +1,6 @@
 {
-  "version": "v38",
-  "built_at": "2026-10-11 14:29",
-  "commit": "e2740c0",
-  "note": "v39 · 加维也纳皇家酒店 Hotel Royal（Singerstraße 3）· 4 城酒店齐备"
+  "version": "v39",
+  "built_at": "2026-10-11 14:48",
+  "commit": "8d85af8",
+  "note": "v40 · 修 1/25 stay + 加 transit.json + 酒店↔交通站点双向箭头（紫虚线）"
 }
