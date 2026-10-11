@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v34", "built_at": "2026-10-11 14:06", "commit": "4a97819", "note": "v35 · 酒店 section 标题改'已订酒店（每城 1 家）'"};
+window.VERSION = {"version": "v35", "built_at": "2026-10-11 14:07", "commit": "3698d05", "note": "v36 · 加克鲁姆洛夫斯卡博达卡酒店（Široká 74）"};

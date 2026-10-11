@@ -64,5 +64,37 @@
       "Boutique Hotel Klarov"
     ],
     "note": "老城区犹太区西侧，伏尔塔瓦河边；步行 5 min 过桥即查理大桥"
+  },
+  "cesky_krumlov": {
+    "city": "克鲁姆洛夫",
+    "center": [
+      48.811,
+      14.3133
+    ],
+    "sight_center": [
+      48.8127,
+      14.314
+    ],
+    "total": 1,
+    "candidates": [
+      {
+        "id": "krumlovska_pohadka",
+        "name": "克鲁姆洛夫斯卡博达卡酒店 Krumlovská pohádka",
+        "kind": "hotel",
+        "lat": 48.8110437,
+        "lon": 14.3133328,
+        "stars": 4,
+        "website": "https://www.krumlovska-pohadka.cz/",
+        "phone": "+420 380 712 924",
+        "street": "Široká 74",
+        "postcode": "381 01",
+        "city": "Český Krumlov",
+        "country": "捷克",
+        "note": "CK 老城内主干道 Široká 街，步行 5 min 到城堡花园入口"
+      }
+    ],
+    "picks": [
+      "克鲁姆洛夫斯卡博达卡酒店 Krumlovská pohádka"
+    ]
   }
 }
