@@ -1,6 +1,6 @@
 {
-  "version": "v36",
-  "built_at": "2026-10-11 14:13",
-  "commit": "cd63429",
-  "note": "v37 · 酒店 marker 默认显示在地图上，但不进 layer control"
+  "version": "v37",
+  "built_at": "2026-10-11 14:24",
+  "commit": "f9a896c",
+  "note": "v38 · 布拉格重排：1/29 老城广场周边；1/30 城堡山；1/31 犹太区+河边"
 }
