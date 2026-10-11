@@ -65,7 +65,7 @@ with sync_playwright() as p:
     print(f"  ITIN_D keys: {n_itin}")
 
     # 期望值
-    exp_places = 51
+    exp_places = 49
     exp_days = 11
     exp_hsec = 3   # vienna + prague + budapest
 

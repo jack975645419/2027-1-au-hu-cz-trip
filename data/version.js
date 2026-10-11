@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v32", "built_at": "2026-10-11 11:52", "commit": "cf0c084", "note": "v32 · 恢复米白浅色主题 + 主页交通指引卡片 + 固定 Esri 底图"};
+window.VERSION = {"version": "v33", "built_at": "2026-10-11 12:00", "commit": "0464e32", "note": "v33 · 删湖区景点 + 统一 CK city 名 + 4 天日程补齐孤立景点 + 修正 itinerary 与 places 名字一致"};
