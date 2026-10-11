@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v31", "built_at": "2026-10-11 11:47", "commit": "9ca3405", "note": "v30 · 重打版本号：指向 commit 9ca3405"};
+window.VERSION = {"version": "v32", "built_at": "2026-10-11 11:52", "commit": "cf0c084", "note": "v32 · 恢复米白浅色主题 + 主页交通指引卡片 + 固定 Esri 底图"};

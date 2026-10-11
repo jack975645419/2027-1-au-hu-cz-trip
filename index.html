@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
 <title>2027-1 奥匈捷之旅</title>
 <style>
-:root{--bg:#12161c;--card:#1b212b;--line:#2a323e;--text:#e8ecf1;--dim:#9aa5b1;--accent:#6ea8fe}
+:root{--bg:#f5f1e8;--card:#fffdf8;--line:#e2dbc9;--text:#2c2a26;--dim:#7c7466;--accent:#2f6fb5}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%}
 .wrap{max-width:900px;margin:0 auto;padding:16px}
@@ -11,29 +11,36 @@ header{padding:16px 0 8px;border-bottom:1px solid var(--line);margin-bottom:16px
 h1{margin:6px 0;font-size:22px}
 h2{font-size:15px;margin:26px 0 10px;color:var(--accent)}
 .sub{color:var(--dim);font-size:13px}.sub b{color:var(--text)}
-.badge{display:inline-block;background:#222b36;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
+.badge{display:inline-block;background:#efe9db;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
 .badge b{color:var(--accent)}
 a.back{color:var(--dim);font-size:12px;text-decoration:none}
-#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#0e1218;z-index:1}
+#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#ece6da;z-index:1}
 #map:fullscreen{height:100vh!important;width:100vw!important;border-radius:0;border:0;position:fixed;inset:0;z-index:9999}
 #map:-webkit-full-screen{height:100vh!important;width:100vw!important;border-radius:0;position:fixed;inset:0;z-index:9999}
 .fsbtn a{display:flex!important;align-items:center;justify-content:center;width:32px!important;height:32px!important;line-height:32px!important;font-size:15px;color:#222;text-decoration:none;background:#fff;border-radius:4px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
 .day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
-.day .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:#202832;border-bottom:1px solid var(--line)}
+.day .hd{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:#f1ebde;border-bottom:1px solid var(--line)}
 .day .d{font-size:17px;font-weight:700;color:var(--accent)}
 .day .w{color:var(--dim);font-size:12px}
 .day .s{margin-left:auto;color:var(--dim);font-size:12px}
 .day .bd{padding:12px 16px}
 .tp{color:var(--dim);font-size:12px;margin-bottom:8px}.tp b{color:var(--text);font-weight:500}
-.note{color:#e8c07a;font-size:12px;margin-top:8px}
-.ampm{color:#9aa5b1;font-size:12px}
+.note{color:#96691c;font-size:12px;margin-top:8px}
+.ampm{color:var(--dim);font-size:12px}
+.day .bd ul li{margin:7px 0}
+.pn{font-size:13px}
+.dur{display:inline-block;margin-left:6px;background:rgba(47,111,181,.10);color:#2f6fb5;
+ border:1px solid rgba(47,111,181,.28);border-radius:6px;padding:0 6px;font-size:11px}
+.pd{color:var(--dim);font-size:11.5px;line-height:1.55;margin:3px 0 0}
+.bk{color:#8a6a2f;font-size:11.5px;line-height:1.55;margin:3px 0 0;background:rgba(138,106,47,.07);
+ border-left:2px solid rgba(138,106,47,.35);padding:3px 7px;border-radius:0 5px 5px 0}
 .hist a{color:var(--accent);text-decoration:none;margin-right:12px;font-size:13px}
 .hsec{margin-bottom:24px}
 .hsec h3{font-size:14px;margin:0 0 10px;color:var(--text)}
 .hcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 .hcard .hn{font-weight:600;font-size:15px}
-.hcard .hstars{color:#e8c07a;font-size:12px;margin-left:6px}
+.hcard .hstars{color:#b8860b;font-size:12px;margin-left:6px}
 .hcard .hm{color:var(--dim);font-size:12px;margin-top:4px}
 .hcard .ha{margin-top:8px}
 .hcard .ha a{color:var(--accent);text-decoration:none;font-size:12px;margin-right:16px}
@@ -43,20 +50,21 @@ a.back{color:var(--dim);font-size:12px;text-decoration:none}
 ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
 .thumbs img{height:96px;width:140px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
-.pros{color:#7fd39a}.cons{color:#e08a8a}
+.pros{color:#2f7a4a}.cons{color:#b5443c}
 .ovw{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 4px;margin-bottom:12px}
 .ovw .row{display:flex;align-items:baseline;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line)}
 .ovw .row:last-child{border-bottom:0}
 .ovw .dt{flex:0 0 auto;min-width:74px;font-weight:700;color:var(--accent);font-size:14px}
 .ovw .dt .w{color:var(--dim);font-weight:400;font-size:11px;margin-left:3px}
 .ovw .city{flex:0 0 auto;min-width:96px;font-size:13px;color:var(--text)}
-.ovw .city.mv::after{content:" →";color:var(--dim)}
+.ovw .city.in::before{content:"→ ";color:var(--dim)}.ovw .city.out::after{content:" →";color:var(--dim)}
+.ovw .city .rt{color:var(--dim);font-weight:400}
 .ovw .seg{flex:0 0 auto;font-size:12px}
 .ovw .seg .ico{margin-right:3px}
-.ovw .seg.flt{color:#f0b25a}.ovw .seg.trn{color:#7fb3ff}
+.ovw .seg.flt{color:#b06a12}.ovw .seg.trn{color:#2f6fb5}
 .ovw .seg .tn{color:var(--text);font-weight:500}
 .ovw .seg .tm{color:var(--dim);margin-left:4px}
-.ovw .seg .tm.pending{color:#8a94a1;font-style:italic}
+.ovw .seg .tm.pending{color:#8a8578;font-style:italic}
 .ovw .sights{flex:1 1 auto;min-width:0;color:var(--dim);font-size:12px;line-height:1.55;text-align:right}
 @media(max-width:640px){
 .ovw .row{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
@@ -69,26 +77,56 @@ ul{margin:0;padding-left:18px}li{margin:3px 0;font-size:14px}
 .pick .t{font-size:17px;font-weight:600;margin-bottom:4px}
 .pick .s{color:var(--dim);font-size:13px}
 footer{color:var(--dim);font-size:12px;text-align:center;padding:24px 0 40px}
-.plabel{background:rgba(20,25,33,.92);border:1px solid #39434f;color:#e8ecf1;border-radius:6px;padding:3px 7px;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.plabel{background:rgba(255,253,248,.95);border:1px solid #d5ccb9;color:var(--text);border-radius:6px;padding:3px 7px;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .plabel::before{display:none!important}
-.plabel .lb{color:#6ea8fe;font-size:10px;margin-top:2px}
-.plabel .nt{color:#9aa5b1;font-size:10px}
-.clabel{background:rgba(15,19,25,.9);border:1px solid #46525f;color:#fff;border-radius:9px;padding:5px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.plabel .lb{color:#2f6fb5;font-size:10px;margin-top:2px}
+.plabel .nt{color:#7c7466;font-size:10px}
+.clabel{background:rgba(255,253,248,.95);border:1px solid #c6bca6;color:var(--text);border-radius:9px;padding:5px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .clabel::before{display:none!important}
-.leaflet-popup-content-wrapper{background:#1b212b;color:#e8ecf1;border-radius:10px}
-.leaflet-popup-tip{background:#1b212b}
+.leaflet-popup-content-wrapper{background:#fffdf8;color:var(--text);border-radius:10px}
+.leaflet-popup-tip{background:#fffdf8}
 .leaflet-popup-content{margin:10px 12px;font-size:13px}
-.leaflet-popup-content .note{color:#9aa5b1;font-size:12px;margin-top:4px}
+.leaflet-popup-content .note{color:#7c7466;font-size:12px;margin-top:4px}
+.tcard{border-color:#a89e8b}
+.tcard.sm{font-size:10.5px;padding:2px 6px}
+.arlab{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;background:rgba(255,253,248,.94);
+ border:1px solid #c6bca6;color:var(--text);border-radius:8px;padding:2px 7px;font-size:11px;line-height:1.45;
+ box-shadow:0 1px 5px rgba(0,0,0,.12)}
+.gdoc{max-width:820px}
+.gdoc h1{font-size:20px;margin:22px 0 8px}
+.gdoc h2{font-size:16px;margin:26px 0 10px;color:var(--accent);
+ padding-bottom:6px;border-bottom:1px solid var(--line)}
+.gdoc h3{font-size:14px;margin:18px 0 8px}
+.gdoc p,.gdoc li{font-size:13.5px;color:var(--text);line-height:1.75}
+.gdoc ul{margin:0 0 10px;padding-left:20px}
+.gdoc li{margin:4px 0}
+.gdoc table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px}
+.gdoc th,.gdoc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+.gdoc th{background:#f1ebde;color:var(--text);font-weight:600}
+.gdoc code{background:#efe9db;padding:1px 5px;border-radius:4px;font-size:12px}
+.gdoc pre{background:#faf7f0;border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-size:12px}
+.gdoc hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.gdoc .q{color:var(--dim);font-size:12.5px;border-left:2px solid var(--line);padding-left:10px;margin:8px 0}
+@media(max-width:640px){.gdoc table{font-size:12px}.gdoc th,.gdoc td{padding:5px 6px}}
 </style></head><body><div class="wrap">
 <header><h1>2027-1 奥匈捷之旅</h1>
-<div class="sub"><b>01.23 – 02.01</b> · 9 晚 10 天 · 广州 → 布达佩斯 / 布拉格 → 广州</div>
+<div class="sub"><b>01.23 – 02.02</b> · 10 晚 11 天 · 深圳 → 维也纳 / 布达佩斯 → 广州</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
-<h2>方案</h2><a class="pick" href="d/index.html"><div class="t">方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫替换湖区</div><div class="s">现行推荐 · 9 晚 10 天</div><div class="s" style="margin-top:6px">住宿：布达佩斯 2晚 · 维也纳 3晚 · 克鲁姆洛夫 1晚 · 布拉格 3晚</div></a>
-<h2>航班（方案 D）</h2>
+<h2>本行程</h2><a class="pick" href="d/index.html"><div class="t">方案 D · 布达佩斯进 / 布拉格中转回 · 克鲁姆洛夫替换湖区</div><div class="s">现行推荐 · 9 晚 10 天</div><div class="s" style="margin-top:6px">住宿：布达佩斯 2晚 · 维也纳 3晚 · 克鲁姆洛夫 1晚 · 布拉格 3晚</div></a>
+<h2>交通指引</h2>
+<div class="card"><div style="font-weight:600">机场进城 · 城际火车与大巴 · 市内买票</div>
+<div class="sub">落地布达佩斯怎么进城、去火车站和大巴站怎么走、票在哪买、冬季与查票注意什么，一页看完</div>
+<div class="sub" style="margin-top:8px">
+<a href="guide/index.html" style="color:var(--accent)">网页版 →</a>　·　
+<a href="交通指引.md" style="color:var(--accent)">原始 Markdown</a></div></div>
+<h2>航班</h2>
 <div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
-<div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287</div></div>
-<div class="card"><div style="font-weight:600">回程 · 2/1（一）</div>
-<div class="sub">布拉格 PRG 13:00 → 中转北京 PEK → 广州 CAN 12:00（次日） · 海航联程 · 实测 ¥2,379</div></div>
+<div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287/人</div></div>
+<div class="card"><div style="font-weight:600">回程 · 2/1（一）→ 2/2（二）</div>
+<div class="sub">布拉格 PRG 13:00 → 北京 PEK 次日 05:15（中转 3h15m）→ 广州 CAN 12:00 ·
+海航联程 · <b>携程实测 ¥2,379/人</b></div></div>
+<div class="card"><div class="sub" style="color:var(--dim)">已否决的方案 A / B 用的是另一套：深圳 SZX 01:45 → 维也纳
+HU789 ¥3,357 / 布达佩斯 BUD 11:45 → 广州 CZ650 ¥3,313（均为直飞）</div></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">行程草稿 · 地图数据 OpenStreetMap</div></footer>
 </div>
 <script src="data/version.js"></script>
