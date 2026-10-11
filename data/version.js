@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v41", "built_at": "2026-10-11 15:05", "commit": "caf6e6b", "note": "v41 · 酒店 tooltip 只剩名字 + POINTS 默认显示 + 删住宿分配/取舍让地图更靠上 + 修 JS_DAYS stats null 报错"};
+window.VERSION = {"version": "v42", "built_at": "2026-10-11 16:00", "commit": "efd2ff2", "note": "v42 · 旅行需求.md 追加第十七节'累计发版归档'（v30→v41 现行方案快照，含 11 天行程/4 城酒店/transit/箭头/网站现状/发版节奏/遗留）"};
