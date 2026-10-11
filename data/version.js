@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v35", "built_at": "2026-10-11 14:07", "commit": "3698d05", "note": "v36 · 加克鲁姆洛夫斯卡博达卡酒店（Široká 74）"};
+window.VERSION = {"version": "v36", "built_at": "2026-10-11 14:13", "commit": "cd63429", "note": "v37 · 酒店 marker 默认显示在地图上，但不进 layer control"};

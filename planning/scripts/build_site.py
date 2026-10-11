@@ -593,8 +593,30 @@ def overview_block():
 
 
 JS_HOTELS_LAYER = """
-// 酒店不再进地图 layer control（用户 2026-10-11 要求"去掉所有推荐酒店"）
-// JS_HOTELS_LAYER 仍保留定义（不画 markers），下方 JS_HOTELS（卡片）继续渲染已订酒店
+// 酒店 marker 默认常驻地图，但不进 layer control 开关（用户 2026-10-11 要求）
+const hLayer=L.layerGroup(); let hn=0;
+if(window.HOTELS){
+  Object.keys(window.HOTELS).forEach(function(key){
+    const rec=window.HOTELS[key], picks=rec.picks||[];
+    (rec.candidates||[]).forEach(function(h){
+      if(picks.indexOf(h.name)<0) return;
+      hn++;
+      const adv=[];
+      if(h.stars) adv.push(h.stars+"★");
+      adv.push(h.kind==="hotel"?"酒店":(h.kind==="guest_house"?"民宿":(h.kind==="hostel"?"青旅":"住宿")));
+      if(h.website) adv.push("有官网");
+      if(h.note) adv.push(h.note);
+      const html="<b>"+h.name+'</b><div class="nt">'+adv.join(" · ")+"</div>";
+      const m=L.circleMarker([h.lat,h.lon],{radius:7,color:"#fff",weight:2,fillColor:"#c98adf",fillOpacity:.92})
+        .bindTooltip(html,{permanent:true,direction:"top",className:"plabel hcard",opacity:1,offset:[0,-6]})
+        .bindPopup("<b>"+h.name+"</b>"+(h.stars?" ★"+h.stars:"")
+          +(h.street?'<div class="note">'+h.street+(h.postcode?" "+h.postcode:"")+'</div>':""))
+        .addTo(hLayer);
+      hM.push(m);
+    });
+  });
+}
+hLayer.addTo(map);   // 酒店 marker 默认显示，但不在 layer control 开关里
 """
 
 JS_HOTELS = """
