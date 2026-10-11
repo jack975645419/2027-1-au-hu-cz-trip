@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v30", "built_at": "2026-10-11 11:41", "commit": "859fc00", "note": "v30 · 删 A/B/C/E 旧方案 + 补 CK 4 景点 + 布拉格 +9 + 布达佩斯 +2 · itineraries 仅留方案 D"};
+window.VERSION = {"version": "v31", "built_at": "2026-10-11 11:47", "commit": "9ca3405", "note": "v30 · 重打版本号：指向 commit 9ca3405"};
