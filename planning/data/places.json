@@ -361,17 +361,6 @@
     "desc": "1980 年代年轻人涂写列侬歌词与和平标语的墙，至今仍不断被重新涂画。在小城区，顺路 10 分钟。"
   },
   {
-    "id": "dancing_house",
-    "name": "跳舞的房子",
-    "query": "Tancici dum, Praha",
-    "city": "Prague",
-    "lat": 50.0754264,
-    "lon": 14.4141719,
-    "note": "待确认",
-    "dur": "0.25h",
-    "desc": "1996 年盖里与捷克建筑师合作的解构主义建筑，像一对跳舞的人。在河边看外观即可，顶层餐厅可俯瞰河景。"
-  },
-  {
     "id": "ck_old_town",
     "name": "克鲁姆洛夫老城广场",
     "query": "Namesti Svornosti, Cesky Krumlov",
@@ -572,5 +561,32 @@
     "en": "Egon Schiele Art Centrum",
     "dur": "1–1.5h",
     "desc": "CK 老城内的现代艺术博物馆，纪念 20 世纪初表现主义画家席勒（1890–1918，其母亲是 CK 人）。成人票约 CZK 200 / €8。1 月照常开放（周二至周日 10–18 点）。室内避寒。"
+  },
+  {
+    "id": "central_market",
+    "name": "中央市场",
+    "query": "Central Market Hall Budapest",
+    "city": "Budapest",
+    "lat": 47.4874,
+    "lon": 19.0576,
+    "note": "布达佩斯最大室内市场，paprika 香料与 Lángos 油饼；自由桥北侧"
+  },
+  {
+    "id": "vaci_street",
+    "name": "瓦茨大街",
+    "query": "Vaci utca Budapest",
+    "city": "Budapest",
+    "lat": 47.4877,
+    "lon": 19.0592,
+    "note": "中央市场旁主要商业步行街"
+  },
+  {
+    "id": "shoes_on_danube",
+    "name": "多瑙河畔鞋",
+    "query": "Shoes on the Danube Bank Budapest",
+    "city": "Budapest",
+    "lat": 47.5053,
+    "lon": 19.0405,
+    "note": "二战犹太遇难者纪念，1940 年代被射杀后掉入河中；国会大厦南 200m"
   }
 ]

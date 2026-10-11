@@ -63,7 +63,7 @@ COLORS = {"Budapest": "#e0605e", "Vienna": "#6ea8fe", "Prague": "#e8a33d",
 # 城市 → 航班/列车字段里可能出现的写法，用来判断当天是「进入」还是「离开」
 CITY_TOKENS = {"Budapest": ["BUD", "Budapest"], "Vienna": ["VIE", "Wien", "Vienna"],
                "Prague": ["PRG", "Praha", "Prague"],
-               "Cesky Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK"],
+               "Český Krumlov": ["Český Krumlov", "Cesky Krumlov", "Krumlov", "CK", "ČK"],
                "Guangzhou": ["CAN", "Guangzhou"], "Shenzhen": ["SZX", "Shenzhen"]}
 
 
@@ -593,31 +593,8 @@ def overview_block():
 
 
 JS_HOTELS_LAYER = """
-const hLayer=L.layerGroup(); let hn=0;
-if(window.HOTELS){
-  Object.keys(window.HOTELS).forEach(function(key){
-    const rec=window.HOTELS[key], picks=rec.picks||[];
-    (rec.candidates||[]).forEach(function(h){
-      if(picks.indexOf(h.name)<0) return;      // 地图只标推荐的那几家
-      hn++;
-      const adv=[];
-      if(h.dist_metro!=null) adv.push("距地铁 "+h.dist_metro+"m");
-      if(h.stars) adv.push(h.stars+"★");
-      adv.push(h.kind==="hotel"?"酒店":(h.kind==="guest_house"?"民宿":(h.kind==="hostel"?"青旅":"住宿")));
-      if(h.dist_sights!=null) adv.push("距景点中心 "+h.dist_sights+"m");
-      if(h.dist_station!=null) adv.push("距车站 "+h.dist_station+"m");
-      if(h.website) adv.push("有官网");
-      const html="<b>"+h.name+'</b><div class="nt">'+adv.join(" · ")+"</div>";
-      const m=L.circleMarker([h.lat,h.lon],{radius:7,color:"#fff",weight:2,fillColor:"#c98adf",fillOpacity:.92})
-        .bindTooltip(html,{permanent:true,direction:"top",className:"plabel hcard",opacity:1,offset:[0,-6]})
-        .bindPopup("<b>"+h.name+"</b>"+(h.stars?" ★"+h.stars:"")
-          +'<div class="note">'+adv.join(" · ")+"</div>")
-        .addTo(hLayer);
-      hM.push(m);
-    });
-  });
-}
-layers["推荐酒店 ("+hn+")"]=hLayer;
+// 酒店不再进地图 layer control（用户 2026-10-11 要求"去掉所有推荐酒店"）
+// JS_HOTELS_LAYER 仍保留定义（不画 markers），下方 JS_HOTELS（卡片）继续渲染已订酒店
 """
 
 JS_HOTELS = """
@@ -648,7 +625,7 @@ document.getElementById("hotels").innerHTML = Object.keys(HH).map(function(key){
   const rec=HH[key], cands=rec.candidates||[];
   const picks=cands.filter(function(h){return (rec.picks||[]).indexOf(h.name)>=0;});
   const rest=cands.filter(function(h){return (rec.picks||[]).indexOf(h.name)<0;});
-  return '<div class="hsec"><h3>'+rec.city+"　OSM 共 "+rec.total+" 家 · 下列 "+cands.length+" 家按位置排序</h3>"
+  return '<div class="hsec"><h3>'+rec.city+"　已订酒店（每城 1 家，共 "+cands.length+" 家）</h3>"
     +picks.map(function(h){return card(h,rec,key);}).join("")
     +(rest.length?'<button class="more" data-k="'+key+'">展开另外 '+rest.length+' 家 ▾</button>'
       +'<div class="morelist" id="ml-'+key+'">'+rest.map(function(h){
@@ -681,7 +658,7 @@ PLAN_TPL = """<!DOCTYPE html>
 <h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
-<h2>逐日行程</h2><div id="days"></div><h2>酒店候选（点图层控件可勾选「酒店」）</h2><div id="hotels"></div>
+<h2>逐日行程</h2><div id="days"></div><h2>已订酒店</h2><div id="hotels"></div>
 __HIST__
 <footer><div id="verfoot"></div><div style="margin-top:6px">__TITLE__ · 草稿</div></footer>
 </div>

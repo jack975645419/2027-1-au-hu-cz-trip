@@ -65,9 +65,9 @@ with sync_playwright() as p:
     print(f"  ITIN_D keys: {n_itin}")
 
     # 期望值
-    exp_places = 49
-    exp_days = 11
-    exp_hsec = 3   # vienna + prague + budapest
+    exp_places = 51
+    exp_days = 12   # 1/25 拆虚拟两日
+    exp_hsec = 2   # budapest + prague（vienna 暂无）
 
     if n_places != exp_places:
         fails.append(f"PLACES 数不符：实际 {n_places}，期望 {exp_places}")
