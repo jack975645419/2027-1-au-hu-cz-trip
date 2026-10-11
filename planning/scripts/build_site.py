@@ -183,7 +183,7 @@ h2{font-size:15px;margin:26px 0 10px;color:var(--accent)}
 .badge{display:inline-block;background:#efe9db;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:11px}
 .badge b{color:var(--accent)}
 a.back{color:var(--dim);font-size:12px;text-decoration:none}
-#map{height:56vh;min-height:300px;border-radius:12px;border:1px solid var(--line);background:#ece6da;z-index:1}
+#map{height:62vh;min-height:460px;border-radius:12px;border:1px solid var(--line);background:#ece6da;z-index:1}
 #map:fullscreen{height:100vh!important;width:100vw!important;border-radius:0;border:0;position:fixed;inset:0;z-index:9999}
 #map:-webkit-full-screen{height:100vh!important;width:100vw!important;border-radius:0;position:fixed;inset:0;z-index:9999}
 .fsbtn a{display:flex!important;align-items:center;justify-content:center;width:32px!important;height:32px!important;line-height:32px!important;font-size:15px;color:#222;text-decoration:none;background:#fff;border-radius:4px}
@@ -424,23 +424,27 @@ function drawSeg(lg,a,b,col){
 arrowBox.addTo(map);   // 日程箭头常开
 // ---------- 交通点：机场 / 火车站 / 大巴站 / 相关地铁站 ----------
 const TR=window.TRANSIT||{points:[],metro:[]};
-const tLayer=L.layerGroup(), tM=[];   // 默认不显示，由图层控件「交通站点」开启
-const TSTYLE={airport:["&#9992;","#e8590c"],train:["&#128646;","#1c7ed6"],bus:["&#128652;","#12b886"]};
+// 机场/车站/大巴站（POINTS）：默认常驻地图（距离景点几十公里远，必须看到）
+const pointsLayer=L.layerGroup(); let pn=0;
 (TR.points||[]).forEach(function(p){
-  const s=TSTYLE[p.kind]||["&#9873;","#888"];
+  const s={airport:["&#9992;","#e8590c"],train:["&#128646;","#1c7ed6"],bus:["&#128652;","#12b886"]}[p.kind]||["&#9873;","#888"];
   L.circleMarker([p.lat,p.lon],{radius:7,color:"#fff",weight:2,fillColor:s[1],fillOpacity:.95})
-    .bindTooltip("<b>"+s[0]+" "+p.name+"</b>"+(p.note?'<div class="nt">'+p.note+"</div>":""),
+    .bindTooltip("<b>"+s[0]+" "+p.name+"</b>"+(p["for"]?'<div class="nt">'+p["for"]+"</div>":""),
       {permanent:true,direction:"top",className:"plabel tcard",opacity:1,offset:[0,-6]})
-    .addTo(tLayer);
+    .addTo(pointsLayer);
+  pn++;
 });
+pointsLayer.addTo(map);   // POINTS 默认显示
+// 地铁站（METRO）：归"交通站点"图层控件（8 个小点，城里）
+const tLayer=L.layerGroup(); let tM=[];
 (TR.metro||[]).forEach(function(m){
   const mk=L.circleMarker([m.lat,m.lon],{radius:5,color:"#fff",weight:1.5,fillColor:"#7048e8",fillOpacity:.9})
-    .bindTooltip("<b>&#128647; "+m.name+'</b><div class="nt">'+m["for"]+" · 约 "+m.dist+"m</div>",
+    .bindTooltip("<b>&#128647; "+m.name+'</b><div class="nt">'+(m["for"]||"")+"</div>",
       {permanent:true,direction:"top",className:"plabel tcard sm",opacity:1,offset:[0,-6]})
     .addTo(tLayer);
   tM.push(mk);
 });
-layers["交通站点 ("+((TR.points||[]).length+(TR.metro||[]).length)+")"]=tLayer;
+layers["相关地铁站 ("+tM.length+")"]=tLayer;
 __JSHOTELSLAYER__
 L.control.layers({},layers,{collapsed:window.innerWidth<600}).addTo(map);
 
@@ -510,7 +514,11 @@ FsCtl.addTo(map);
 document.addEventListener("fullscreenchange",function(){setTimeout(function(){map.invalidateSize();applyZoom();},120);});
 document.addEventListener("webkitfullscreenchange",function(){setTimeout(function(){map.invalidateSize();applyZoom();},120);});
 
-if(bounds.length){ map.fitBounds(bounds,{padding:[40,40]}); }
+// 初始视野：含 POINTS（机场/车站/大巴站）+ 景点 bounds。POINTS 跨度欧洲，
+// maxZoom 不限制，让 fitBounds 自己决定（POINTS 会让初始 zoom 拉到能容全境）。
+const allBounds = bounds.slice();
+(TR.points||[]).forEach(function(p){ allBounds.push([p.lat, p.lon]); });
+if(allBounds.length){ map.fitBounds(allBounds,{padding:[40,40]}); }
 applyZoom();
 """
 
@@ -536,9 +544,6 @@ document.getElementById("days").innerHTML = ITIN.days.map(function(d){
     (items?"<ul>"+items+"</ul>":"")+
     (d.note?'<div class="note">'+d.note+"</div>":"")+
     "</div></div>";
-}).join("");
-document.getElementById("stats").innerHTML = ITIN.stay.map(function(s){
-  return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+"</div></div>";
 }).join("");
 """
 
@@ -607,11 +612,12 @@ if(window.HOTELS){
       adv.push(h.kind==="hotel"?"酒店":(h.kind==="guest_house"?"民宿":(h.kind==="hostel"?"青旅":"住宿")));
       if(h.website) adv.push("有官网");
       if(h.note) adv.push(h.note);
-      const html="<b>"+h.name+'</b><div class="nt">'+adv.join(" · ")+"</div>";
+      const html="<b>"+h.name+"</b>";
       const m=L.circleMarker([h.lat,h.lon],{radius:7,color:"#fff",weight:2,fillColor:"#c98adf",fillOpacity:.92})
         .bindTooltip(html,{permanent:true,direction:"top",className:"plabel hcard",opacity:1,offset:[0,-6]})
-        .bindPopup("<b>"+h.name+"</b>"+(h.stars?" ★"+h.stars:"")
-          +(h.street?'<div class="note">'+h.street+(h.postcode?" "+h.postcode:"")+'</div>':""))
+        .bindPopup("<b>"+h.name+"</b>"+(h.stars?"<br>"+h.stars+"★":"")
+          +(h.street?'<div class="note">'+h.street+(h.postcode?" "+h.postcode:"")+'</div>':"")
+          +(h.note?'<div class="note">'+h.note+"</div>":""))
         .addTo(hLayer);
       hM.push(m);
     });
@@ -710,8 +716,6 @@ PLAN_TPL = """<!DOCTYPE html>
 <h1>__TITLE__</h1><div class="sub">__SUBTITLE__</div>
 <div class="sub">__HEAD__</div>
 <div class="sub" style="margin-top:9px"><span class="badge" id="ver"></span></div></header>
-<h2>取舍</h2><div class="card">__TRADEOFF__</div>
-<h2>住宿分配</h2><div class="grid" id="stats"></div>
 <h2>地图（右上角 ⛶ 可全屏）</h2><div id="map"></div>
 <h2>行程一览</h2><div class="ovw" id="overview"></div>
 <h2>逐日行程</h2><div id="days"></div><h2>已订酒店</h2><div id="hotels"></div>

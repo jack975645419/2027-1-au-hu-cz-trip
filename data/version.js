@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v39", "built_at": "2026-10-11 14:48", "commit": "8d85af8", "note": "v40 · 修 1/25 stay + 加 transit.json + 酒店↔交通站点双向箭头（紫虚线）"};
+window.VERSION = {"version": "v41", "built_at": "2026-10-11 15:05", "commit": "caf6e6b", "note": "v41 · 酒店 tooltip 只剩名字 + POINTS 默认显示 + 删住宿分配/取舍让地图更靠上 + 修 JS_DAYS stats null 报错"};
