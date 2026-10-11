@@ -96,5 +96,37 @@
     "picks": [
       "克鲁姆洛夫斯卡博达卡酒店 Krumlovská pohádka"
     ]
+  },
+  "vienna": {
+    "city": "维也纳",
+    "center": [
+      48.2079,
+      16.3723
+    ],
+    "sight_center": [
+      48.2005,
+      16.3695
+    ],
+    "total": 1,
+    "candidates": [
+      {
+        "id": "hotel_royal_wien",
+        "name": "维也纳皇家酒店 Hotel Royal Wien",
+        "kind": "hotel",
+        "lat": 48.2078844,
+        "lon": 16.3723234,
+        "stars": 4,
+        "website": "https://www.karlschoehrer.at/hotel-royal",
+        "phone": "+43 1 588 18 0",
+        "street": "Singerstraße 3",
+        "postcode": "1010",
+        "city": "Wien",
+        "country": "奥地利",
+        "note": "内城区 Kärntner Viertel，紧邻国家歌剧院 / 卡尔广场 U1+U2+U4 三线；步行 5 min 到金色大厅"
+      }
+    ],
+    "picks": [
+      "维也纳皇家酒店 Hotel Royal Wien"
+    ]
   }
 }

@@ -1,1 +1,1 @@
-window.VERSION = {"version": "v37", "built_at": "2026-10-11 14:24", "commit": "f9a896c", "note": "v38 · 布拉格重排：1/29 老城广场周边；1/30 城堡山；1/31 犹太区+河边"};
+window.VERSION = {"version": "v38", "built_at": "2026-10-11 14:29", "commit": "e2740c0", "note": "v39 · 加维也纳皇家酒店 Hotel Royal（Singerstraße 3）· 4 城酒店齐备"};

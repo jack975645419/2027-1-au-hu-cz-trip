@@ -67,7 +67,7 @@ with sync_playwright() as p:
     # 期望值
     exp_places = 51
     exp_days = 12   # 1/25 拆虚拟两日
-    exp_hsec = 3   # budapest + prague + cesky_krumlov
+    exp_hsec = 4   # budapest + vienna + prague + cesky_krumlov
 
     if n_places != exp_places:
         fails.append(f"PLACES 数不符：实际 {n_places}，期望 {exp_places}")
