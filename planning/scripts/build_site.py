@@ -757,10 +757,10 @@ INDEX_TPL = """<!DOCTYPE html>
 <a href="交通指引.md" style="color:var(--accent)">原始 Markdown</a></div></div>
 <h2>航班</h2>
 <div class="card"><div style="font-weight:600">去程 · 1/23（六）</div>
-<div class="sub">广州 CAN 01:55 → 布达佩斯 BUD 07:10 · 南航 CZ649 · 实测直飞 ¥3,287/人</div></div>
+<div class="sub">广州 CAN 01:30 → 布达佩斯 BUD 06:30 · 南航 CZ649 · 已出票 ¥3,977/人</div></div>
 <div class="card"><div style="font-weight:600">回程 · 2/1（一）→ 2/2（二）</div>
 <div class="sub">布拉格 PRG 13:00 → 北京 PEK 次日 05:15（中转 3h15m）→ 广州 CAN 12:00 ·
-海航联程 · <b>携程实测 ¥2,379/人</b></div></div>
+海航联程 · <b>已出票 ¥2,366/人</b></div></div>
 <div class="card"><div class="sub" style="color:var(--dim)">已否决的方案 A / B 用的是另一套：深圳 SZX 01:45 → 维也纳
 HU789 ¥3,357 / 布达佩斯 BUD 11:45 → 广州 CZ650 ¥3,313（均为直飞）</div></div>
 <footer><div id="verfoot"></div><div style="margin-top:6px">行程草稿 · 地图数据 OpenStreetMap</div></footer>
